@@ -132,7 +132,6 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="VertexSimple.h" />
     <ClCompile Include="Vector.cpp" />
@@ -157,7 +156,6 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="EngineStatics.h" />
     <ClInclude Include="ObjectFactory.h" />
-    <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ImGui\imconfig.h" />

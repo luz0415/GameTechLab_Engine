@@ -75,9 +75,6 @@
     <ClCompile Include="ObjectFactory.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
@@ -140,9 +137,6 @@
       <Filter>헤더 파일\Core</Filter>
     </ClInclude>
     <ClInclude Include="ObjectFactory.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
     <ClInclude Include="Class.h">
