@@ -7,8 +7,6 @@ UObject::UObject()
 
 UObject::~UObject()
 {
-	UObject* d = new(UObject);
-	delete d;
 }
 
 bool UObject::IsA(UClass* Class) const
