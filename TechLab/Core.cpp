@@ -40,7 +40,6 @@ void* operator new[](size_t Size) noexcept
     TotalAllocationBytes += totalSize;
 
     return static_cast<void*>(reinterpret_cast<char*>(Ptr) + sizeof(MemoryHeader));
-
 }
 
 void operator delete[](void* Ptr) noexcept

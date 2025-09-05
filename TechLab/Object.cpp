@@ -1,8 +1,8 @@
 #include "Object.h"
+#include "EngineStatics.h"
 
-UObject::UObject()
+UObject::UObject() : UUID(UEngineStatics::GenUUID()), InternalIndex(0)
 {
-
 }
 
 UObject::~UObject()
