@@ -7,8 +7,8 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <Windows.h> // HWND 타입을 위해 추가
-#include "FVector.h"
-#include "FVertexSimple.h"
+#include "Vector.h"
+#include "VertexSimple.h"
 
 class URenderer
 {

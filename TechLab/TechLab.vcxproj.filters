@@ -19,6 +19,12 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{7ec32805-996e-421e-aac3-449272114474}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{975d7576-eba2-45fb-a6bb-cdd86dd82de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{5e9f00e8-85de-4cd0-a307-91a6c6b5fd33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,14 +51,17 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="FVector.cpp">
+    <ClCompile Include="Vector.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FVertexSimple.h">
+    <ClCompile Include="VertexSimple.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="URenderer.cpp">
+    <ClCompile Include="Renderer.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,11 +100,14 @@
     <ClInclude Include="Shapes.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="FVector.h">
+    <ClInclude Include="Vector.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="URenderer.h">
+    <ClInclude Include="Renderer.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
