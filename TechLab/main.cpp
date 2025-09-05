@@ -12,7 +12,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-
+#include "Object.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -45,11 +45,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
 		nullptr, nullptr, hInstance, nullptr);
 
+	UObject* Object = FObjectFactory::Get()->ConstructObject(UObject::StaticClass());
 	bool exit = false;
 	while (!exit)
 	{
 
 	}
-
 	return 0;
 }

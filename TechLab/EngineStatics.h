@@ -6,4 +6,3 @@ public:
 	static uint32 GenUUID();
 	static uint32 NextUUID;
 };
-
