@@ -1,126 +1,147 @@
 #include "Matrix.h"
 #include "Vector.h"
-#include <math.h>
+#include <cmath>
 
-const FMatrix FMatrix::Identity()
+FMatrix FMatrix::Identity() noexcept
 {
-    FMatrix Result{};
-    Result[0][0] = 1;
-    Result[1][1] = 1;
-    Result[2][2] = 1;
-    Result[3][3] = 1;
-    return Result;
+	FMatrix Output{};
+	Output[0][0] = 1;	Output[1][1] = 1;
+	Output[2][2] = 1;	Output[3][3] = 1;
+	return Output;
 }
 
-
-const FMatrix FMatrix::TransformMatrix(FVector trans)
+FMatrix FMatrix::Transpose() const noexcept
 {
-    FMatrix Result = Identity();
-    Result[3][0] = trans.x;
-    Result[3][1] = trans.y;
-    Result[3][2] = trans.z;
-    return Result;
+	FMatrix Output{};
+	for (int R = 0; R < 4; R++) {
+		for (int C = 0; C < 4; C++) {
+			Output[R][C] = M[C][R];
+		}
+	}
+	return Output;
 }
 
-const FMatrix FMatrix::ScaleMatrix(FVector trans)
+FMatrix FMatrix::InverseAffine() const noexcept
 {
-    FMatrix Result = Identity();
-    Result[0][0] = trans.x;
-    Result[1][1] = trans.y;
-    Result[2][2] = trans.z;
-    return Result;
+	FMatrix Output{};
+
+	// R_inv = R^T
+	Output[0][0] = M[0][0]; Output[0][1] = M[1][0]; Output[0][2] = M[2][0];
+	Output[1][0] = M[0][1]; Output[1][1] = M[1][1]; Output[1][2] = M[2][1];
+	Output[2][0] = M[0][2]; Output[2][1] = M[1][2]; Output[2][2] = M[2][2];
+
+	const float Tx = M[3][0];
+	const float Ty = M[3][1];
+	const float Tz = M[3][2];
+
+	// T_inv
+	Output[3][0] = -(Tx * Output[0][0] + Ty * Output[1][0] + Tz * Output[2][0]);
+	Output[3][1] = -(Tx * Output[0][1] + Ty * Output[1][1] + Tz * Output[2][1]);
+	Output[3][2] = -(Tx * Output[0][2] + Ty * Output[1][2] + Tz * Output[2][2]);
+
+	Output[3][3] = 1.0f;
+
+	return Output;
 }
 
-const FMatrix FMatrix::RotateMatrixX(float angle)
+FMatrix FMatrix::TransformMatrix(FVector Trans) noexcept
 {
-    FMatrix Result = Identity();
-    Result[1][1] = cos(angle);
-    Result[1][2] = sin(angle);
-    Result[2][1] = -sin(angle);
-    Result[2][2] = cos(angle);
-
-    return Result;
+	FMatrix T = FMatrix::Identity();
+	T[3][0] = Trans.X;
+	T[3][1] = Trans.Y;
+	T[3][2] = Trans.Z;
+	return T;
 }
 
-const FMatrix FMatrix::RotateMatrixY(float angle)
+FMatrix FMatrix::ScaleMatrix(FVector Scale) noexcept
 {
-    FMatrix Result = Identity();
-    Result[0][0] = cos(angle);
-    Result[0][2] = -sin(angle);
-    Result[2][0] = sin(angle);
-    Result[2][2] = cos(angle);
-    return Result;
+	FMatrix S = FMatrix::Identity();
+	S[0][0] = Scale.X;
+	S[1][1] = Scale.Y;
+	S[2][2] = Scale.Z;
+	return S;
 }
 
-const FMatrix FMatrix::RotateMatrixZ(float angle)
+FMatrix FMatrix::RotateMatrixX(float AngleRad) noexcept
 {
-    FMatrix Result = Identity();
-    Result[0][0] = cos(angle);
-    Result[0][1] = sin(angle);
-    Result[1][0] = -sin(angle);
-    Result[1][1] = cos(angle);
-    return Result;
+	FMatrix R = FMatrix::Identity();
+	float c = std::cos(AngleRad);
+	float s = std::sin(AngleRad);
+	R[1][1] = c; R[1][2] = s;
+	R[2][1] = -s; R[2][2] = c;
+	return R;
 }
 
-const FMatrix FMatrix::ViewMatrix(const FVector& eye, const FVector& at, const FVector& up)
+FMatrix FMatrix::RotateMatrixY(float AngleRad) noexcept
 {
-    FVector zaxis = at - eye;
-    zaxis.Normalize();
-    FVector xaxis = up.Cross(zaxis);
-    xaxis.Normalize();
-
-    FVector yaxis = zaxis.Cross(xaxis);
-    yaxis.Normalize();
-
-    FMatrix Result = FMatrix::Identity();
-
-    
-    Result.M[0][0] = xaxis.x; Result.M[0][1] = xaxis.y; Result.M[0][2] = xaxis.z;
-    Result.M[1][0] = yaxis.x; Result.M[1][1] = yaxis.y; Result.M[1][2] = yaxis.z;
-    Result.M[2][0] = zaxis.x; Result.M[2][1] = zaxis.y; Result.M[2][2] = zaxis.z;
-
-    
-    Result.M[3][0] = -xaxis.Dot(eye);
-    Result.M[3][1] = -yaxis.Dot(eye);
-    Result.M[3][2] = -zaxis.Dot(eye);
-    return Result;
+	FMatrix R = FMatrix::Identity();
+	float c = std::cos(AngleRad);
+	float s = std::sin(AngleRad);
+	R[0][0] = c; R[0][2] = s;
+	R[2][0] = -s; R[2][2] = c;
+	return R;
 }
 
-const FMatrix FMatrix::ProjectionMatrix(float fovAngleY, float aspectRatio, float nearZ, float farZ)
+FMatrix FMatrix::RotateMatrixZ(float AngleRad) noexcept
 {
-    FMatrix Result{};
-    float halfAngleY = fovAngleY / 2.0f;
-    float height = 1.0f / tan(halfAngleY);
-    float width = height / aspectRatio;
-    Result[0][0] = width;
-    Result[1][1] = height;
-    Result[2][2] = farZ / (farZ - nearZ);
-    Result[3][2] = -nearZ * Result[2][2];
-
-    Result[2][3] = 1.0f;
-    return Result;
+	FMatrix R = FMatrix::Identity();
+	float c = std::cos(AngleRad);
+	float s = std::sin(AngleRad);
+	R[0][0] = c; R[0][1] = s;
+	R[1][0] = -s; R[1][1] = c;
+	return R;
 }
 
-FMatrix FMatrix::operator*(const FMatrix& Other) const
+FMatrix FMatrix::ViewMatrix(const FVector& Eye, const FVector& At, const FVector& Up) noexcept
 {
-    FMatrix Result{};
-    for (int i = 0; i < 4; ++i)
-    {
-        for (int j = 0; j < 4; ++j)
-        {
-            Result.M[i][j] = 0.0f;
-            for (int k = 0; k < 4; ++k)
-            {
-                Result.M[i][j] += M[i][k] * Other.M[k][j];
-            }
-        }
-    }
-    return Result;
+	FMatrix Output = FMatrix::Identity();
+	FVector N = At - Eye;
+	N.Normalize();
+	FVector U = Up.Cross(N);
+	U.Normalize();
+	FVector V = N.Cross(U);
+	V.Normalize();
+
+	Output[0][0] = U.X; Output[1][0] = U.Y; Output[2][0] = U.Z;
+	Output[0][1] = V.X; Output[1][1] = V.Y; Output[2][1] = V.Z;
+	Output[0][2] = N.X; Output[1][2] = N.Y; Output[2][2] = N.Z;
+
+	Output[3][0] = -U.Dot(Eye);
+	Output[3][1] = -V.Dot(Eye);
+	Output[3][2] = -N.Dot(Eye);
+
+	return Output;
 }
 
-
-float(&FMatrix::operator[](unsigned row))[4]
+FMatrix FMatrix::ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept
 {
-    return M[row];
+	FMatrix P{};
+
+	const float YScale = 1.0f / tanf(FovYRad / 2.0f);
+	const float XScale = YScale / AspectRatio;
+
+	P[0][0] = XScale;
+	P[1][1] = YScale;
+	P[2][2] = FarZ / (FarZ - NearZ);
+	P[3][2] = -FarZ * NearZ / (FarZ - NearZ);
+	P[2][3] = 1.0f;
+
+	return P;
 }
 
+FMatrix FMatrix::operator*(const FMatrix& Other) const noexcept
+{
+	FMatrix Output{};
+
+	for (int R = 0; R < 4; R++)
+	{
+		for (int C = 0; C < 4; C++)
+		{
+			for (int K = 0; K < 4; K++)
+			{
+				Output[R][C] += (*this)[R][K] * Other[K][C];
+			}
+		}
+	}
+	return Output;
+}
