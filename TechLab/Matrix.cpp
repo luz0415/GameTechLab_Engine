@@ -44,6 +44,15 @@ FMatrix FMatrix::InverseAffine() const noexcept
 	return Output;
 }
 
+FVector FMatrix::TransformVector(const FVector& InVector) const noexcept
+{
+    FVector Out;
+    Out.X = InVector.X * M[0][0] + InVector.Y * M[1][0] + InVector.Z * M[2][0];
+    Out.Y = InVector.X * M[0][1] + InVector.Y * M[1][1] + InVector.Z * M[2][1];
+    Out.Z = InVector.X * M[0][2] + InVector.Y * M[1][2] + InVector.Z * M[2][2];
+    return Out;
+}
+
 FMatrix FMatrix::TransformMatrix(FVector Trans) noexcept
 {
 	FMatrix T = FMatrix::Identity();
@@ -77,8 +86,8 @@ FMatrix FMatrix::RotateMatrixY(float AngleRad) noexcept
 	FMatrix R = FMatrix::Identity();
 	float c = std::cos(AngleRad);
 	float s = std::sin(AngleRad);
-	R[0][0] = c; R[0][2] = s;
-	R[2][0] = -s; R[2][2] = c;
+	R[0][0] = c; R[0][2] = -s;
+	R[2][0] = s; R[2][2] = c;
 	return R;
 }
 

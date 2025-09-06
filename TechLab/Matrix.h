@@ -8,6 +8,7 @@ struct FMatrix
 	static FMatrix Identity() noexcept;
 	FMatrix Transpose() const noexcept;
 	FMatrix InverseAffine() const noexcept;
+	FVector TransformVector(const FVector& InVector) const noexcept;
 
 	static FMatrix TransformMatrix(FVector Trans) noexcept;
 	static FMatrix ScaleMatrix(FVector Scale) noexcept;

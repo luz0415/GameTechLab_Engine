@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <algorithm>
 
 Camera::Camera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
@@ -10,9 +11,87 @@ Camera::Camera(
 	, AspectRatio(InAspectRatio)
 	, NearZ(InNearZ)
 	, FarZ(InFarZ)
+	, Yaw(0.0f)
+	, Pitch(0.0f)
+	, MoveLeftRight(0.0f)
+	, MoveBackForward(0.0f)
+	, MoveUpDown(0.0f)
+	, MovementSpeed(10.0f)
+	, RotationSpeed(0.002f)
+	, CameraForward(FVector(0.f, 0.f, 1.f))
+	, CameraRight(FVector(1.f, 0.f, 0.f))
+	, CameraUp(FVector(0.f, 1.f, 0.f))
 {
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
+}
+
+void Camera::HandleInput(const FInput& Input, float DeltaTime)
+{
+	if (Input.bFront)
+	{
+		MoveBackForward += MovementSpeed * DeltaTime;
+	}
+	if (Input.bBack)
+	{
+		MoveBackForward -= MovementSpeed * DeltaTime;
+	}
+	if (Input.bLeft)
+	{
+		MoveLeftRight -= MovementSpeed * DeltaTime;
+	}
+	if (Input.bRight)
+	{
+		MoveLeftRight += MovementSpeed * DeltaTime;
+	}
+	if (Input.bUp)
+	{
+		MoveUpDown += MovementSpeed * DeltaTime;
+	}
+	if (Input.bDown)
+	{
+		MoveUpDown -= MovementSpeed * DeltaTime;
+	}
+
+	if (Input.bMouseRightClick)
+	{
+		if (Input.MouseX != 0 || Input.MouseY != 0)
+		{
+			Yaw += static_cast<float>(Input.MouseX) * RotationSpeed;
+			Pitch += static_cast<float>(Input.MouseY) * RotationSpeed;
+			// Clamp pitch
+			Pitch = std::max(-3.1415926535f / 2.0f, std::min(3.1415926535f / 2.0f, Pitch));
+		}
+	}
+}
+
+void Camera::Update()
+{
+	FMatrix rotation = FMatrix::RotateMatrixY(Yaw) * FMatrix::RotateMatrixX(Pitch);
+	
+	At = rotation.TransformVector(FVector(0.f, 0.f, 1.f));
+	At.Normalize();
+
+	FMatrix pitch = FMatrix::RotateMatrixX(Pitch);
+	FMatrix yaw = FMatrix::RotateMatrixY(Yaw);
+
+	//CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
+	CameraForward = At;
+	CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
+	CameraUp = rotation.TransformVector(FVector(0.f, 1.f, 0.f));
+
+	Eye += CameraRight * MoveLeftRight;
+	Eye += CameraForward * MoveBackForward;
+	Eye += CameraUp * MoveUpDown;
+
+	MoveLeftRight = 0.0f;
+	MoveBackForward = 0.0f;
+	MoveUpDown = 0.0f;
+
+	At = Eye + At;
+	Up = FVector(0.f,1.f,0.f);
+
+	UpdateViewMatrix();
 }
 
 void Camera::UpdateViewMatrix() noexcept
