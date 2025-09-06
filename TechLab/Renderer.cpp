@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "SimpleConstants.h"
 #include "ImGuiManager.h"
 
 void URenderer::Create(HWND hWindow)
@@ -86,6 +87,7 @@ void URenderer::CreateRasterizerState()
 	D3D11_RASTERIZER_DESC rasterizerdesc = {};
 	rasterizerdesc.FillMode = D3D11_FILL_SOLID;
 	rasterizerdesc.CullMode = D3D11_CULL_BACK;
+	//rasterizerdesc.FrontCounterClockwise = TRUE;
 
 	Device->CreateRasterizerState(&rasterizerdesc, &RasterizerState);
 }
@@ -99,24 +101,12 @@ void URenderer::ReleaseRasterizerState()
 	}
 }
 
-ImGuiManager::ImGuiManager()
-{
-}
-
-ImGuiManager::~ImGuiManager()
-{
-}
-
-void ImGuiManager::Init()
-{
-}
-
 void URenderer::Release()
 {
 	DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
 	ReleaseRasterizerState();
-	ReleaseConstantBuffer(); // 추가
+	//ReleaseConstantBuffer(); // 추가
 	ReleaseShader(); // 추가
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
@@ -132,10 +122,10 @@ void URenderer::CreateShader()
 	ID3DBlob* vertexshaderCSO;
 	ID3DBlob* pixelshaderCSO;
 
-	D3DCompileFromFile(L"Shader.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &vertexshaderCSO, nullptr);
+	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &vertexshaderCSO, nullptr);
 	Device->CreateVertexShader(vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), nullptr, &SimpleVertexShader);
 
-	D3DCompileFromFile(L"Shader.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &pixelshaderCSO, nullptr);
+	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &pixelshaderCSO, nullptr);
 	Device->CreatePixelShader(pixelshaderCSO->GetBufferPointer(), pixelshaderCSO->GetBufferSize(), nullptr, &SimplePixelShader);
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -193,6 +183,18 @@ void URenderer::PrepareShader()
 	}
 }
 
+void URenderer::PrepareShader(ID3D11Buffer* ConstBuffer)
+{
+	DeviceContext->VSSetShader(SimpleVertexShader, nullptr, 0);
+	DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
+	DeviceContext->IASetInputLayout(SimpleInputLayout);
+
+	if (ConstBuffer)
+	{
+		DeviceContext->VSSetConstantBuffers(0, 1, &ConstBuffer);
+	}
+}
+
 void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
 {
 	UINT offset = 0;
@@ -223,18 +225,7 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
 	}
 }
 
-void URenderer::CreateConstantBuffer()
-{
-	D3D11_BUFFER_DESC constantbufferdesc = {};
-	constantbufferdesc.ByteWidth = sizeof(FConstants) + 0xf & 0xfffffff0; // 16바이트 배수로 맞춤
-	constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;
-	constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
-	Device->CreateBuffer(&constantbufferdesc, nullptr, &ConstantBuffer);
-}
-
-void URenderer::ReleaseConstantBuffer()
+void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)
 {
 	if (ConstantBuffer)
 	{
@@ -243,17 +234,18 @@ void URenderer::ReleaseConstantBuffer()
 	}
 }
 
-void URenderer::UpdateConstant(FVector Offset, float Radius)
+void URenderer::UpdateConstantBuffer(ID3D11Buffer* ConstantBuffer,const FMatrix& Model, const FMatrix& View, const FMatrix& Projection)
 {
 	if (ConstantBuffer)
 	{
 		D3D11_MAPPED_SUBRESOURCE constantbufferMSR;
+
 		DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantbufferMSR);
-
-		FConstants* constants = (FConstants*)constantbufferMSR.pData;
-		constants->Offset = Offset;
-		constants->Radius = Radius;
-
+		FSimpleConstant* constants = (FSimpleConstant*)constantbufferMSR.pData;
+		constants->Model = Model;
+		constants->View = View;
+		constants->Projection = Projection;
 		DeviceContext->Unmap(ConstantBuffer, 0);
 	}
 }
+

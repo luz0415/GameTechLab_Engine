@@ -1,63 +1,66 @@
 #pragma once
 
-/*
-// 삼각형을 하드 코딩
-FVertexSimple triangle_vertices[] =
-{
-	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
-	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
-	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f }  // Bottom-left vertex (blue)
-};
+#include "VertexSimple.h"
 
+
+
+
+//FVertexSimple triangle_vertices[] =
+//{
+//	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
+//	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
+//	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f }  // Bottom-left vertex (blue)
+//};
+namespace Shapes {
 FVertexSimple cube_vertices[] =
 {
-	// Front face (Z+)
-	{ -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // Bottom-left (red)
-	{ -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // Top-left (yellow)
-	{  0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-	{ -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // Top-left (yellow)
-	{  0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // Top-right (blue)
-	{  0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+    // Front face (Red) - 이제 Z가 양수인 앞면 (이전 뒷면)
+    {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 오아래앞
+    {  0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 오위앞
+    { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 왼위앞
+    {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 오아래앞
+    { -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 왼위앞
+    { -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // 왼아래앞
 
-	// Back face (Z-)
-	{ -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // Bottom-left (cyan)
-	{  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // Bottom-right (magenta)
-	{ -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{ -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // Bottom-right (magenta)
-	{  0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // Top-right (yellow)
+    // Back face (Green) - 이제 Z가 음수인 뒷면 (이전 앞면)
+    { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 왼아래뒤
+    { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 왼위뒤
+    {  0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 오위뒤
+    { -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 왼아래뒤
+    {  0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 오위뒤
+    {  0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // 오아래뒤
 
-	// Left face (X-)
-	{ -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // Bottom-left (purple)
-	{ -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{ -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
-	{ -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // Top-left (blue)
-	{ -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // Top-right (yellow)
-	{ -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right (green)
+    // Left face (Blue) - 왼쪽 면 (Z값 반전)
+    { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼아래앞
+    { -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼위앞
+    { -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼위뒤
+    { -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼아래앞
+    { -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼위뒤
+    { -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f, 1.0f }, // 왼아래뒤
 
-	// Right face (X+)
-	{  0.5f, -0.5f, -0.5f,  1.0f, 0.5f, 0.0f, 1.0f }, // Bottom-left (orange)
-	{  0.5f, -0.5f,  0.5f,  0.5f, 0.5f, 0.5f, 1.0f }, // Bottom-right (gray)
-	{  0.5f,  0.5f, -0.5f,  0.5f, 0.0f, 0.5f, 1.0f }, // Top-left (purple)
-	{  0.5f,  0.5f, -0.5f,  0.5f, 0.0f, 0.5f, 1.0f }, // Top-left (purple)
-	{  0.5f, -0.5f,  0.5f,  0.5f, 0.5f, 0.5f, 1.0f }, // Bottom-right (gray)
-	{  0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.5f, 1.0f }, // Top-right (dark blue)
+    // Right face (Yellow) - 오른쪽 면 (Z값 반전)
+    {  0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오아래뒤
+    {  0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오위뒤
+    {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오위앞
+    {  0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오아래뒤
+    {  0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오위앞
+    {  0.5f, -0.5f,  0.5f,  1.0f, 1.0f, 0.0f, 1.0f }, // 오아래앞
 
-	// Top face (Y+)
-	{ -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.5f, 1.0f }, // Bottom-left (light green)
-	{ -0.5f,  0.5f,  0.5f,  0.0f, 0.5f, 1.0f, 1.0f }, // Top-left (cyan)
-	{  0.5f,  0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f }, // Bottom-right (white)
-	{ -0.5f,  0.5f,  0.5f,  0.0f, 0.5f, 1.0f, 1.0f }, // Top-left (cyan)
-	{  0.5f,  0.5f,  0.5f,  0.5f, 0.5f, 0.0f, 1.0f }, // Top-right (brown)
-	{  0.5f,  0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f }, // Bottom-right (white)
+    // Top face (Cyan) - 윗면 (Z값 반전)
+    { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 왼위뒤
+    { -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 왼위앞
+    {  0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 오위앞
+    { -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 왼위뒤
+    {  0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 오위앞
+    {  0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 1.0f, 1.0f }, // 오위뒤
 
-	// Bottom face (Y-)
-	{ -0.5f, -0.5f, -0.5f,  0.5f, 0.5f, 0.0f, 1.0f }, // Bottom-left (brown)
-	{ -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top-left (red)
-	{  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.5f, 1.0f }, // Bottom-right (purple)
-	{ -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top-left (red)
-	{  0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f }, // Top-right (green)
-	{  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.5f, 1.0f }, // Bottom-right (purple)
+    // Bottom face (Magenta) - 아랫면 (Z값 반전)
+    { -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // 왼아래앞
+    { -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // 왼아래뒤
+    {  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // 오아래뒤
+    { -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // 왼아래앞
+    {  0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 1.0f, 1.0f }, // 오아래뒤
+    {  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 1.0f, 1.0f }  // 오아래앞
 };
 
 FVertexSimple sphere_vertices[] = {
@@ -2462,5 +2465,4 @@ FVertexSimple sphere_vertices[] = {
 	{ -0.000000f, -1.000000f, -0.000000f, 0.500000f, 0.000000f, 0.500000f, 1.000000f },
 	{ 0.156434f, -0.987688f, 0.000000f, 0.578217f, 0.006156f, 0.500000f, 1.000000f },
 };
-
-*/
+}

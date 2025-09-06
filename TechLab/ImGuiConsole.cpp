@@ -26,3 +26,4 @@ void UImGuiConsole::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 		AddLog(fmt, args);   // AddLog(...)와 동일한 효과
 		va_end(args);
 	}
+}
