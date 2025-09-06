@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
@@ -165,6 +166,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MeshManager.h" />

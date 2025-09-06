@@ -20,6 +20,8 @@
 #include "Object.h"
 #include "ImGuiManager.h"
 
+#include "Camera.h"
+
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -67,7 +69,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float roty = 2; //rot
 	float scale = 1;
 	float tmp = 0;
-	float eyepos = -5.f;
+	//float eyepos = -5.f;
+
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	const int width = rect.right - rect.left;
+	const int height = rect.bottom - rect.top;
+
+	const FVector eye = FVector(0, 0, -5);
+	const FVector at = FVector(0, 0, 0);
+	const FVector up = FVector(0, 1, 0);
+	const float angle = 90.f;
+	const float radangle = angle * 3.1415926535f / 180.f;
+
+	Camera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
+
 	bool bIsExit = false;
 	while (bIsExit == false)
 	{
@@ -108,26 +124,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		//model
 		//eyepos += 0.01f;
-		FVector eye = FVector(0, 0, -5);
-		FVector at = FVector(0, 0, 0);
-		FVector up = FVector(0, 1, 0);
-		FMatrix view = FMatrix::ViewMatrix(eye, at, up);
-		float angle = 90.f;
-		float radangle = angle * 3.1415926535f / 180.f;
-		RECT rect;
-		GetClientRect(hWnd, &rect);
-		int width = rect.right - rect.left;
-		int height = rect.bottom - rect.top;
-		FMatrix projection = FMatrix::ProjectionMatrix(radangle,(float)width/(float)height , 0.1f, 100.f);
 
-		renderer.UpdateConstantBuffer(CubeConstant, model,view,projection);
+		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(CubeResource->VertexBuffer, CubeResource->NumVerticies);
 
 		trans = FMatrix::TransformMatrix(FVector(0, ypos, 0));
 		model = sc * rot * trans;
 
-		renderer.UpdateConstantBuffer(CubeConstant, model, view, projection);
+		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(SphereResource->VertexBuffer, SphereResource->NumVerticies);
 		renderer.SwapBuffer();
@@ -135,8 +140,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	renderer.ReleaseShader();
 	renderer.Release();
 
-
-	
 
 	return 0;
 }
