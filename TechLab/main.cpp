@@ -12,7 +12,9 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
+#include <memory>
 #include "Object.h"
+#include "ImGuiManager.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -46,10 +48,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		nullptr, nullptr, hInstance, nullptr);
 
 	UObject* Object = FObjectFactory::Get()->ConstructObject(UObject::StaticClass());
+
+	//UImGuiManager* ImGuiManager = new UImGuiManager();
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init((void*)hWnd);
+	//ImGui_ImplDX11_Init(renderer.Device, renderer.DeviceContext);
+	// ㄴ 렌더러 추가시 변경 
+	
+	unique_ptr<UImGuiManager> ImGuiManager = make_unique<UImGuiManager>();
+
+	ImGuiManager->Init();
+
 	bool exit = false;
 	while (!exit)
 	{
 
 	}
+
+
+	ImGuiManager->Release();
+
 	return 0;
 }

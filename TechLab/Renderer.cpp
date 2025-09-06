@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "ImGuiManager.h"
 
 void URenderer::Create(HWND hWindow)
 {
@@ -96,6 +97,18 @@ void URenderer::ReleaseRasterizerState()
 		RasterizerState->Release();
 		RasterizerState = nullptr;
 	}
+}
+
+ImGuiManager::ImGuiManager()
+{
+}
+
+ImGuiManager::~ImGuiManager()
+{
+}
+
+void ImGuiManager::Init()
+{
 }
 
 void URenderer::Release()
