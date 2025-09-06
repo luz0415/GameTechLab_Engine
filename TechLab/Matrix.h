@@ -1,21 +1,24 @@
 #pragma once
 
 struct FVector;
-
 struct FMatrix
 {
 	float M[4][4]{};
 
-	//FMatrix();
+	static FMatrix Identity() noexcept;
+	FMatrix Transpose() const noexcept;
+	FMatrix InverseAffine() const noexcept;
 
-	static const FMatrix Identity();
-	static const FMatrix TransformMatrix(FVector trans);
-	static const FMatrix ScaleMatrix(FVector trans);
-	static const FMatrix RotateMatrixX(float angle);
-	static const FMatrix RotateMatrixY(float angle);
-	static const FMatrix RotateMatrixZ(float angle);
-	static const FMatrix ViewMatrix(const FVector& eye, const FVector& at, const FVector& up);
-	static const FMatrix ProjectionMatrix(float floatAngleY, float aspectRatio, float nearZ, float farZ);
-	FMatrix operator*(const FMatrix& Other) const;
-	float(&operator[](unsigned row))[4];
+	static FMatrix TransformMatrix(FVector Trans) noexcept;
+	static FMatrix ScaleMatrix(FVector Scale) noexcept;
+	static FMatrix RotateMatrixX(float AngleRad) noexcept;
+	static FMatrix RotateMatrixY(float AngleRad) noexcept;
+	static FMatrix RotateMatrixZ(float AngleRad) noexcept;
+
+	static FMatrix ViewMatrix(const FVector& Eye, const FVector& At, const FVector& Up) noexcept;
+	static FMatrix ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept;
+
+	FMatrix operator*(const FMatrix& Other) const noexcept;
+	float(&operator[](int Row) noexcept)[4] { return M[Row]; }
+	const float(&operator[](int Row) const noexcept)[4] { return M[Row]; }
 };

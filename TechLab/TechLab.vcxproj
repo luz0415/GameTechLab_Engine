@@ -141,6 +141,7 @@
     <ClCompile Include="ImGuiWindow.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexSimple.h" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Vector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
