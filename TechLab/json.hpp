@@ -7,7 +7,6 @@
 #include <string>
 #include <deque>
 #include <map>
-#include <vector>
 #include <type_traits>
 #include <initializer_list>
 #include <ostream>

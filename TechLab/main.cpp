@@ -109,25 +109,25 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
 
-		xpos += 0.1f;
-		ypos += 0.1f;
-		if (xpos > 2.f)
-		{
-			xpos = -2.f;
-		}
-		if (ypos > 2.f)
-		{
-			ypos = -2.f;
-		}
-		rotz += 0.05f;
-		roty += 0.05f;
-		tmp += 1;
-		scale += sin(tmp);
+		//xpos += 0.1f;
+		//ypos += 0.1f;
+		//if (xpos > 2.f)
+		//{
+		//	xpos = -2.f;
+		//}
+		//if (ypos > 2.f)
+		//{
+		//	ypos = -2.f;
+		//}
+		//rotz += 0.05f;
+		//roty += 0.05f;
+		//tmp += 1;
+		//scale += sin(tmp);
 
 
 		FMatrix trans = FMatrix::TransformMatrix(FVector(xpos, 0, 0));
 		FMatrix rot = FMatrix::RotateMatrixZ(rotz)*FMatrix::RotateMatrixY(roty);
-		FMatrix sc = FMatrix::ScaleMatrix(FVector(1,1,1));
+		FMatrix sc = FMatrix::ScaleMatrix(FVector(scale, scale, scale));
 		FMatrix model = sc * rot * trans;
 
 		//model

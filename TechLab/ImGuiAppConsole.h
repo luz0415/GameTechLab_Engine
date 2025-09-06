@@ -1,8 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
 #pragma once
 
 #define _CRT_SECURE_NO_WARNINGS
+// ã„´ í”„ë¡œì íŠ¸ - ì†ì„± - c/c++ - ì „ì²˜ë¦¬ê¸° - ì •ì˜ -ì›ë˜ ìˆë˜ ê¸€ ë’¤ì— ;(êµ¬ë¶„ì) ë’¤ì—Â _CRT_SECURE_NO_WARNINGSë¥¼ ë„£ì–´ì£¼ê³  ; ê¹Œì§€
 
 #include "ImGui/imgui.h"
 #include <ctype.h>          // toupper
@@ -14,7 +15,6 @@
 #include <regex>
 
 using namespace std;
-
 
 struct ImGuiAppConsole
 {
@@ -229,7 +229,7 @@ struct ImGuiAppConsole
         }
         else if (strncmp(command_line, "UE_LOG", 6) == 0)
         {
-            // 1) UE_LOG(...) ¾ÈÀÇ ÀüÃ¼ ³»¿ë ÃßÃâ
+            // 1) UE_LOG(...) ì•ˆì˜ ì „ì²´ ë‚´ìš© ì¶”ì¶œ
             std::regex ueLogRegex(R"(UE_LOG\s*\((.*)\);)");
             std::smatch match;
             std::string input(command_line);
@@ -239,7 +239,7 @@ struct ImGuiAppConsole
                 std::string inside = match[1].str();
                 // e.g. inside = "\"Hello %s %d %f\", \"World\", 2025, 3.14"
 
-                // 2) Ã¹ ¹øÂ° Å«µû¿ÈÇ¥ ¹®ÀÚ¿­ ¡æ format string
+                // 2) ì²« ë²ˆì§¸ í°ë”°ì˜´í‘œ ë¬¸ìì—´ â†’ format string
                 std::regex formatRegex(R"FMT("([^"]*)")FMT");
 
                 std::smatch formatMatch;
@@ -247,7 +247,7 @@ struct ImGuiAppConsole
                 {
                     std::string format = formatMatch[1].str();
 
-                    // 3) ³ª¸ÓÁö ÀÎÀÚ ÃßÃâ (¹®ÀÚ¿­ OR ¼ıÀÚ)
+                    // 3) ë‚˜ë¨¸ì§€ ì¸ì ì¶”ì¶œ (ë¬¸ìì—´ OR ìˆ«ì)
                     std::string rest = formatMatch.suffix().str();
                     std::regex argsRegex(R"ARG("([^"]*)"|([0-9]+(?:\.[0-9]+)?))ARG");
 
@@ -256,12 +256,12 @@ struct ImGuiAppConsole
                         it != std::sregex_iterator(); ++it)
                     {
                         if ((*it)[1].matched)
-                            args.push_back((*it)[1].str()); // ¹®ÀÚ¿­ ÀÎÀÚ
+                            args.push_back((*it)[1].str()); // ë¬¸ìì—´ ì¸ì
                         else if ((*it)[2].matched)
-                            args.push_back((*it)[2].str()); // ¼ıÀÚ ÀÎÀÚ
+                            args.push_back((*it)[2].str()); // ìˆ«ì ì¸ì
                     }
 
-                    // 4) format + args °áÇÕ
+                    // 4) format + args ê²°í•©
                     char buf[1024];
                     int offset = 0;
                     size_t argIndex = 0;
