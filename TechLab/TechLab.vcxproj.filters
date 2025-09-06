@@ -25,6 +25,9 @@
     <Filter Include="헤더 파일\Object">
       <UniqueIdentifier>{5e9f00e8-85de-4cd0-a307-91a6c6b5fd33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{12590bad-3248-465c-b642-fe4ba1f635b4}</UniqueIdentifier>
+    </Filter>
     <Filter Include="헤더 파일\Core">
       <UniqueIdentifier>{7683a999-8c3a-4dc9-b6a0-e4c0077d2f88}</UniqueIdentifier>
     </Filter>
@@ -69,11 +72,23 @@
     <ClCompile Include="VertexSimple.h">
       <Filter>헤더 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Shapes.cpp">
+      <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="EngineStatics.cpp">
       <Filter>소스 파일\Core</Filter>
@@ -107,6 +122,9 @@
     <FxCompile Include="Shader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="W2Shader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\imconfig.h">
@@ -133,20 +151,38 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Shapes.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Vector.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleConstants.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderProxy.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ShapeType.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshManager.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshResource.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>헤더 파일\Core</Filter>

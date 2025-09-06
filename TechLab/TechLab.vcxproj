@@ -128,8 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Class.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="Shapes.cpp" />
+    <ClCompile Include="Class.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
     <ClCompile Include="ImGuiAppConsole.cpp" />
     <ClCompile Include="ImGuiConsole.cpp" />
@@ -156,8 +159,18 @@
     <FxCompile Include="Shader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="W2Shader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="MeshResource.h" />
+    <ClInclude Include="Matrix.h" />
+    <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="RenderProxy.h" />
+    <ClInclude Include="ShapeType.h" />
+    <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="EngineStatics.h" />
@@ -178,7 +191,6 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Shapes.h" />
-    <ClInclude Include="Sphere.h" />
     <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

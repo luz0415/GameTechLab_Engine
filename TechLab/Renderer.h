@@ -9,7 +9,9 @@
 #include <Windows.h> // HWND 타입을 위해 추가
 #include "Vector.h"
 #include "VertexSimple.h"
-
+#include "Matrix.h"
+#include "Core.h"
+#include "RenderProxy.h"
 class URenderer
 {
 public:
@@ -31,12 +33,7 @@ public:
 	ID3D11InputLayout* SimpleInputLayout;
 	unsigned int Stride;
 
-	struct FConstants
-	{
-		FVector Offset;
-		float Radius;
-		float Pad;
-	};
+	TArray<FRenderProxy> RenderProxyList;
 
 public:
 	// 생성 및 해제 함수
@@ -53,6 +50,7 @@ public:
 	// 렌더링 준비 함수
 	void Prepare();
 	void PrepareShader();
+	void PrepareShader(ID3D11Buffer* ConstBuffer);
 
 	// 렌더링 함수
 	void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
@@ -60,11 +58,24 @@ public:
 	// 버퍼 생성 및 해제 함수
 	ID3D11Buffer* CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth);
 	void ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer);
-	void CreateConstantBuffer();
-	void ReleaseConstantBuffer();
+	void ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer);
+	void UpdateConstantBuffer(ID3D11Buffer* ConstantBuffer, const FMatrix& Model, const FMatrix& View, const FMatrix& Projection);
 
-	// 상수 버퍼 업데이트
-	void UpdateConstant(FVector Offset, float Radius);
+	template<typename T>
+	ID3D11Buffer* CreateConstantBuffer()
+	{
+		ID3D11Buffer* constbuffer;
+		D3D11_BUFFER_DESC constantbufferdesc = {};
+		constantbufferdesc.ByteWidth = sizeof(T) + 0xf & 0xfffffff0; // 16바이트 배수로 맞춤
+		constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;
+		constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+		Device->CreateBuffer(&constantbufferdesc, nullptr, &constbuffer);
+		return constbuffer;
+	}
+	//void ReleaseConstantBuffer();
+
 
 private:
 	// 내부 헬퍼 함수
