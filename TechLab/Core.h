@@ -5,6 +5,10 @@
 #include <string>
 #include <map>
 
+#include <memory>
+
+#include "ImGuiAppConsole.h"
+
 template<typename T>
 using TArray = std::vector<T>;
 template<typename KeyType, typename ValueType>
@@ -34,3 +38,9 @@ void operator delete[](void* Ptr) noexcept;
 
 // [ UObject* function(void) ] Ptr
 using StaticClassFactory = class UObject* (*)();
+
+#define UE_LOG(fmt, ...) \
+    do \
+    { \
+        if (ImGuiManager && ImGuiManager->Console) Console->AddLog(fmt, ##__VA_ARGS__) \
+    } while(0)

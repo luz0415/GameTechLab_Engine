@@ -31,6 +31,12 @@
     <Filter Include="소스 파일\Core">
       <UniqueIdentifier>{0d7e9348-2246-49cd-bab3-eab11b4f5739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\ImGui">
+      <UniqueIdentifier>{50a4de39-3ab3-4ed4-9aeb-014b28867fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\ImGui">
+      <UniqueIdentifier>{7d766aa3-a2dd-4ec8-aadd-9baa62f6a014}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,6 +89,18 @@
     </ClCompile>
     <ClCompile Include="SceneComponent.cpp">
       <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiConsole.cpp">
+      <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiWindow.cpp">
+      <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiAppConsole.cpp">
+      <Filter>소스 파일\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +162,18 @@
     </ClInclude>
     <ClInclude Include="SceneComponent.h">
       <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>헤더 파일\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiWindow.h">
+      <Filter>헤더 파일\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiConsole.h">
+      <Filter>헤더 파일\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiAppConsole.h">
+      <Filter>헤더 파일\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
