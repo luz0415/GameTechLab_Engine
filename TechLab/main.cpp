@@ -136,7 +136,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	renderer.Release();
 
 
-	ImGuiManager->Release();
+	
 
 	return 0;
 }
