@@ -1,46 +1,37 @@
 #pragma once
-#include <math.h>
+#include <cmath>
+
+constexpr float KINDA_SMALL_NUMBER = 1.e-4f;
+
 struct FVector
 {
-	float x, y, z;
-	FVector() : FVector(0, 0, 0) {}
-	FVector(float _x = 0, float _y = 0, float _z = 0) : x(_x), y(_y), z(_z) {}
+	float X;
+	float Y;
+	float Z;
 
-	FVector& operator+=(const FVector& other)
-	{
-		x = x + other.x;
-		y = y + other.y;
-		z = z + other.z;
-		return *this;
-	}
+	FVector() : X(0.0f), Y(0.0f), Z(0.0f) {}
+	FVector(float InX, float InY, float InZ) : X(InX), Y(InY), Z(InZ) {}
 
-	float Length() const
-	{
-		return sqrt(x * x + y * y + z * z);
-	}
+	float Dot(const FVector& Other) const noexcept;
+	FVector Cross(const FVector& Other) const noexcept;
+	float Length() const noexcept;
+	void Normalize() noexcept;
 
-	void Normalize()
-	{
-		float len = Length();
-		x = x / len;
-		y = y / len;
-		z = z / len;
-	}
+	FVector operator+(const FVector& Other) const noexcept;
+	FVector operator-(const FVector& Other) const noexcept;
+	FVector operator*(float Scale) const noexcept;
+	FVector operator/(float Scale) const noexcept;
+	FVector operator-() const noexcept;
+	FVector& operator+=(const FVector& Other) noexcept;
+	FVector& operator-=(const FVector& Other) noexcept;
+	FVector& operator*=(float Scale) noexcept;
+	FVector& operator/=(float Scale) noexcept;
+	bool operator==(const FVector& Other) const noexcept;
+	bool operator!=(const FVector& Other) const noexcept;
 
-	float Dot(const FVector& other) const
-	{
-		return x * other.x + y * other.y + z * other.z;
-	}
-	FVector Cross(const FVector& other) const
-	{
-		return FVector(
-			(y * other.z) - (z * other.y),
-			(z * other.x) - (x * other.z),
-			(x * other.y) - (y * other.x)
-		);
-	}
+	float LengthSquared() const noexcept;
+	FVector GetNormalized() const noexcept;
+	bool IsNearlyZero(float Tolerance = KINDA_SMALL_NUMBER) const noexcept;
+	static float Dist(const FVector& V1, const FVector& V2) noexcept;
+	static float DistSquared(const FVector& V1, const FVector& V2) noexcept;
 };
-
-FVector operator+(const FVector& one, const FVector& other);
-FVector operator-(const FVector& one, const FVector& other);
-FVector operator*(const FVector& one, const FVector& other);
