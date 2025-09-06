@@ -15,7 +15,9 @@ public:
 
 	void Render();
 
+	UImGuiConsole* GetConsole() { return Console; }
+
 private:
 	std::vector<IImGuiWindow*> ImGuiArray;
-	unique_ptr<UImGuiConsole> Console = nullptr;
+	UImGuiConsole* Console = nullptr;
 };

@@ -19,6 +19,8 @@
 #include <memory>
 #include "Object.h"
 #include "ImGuiManager.h"
+#include "Core.h"
+#include "ImGuiAppConsole.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -55,6 +57,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	renderer.Create(hWnd);
 	renderer.CreateShader();
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init((void*)hWnd);
+	ImGui_ImplDX11_Init(renderer.Device, renderer.DeviceContext);
+
+	UImGuiManager* ImGuiManager = new UImGuiManager();
+	ImGuiAppConsole* App = new ImGuiAppConsole();
 
 	int idCube = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Cube);
 	FMeshResource* CubeResource = FMeshManager::Instance()->Get(idCube);
@@ -68,7 +78,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	float scale = 1;
 	float tmp = 0;
 	float eyepos = -5.f;
+
 	bool bIsExit = false;
+
 	while (bIsExit == false)
 	{
 		MSG msg;
@@ -84,6 +96,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 
 		renderer.Prepare();
+
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+
+		UE_LOG("xpos: %f", xpos);
+		UE_LOG("ypos: %f ", ypos);
+
+		if (ImGuiManager)
+			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
+
 
 		xpos += 0.1f;
 		ypos += 0.1f;
@@ -130,13 +154,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		renderer.UpdateConstantBuffer(CubeConstant, model, view, projection);
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(SphereResource->VertexBuffer, SphereResource->NumVerticies);
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 		renderer.SwapBuffer();
 	}
 	renderer.ReleaseShader();
 	renderer.Release();
 
-
-	
 
 	return 0;
 }

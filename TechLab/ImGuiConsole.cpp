@@ -2,7 +2,7 @@
 
 UImGuiConsole::UImGuiConsole()
 {
-	AppConsole = make_unique<ImGuiAppConsole>();
+	AppConsole = new ImGuiAppConsole();
 }
 
 UImGuiConsole::~UImGuiConsole()
@@ -21,9 +21,13 @@ void UImGuiConsole::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 {
 	if (AppConsole)
 	{
+		char buf[1024];
+
 		va_list args;
 		va_start(args, fmt);
-		AddLog(fmt, args);   // AddLog(...)와 동일한 효과
+		vsnprintf(buf, sizeof(buf), fmt, args);
 		va_end(args);
+
+		AppConsole->AddLog("%s", buf);   // AddLog(...)와 동일한 효과
 	}
 }

@@ -15,6 +15,8 @@ public:
 	virtual void Render() override;
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);
 
+	ImGuiAppConsole* GetAppConsole() { return AppConsole; }
+
 private:
-	unique_ptr<ImGuiAppConsole> AppConsole = nullptr;
+	ImGuiAppConsole* AppConsole = nullptr;
 };
