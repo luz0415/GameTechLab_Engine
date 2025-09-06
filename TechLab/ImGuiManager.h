@@ -2,7 +2,8 @@
 
 #include <vector>
 
-#include "ImGuiConsole.h" 
+#include "ImGuiConsole.h"
+#include "ImGuiSizeController.h"
 
 class UImGuiManager
 {
@@ -16,6 +17,7 @@ public:
 	void Render();
 
 	UImGuiConsole* GetConsole() { return Console; }
+	std::vector<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
 
 private:
 	std::vector<IImGuiWindow*> ImGuiArray;

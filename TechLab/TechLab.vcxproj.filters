@@ -129,6 +129,9 @@
     <ClCompile Include="SceneFileManager.cpp">
       <Filter>소스 파일\SceneFileManager</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiSizeController.cpp">
+      <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader.hlsl">
@@ -231,6 +234,9 @@
     </ClInclude>
     <ClInclude Include="SceneFileManager.h">
       <Filter>헤더 파일\SceneFileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSizeController.h">
+      <Filter>헤더 파일\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

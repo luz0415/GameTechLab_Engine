@@ -17,6 +17,8 @@ UImGuiManager::UImGuiManager()
 
     Console = new UImGuiConsole();
 
+    Init();
+
 }
 
 UImGuiManager::~UImGuiManager()
@@ -26,11 +28,11 @@ UImGuiManager::~UImGuiManager()
 
 void UImGuiManager::Init()
 {
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-
     // renderer.Prepare 다음에 추가
+
+    UImGuiSizeController* SC = new UImGuiSizeController();
+
+    ImGuiArray.push_back(SC);
 }
 
 void UImGuiManager::Release()

@@ -21,6 +21,7 @@
 #include "ImGuiManager.h"
 #include "Core.h"
 #include "ImGuiAppConsole.h"
+#include "ImGuiSizeController.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -65,6 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UImGuiManager* ImGuiManager = new UImGuiManager();
 	ImGuiAppConsole* App = new ImGuiAppConsole();
+	UImGuiSizeController* SC = dynamic_cast<UImGuiSizeController*>((ImGuiManager->GetImGuiArray())[0]);
 
 	int idCube = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Cube);
 	FMeshResource* CubeResource = FMeshManager::Instance()->Get(idCube);
@@ -101,13 +103,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-
 		UE_LOG("xpos: %f", xpos);
 		UE_LOG("ypos: %f ", ypos);
 
 		if (ImGuiManager)
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
+		if (SC)
+			xpos = SC->GetSize()[0];
 
 		xpos += 0.1f;
 		ypos += 0.1f;
@@ -154,12 +157,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		renderer.UpdateConstantBuffer(CubeConstant, model, view, projection);
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(SphereResource->VertexBuffer, SphereResource->NumVerticies);
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+		ImGuiManager->Render();
+		
 		renderer.SwapBuffer();
 	}
 	renderer.ReleaseShader();
 	renderer.Release();
+
+	ImGuiManager->Release();
 
 
 	return 0;
