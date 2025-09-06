@@ -4,14 +4,14 @@
 class USceneComponent : public UObject
 {
 public:
-    static UObject* StaticClassFactory()
+    static UObject* StaticUObjectFactory()
     {
         return new USceneComponent();
     }
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("USceneComponent"), StaticClassFactory, UObject::StaticClass());
+        static UClass Class(FString("USceneComponent"), StaticUObjectFactory, UObject::StaticClass());
         return &Class;
 
     }

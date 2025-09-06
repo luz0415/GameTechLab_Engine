@@ -4,15 +4,15 @@
 class UClass
 {
 public:
-    UClass(const FString& InName, StaticClassFactory InConstructor, UClass* InParentClass = nullptr)
+    UClass(const FString& InName, StaticUObjectFactory InConstructor, UClass* InParentClass = nullptr)
         : ClassName(InName), Constructor(InConstructor), ParentClass(InParentClass) {}
 
     inline FString GetClassName() const { return ClassName; }
-    inline StaticClassFactory GetConstructor() const { return Constructor; }
+    inline StaticUObjectFactory GetConstructor() const { return Constructor; }
     inline UClass* GetParentClass() const { return ParentClass; }
 
 private:
     FString ClassName;
-    StaticClassFactory Constructor;
+    StaticUObjectFactory Constructor;
     UClass* ParentClass;
 };

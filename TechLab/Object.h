@@ -14,14 +14,14 @@ public:
 
 // 
 public:
-    static UObject* StaticClassFactory()
+    static UObject* StaticUObjectFactory()
     {
         return new UObject();
     }
 
     static UClass* StaticClass() 
     {
-        static UClass Class(FString("UObject"), StaticClassFactory);
+        static UClass Class(FString("UObject"), StaticUObjectFactory);
         return &Class;
     }
 

@@ -33,4 +33,4 @@ void operator delete[](void* Ptr) noexcept;
 // UClass
 
 // [ UObject* function(void) ] Ptr
-using StaticClassFactory = class UObject* (*)();
+using StaticUObjectFactory = class UObject* (*)();
