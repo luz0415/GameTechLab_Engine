@@ -187,6 +187,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		FObjectFactory::Get()->TickObjects(deltaTime);
 		Test->AddRelativeRotationZ(10);
 		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
+
 		for (UObject* Object : Objects)
 		{
 			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Object))
