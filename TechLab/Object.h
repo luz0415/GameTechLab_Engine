@@ -40,3 +40,16 @@ public:
 private:
     bool bShouldBeDestroyed = false;
 };
+
+// UObject Cast
+template<typename T>
+T* Cast(UObject* Object)
+{
+    if (!Object)
+        return nullptr;
+
+    if (Object->IsA(T::StaticClass()))
+        return static_cast<T*>(Object);
+
+    return nullptr;
+}

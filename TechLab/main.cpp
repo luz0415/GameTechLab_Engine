@@ -188,9 +188,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
 		for (UObject* Object : Objects)
 		{
-			if (Object->IsA(UPrimitiveComponent::StaticClass()))
+			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Object))
 			{
-				dynamic_cast<UPrimitiveComponent*>(Object)->Render();
+				PrimComp->Render();
 			}
 		}
 
