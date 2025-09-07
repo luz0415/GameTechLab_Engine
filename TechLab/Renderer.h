@@ -33,6 +33,7 @@ public:
 	ID3D11RasterizerState* RasterizerState = nullptr;
 	ID3D11Buffer* VPConstantBuffer = nullptr;
 	ID3D11Buffer* MConstantBuffer = nullptr;
+	ID3D11DepthStencilState* DepthStencilState = nullptr;
 
 	FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
 	D3D11_VIEWPORT ViewportInfo;
@@ -104,6 +105,8 @@ private:
 
 	void CreateRasterizerState();
 	void ReleaseRasterizerState();
+
+
 
 	TArray<FRenderProxy> RenderProxyList;
 };

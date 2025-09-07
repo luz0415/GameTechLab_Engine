@@ -20,8 +20,8 @@ typedef int int32;
 typedef unsigned int uint32;
 
 // Memory Allocation
-extern uint32 TotalAllocationBytes;
-extern uint32 TotalAllocationCount;
+//extern uint32 TotalAllocationBytes;
+//extern uint32 TotalAllocationCount;
 
 struct MemoryHeader
 {
