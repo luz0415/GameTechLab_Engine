@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "Transform.h"
 
 class USceneComponent : public UObject
 {
@@ -24,27 +25,49 @@ public:
     USceneComponent();
     ~USceneComponent();
 
-public:
-    // FVector GetWorldLocation() const;
-    // FVector GetWorldRotation() const;
-    // FVector GetWorldScale3D() const;
 
-    // void SetWorldLocation(const FVector& InLocation) const;
-    // void SetWorldRotation(const FVector& InRotation) const;
-    // void SetWorldScale3D(const FVector& InScale3D) const;
-    
-    // FVector GetRelativeLocation() const;
-    // FVector GetRelativeRotation() const;
-    // FVector GetRelativeScale3D() const;
- 
-    // void SetRelativeLocation(const FVector& InLocation) const;
-    // void SetRelativeRotation(const FVector& InRotation) const;
-    // void SetRelativeScale3D(const FVector& InScale3D) const;
+// Relative Transform
+public:    
+    FVector GetRelativeLocation() const { return RelativeTransform.GetLocation(); }
+    FVector GetRelativeRotation() const { return RelativeTransform.GetRotation(); }
+    FVector GetRelativeRotationRadians() const { return RelativeTransform.GetRotationRadians(); }
+    FVector GetRelativeScale() const { return RelativeTransform.GetScale(); }
+
+    void Translate(const FVector& InTranslation) { RelativeTransform.Translate(InTranslation); }
+    void SetRelativeLocation(const FVector& InLocation) { RelativeTransform.SetLocation(InLocation); }
+    void SetRelativeRotationX(const float& Degree) { RelativeTransform.AddRotationX(Degree); }
+    void SetRelativeRotationY(const float& Degree) { RelativeTransform.AddRotationY(Degree); }
+    void SetRelativeRotationZ(const float& Degree) { RelativeTransform.AddRotationZ(Degree); }
+    void SetRelativeScale(const FVector& InScale) { RelativeTransform.SetScale(InScale); }
 
 private:
-    USceneComponent* Attachment = nullptr;
+    FTransform RelativeTransform;
 
-    // FVector Location;
-    // FVector Rotation;
-    // FVector Scale3D;
+// World Transform
+public:
+    FMatrix& GetWorldMatrix();
+    FVector GetWorldLocation() { return GetWorldMatrix().GetTranslation(); }
+    FVector GetWorldRotation() { return GetWorldMatrix().GetRotation(); }
+    FVector GetWorldScale() { return GetWorldMatrix().GetScale(); }
+
+    void SetWorldLocation(const FVector& InLocation);
+    void SetWorldRotation(const FVector& InRotation);
+    void SetWorldScale(const FVector& InScale);
+
+private:
+    FMatrix CachedWorldMatrix;
+    FTransform CachedWorldTransform;
+
+// Attachment
+public:
+    void SetAttachment(USceneComponent* ParentComponent);
+    USceneComponent* GetAttachment() const { return Attachment; }
+
+private:
+    void AddAttachedChild(USceneComponent* Child);
+    void SetDirty();
+
+    USceneComponent* Attachment = nullptr;
+    TArray<USceneComponent*> Children;
+    bool bIsDirty = true;
 };

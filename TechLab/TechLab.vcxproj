@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="SceneFileManager.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="ImGuiWindow.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexSimple.h" />
     <ClCompile Include="Vector.cpp" />
@@ -169,6 +171,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MeshManager.h" />
@@ -185,6 +188,7 @@
     <ClInclude Include="ImGuiWindow.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />

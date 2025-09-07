@@ -205,7 +205,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//scale += sin(tmp);
 
 
-		FMatrix trans = FMatrix::TransformMatrix(FVector(xpos, 0, 0));
+		FMatrix trans = FMatrix::TranslateMatrix(FVector(xpos, 0, 0));
 		FMatrix rot = FMatrix::RotateMatrixZ(rotz)*FMatrix::RotateMatrixY(roty);
 		FMatrix sc = FMatrix::ScaleMatrix(FVector(scale, scale, scale));
 		FMatrix model = sc * rot * trans;
@@ -214,7 +214,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(CubeResource->VertexBuffer, CubeResource->NumVerticies);
 
-		trans = FMatrix::TransformMatrix(FVector(2, 0, 0));
+		trans = FMatrix::TranslateMatrix(FVector(0, ypos, 0));
 		model = sc * rot * trans;
 
 		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());

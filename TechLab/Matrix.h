@@ -10,11 +10,15 @@ struct FMatrix
 	FMatrix InverseAffine() const noexcept;
 	FVector TransformVector(const FVector& InVector) const noexcept;
 
-	static FMatrix TransformMatrix(FVector Trans) noexcept;
+	static FMatrix TranslateMatrix(FVector Trans) noexcept;
 	static FMatrix ScaleMatrix(FVector Scale) noexcept;
 	static FMatrix RotateMatrixX(float AngleRad) noexcept;
 	static FMatrix RotateMatrixY(float AngleRad) noexcept;
 	static FMatrix RotateMatrixZ(float AngleRad) noexcept;
+
+	FVector GetTranslation() const noexcept;
+	FVector GetScale() const noexcept;
+	FVector GetRotation() const noexcept;
 
 	static FMatrix ViewMatrix(const FVector& Eye, const FVector& At, const FVector& Up) noexcept;
 	static FMatrix ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept;
