@@ -111,7 +111,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 	// Test
-	FObjectFactory::Get()->ConstructObject<USphereComp>();
+	USceneComponent* Test = FObjectFactory::Get()->ConstructObject<USphereComp>();
 	FObjectFactory::Get()->ConstructObject<USphereComp>()->Translate(FVector(5.0f, 0.0f, 0.0f));
 	auto& Objects = FObjectFactory::Get()->GetObjectArray();
 
@@ -185,6 +185,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
 		FObjectFactory::Get()->TickObjects(deltaTime);
+		Test->AddRelativeRotationZ(10);
 		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
 		for (UObject* Object : Objects)
 		{

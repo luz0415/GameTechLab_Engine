@@ -33,12 +33,13 @@ public:
     FVector GetRelativeRotationRadians() const { return RelativeTransform.GetRotationRadians(); }
     FVector GetRelativeScale() const { return RelativeTransform.GetScale(); }
 
-    void Translate(const FVector& InTranslation) { RelativeTransform.Translate(InTranslation); }
-    void SetRelativeLocation(const FVector& InLocation) { RelativeTransform.SetLocation(InLocation); }
-    void SetRelativeRotationX(const float& Degree) { RelativeTransform.AddRotationX(Degree); }
-    void SetRelativeRotationY(const float& Degree) { RelativeTransform.AddRotationY(Degree); }
-    void SetRelativeRotationZ(const float& Degree) { RelativeTransform.AddRotationZ(Degree); }
-    void SetRelativeScale(const FVector& InScale) { RelativeTransform.SetScale(InScale); }
+    void Translate(const FVector& InTranslation) { SetDirty();  RelativeTransform.Translate(InTranslation); }
+    void SetRelativeLocation(const FVector& InLocation) { SetDirty(); RelativeTransform.SetLocation(InLocation); }
+    void SetRelativeRotation(const FVector& InRotation) { SetDirty(); RelativeTransform.SetRotation(InRotation); }
+    void AddRelativeRotationX(const float& Degree) { SetDirty(); RelativeTransform.AddRotationX(Degree); }
+    void AddRelativeRotationY(const float& Degree) { SetDirty(); RelativeTransform.AddRotationY(Degree); }
+    void AddRelativeRotationZ(const float& Degree) { SetDirty(); RelativeTransform.AddRotationZ(Degree); }
+    void SetRelativeScale(const FVector& InScale) { SetDirty(); RelativeTransform.SetScale(InScale); }
 
 private:
     FTransform RelativeTransform;
