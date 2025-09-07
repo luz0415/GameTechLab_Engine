@@ -49,7 +49,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GetCursorPos(&currentMousePos);
 			ScreenToClient(hWnd, &currentMousePos);
 			GInput.MouseX = currentMousePos.x - GLastMousePosition.x;
-			GInput.MouseY = currentMousePos.y - GLastMousePosition.y;
+			GInput.MouseY = GLastMousePosition.y - currentMousePos.y;
 			GLastMousePosition = currentMousePos;
 		}
 		else

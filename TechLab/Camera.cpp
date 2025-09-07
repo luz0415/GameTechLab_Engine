@@ -67,15 +67,11 @@ void Camera::HandleInput(const FInput& Input, float DeltaTime)
 
 void Camera::Update()
 {
-	FMatrix rotation = FMatrix::RotateMatrixY(Yaw) * FMatrix::RotateMatrixX(Pitch);
-	
+	FMatrix rotation = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
+
 	At = rotation.TransformVector(FVector(0.f, 0.f, 1.f));
 	At.Normalize();
 
-	FMatrix pitch = FMatrix::RotateMatrixX(Pitch);
-	FMatrix yaw = FMatrix::RotateMatrixY(Yaw);
-
-	//CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
 	CameraForward = At;
 	CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
 	CameraUp = rotation.TransformVector(FVector(0.f, 1.f, 0.f));
