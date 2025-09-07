@@ -1,12 +1,16 @@
 #include "Renderer.h"
 #include "SimpleConstants.h"
 #include "ImGuiManager.h"
+#include "Camera.h"
+#include "MeshManager.h"
 
 void URenderer::Create(HWND hWindow)
 {
 	CreateDeviceAndSwapChain(hWindow);
 	CreateFrameBuffer();
 	CreateRasterizerState();
+	VPConstantBuffer = CreateConstantBuffer<FViewProjConstant>();
+	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
 }
 
 void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
@@ -119,14 +123,14 @@ void URenderer::SwapBuffer()
 
 void URenderer::CreateShader()
 {
-	ID3DBlob* vertexshaderCSO;
-	ID3DBlob* pixelshaderCSO;
+	ID3DBlob* VertexShaderCSO;
+	ID3DBlob* PixelShaderCSO;
 
-	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &vertexshaderCSO, nullptr);
-	Device->CreateVertexShader(vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), nullptr, &SimpleVertexShader);
+	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
+	Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &SimpleVertexShader);
 
-	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &pixelshaderCSO, nullptr);
-	Device->CreatePixelShader(pixelshaderCSO->GetBufferPointer(), pixelshaderCSO->GetBufferSize(), nullptr, &SimplePixelShader);
+	D3DCompileFromFile(L"W2Shader.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PixelShaderCSO, nullptr);
+	Device->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &SimplePixelShader);
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -134,12 +138,10 @@ void URenderer::CreateShader()
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	Device->CreateInputLayout(layout, ARRAYSIZE(layout), vertexshaderCSO->GetBufferPointer(), vertexshaderCSO->GetBufferSize(), &SimpleInputLayout);
+	Device->CreateInputLayout(layout, ARRAYSIZE(layout), VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &SimpleInputLayout);
 
-	Stride = sizeof(FVertexSimple);
-
-	vertexshaderCSO->Release();
-	pixelshaderCSO->Release();
+	VertexShaderCSO->Release();
+	PixelShaderCSO->Release();
 }
 
 void URenderer::ReleaseShader()
@@ -176,30 +178,30 @@ void URenderer::PrepareShader()
 	DeviceContext->VSSetShader(SimpleVertexShader, nullptr, 0);
 	DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
 	DeviceContext->IASetInputLayout(SimpleInputLayout);
-
-	if (ConstantBuffer)
-	{
-		DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
-	}
 }
 
-void URenderer::PrepareShader(ID3D11Buffer* ConstBuffer)
+void URenderer::RenderScene(const Camera& SceneCamera)
 {
-	DeviceContext->VSSetShader(SimpleVertexShader, nullptr, 0);
-	DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
-	DeviceContext->IASetInputLayout(SimpleInputLayout);
+	Prepare();
+	PrepareShader();
+	UINT Offset = 0;
 
-	if (ConstBuffer)
+	FViewProjConstant VPConstant{ SceneCamera.GetViewMatrix(), SceneCamera.GetProjectionMatrix() };
+	UpdateConstantBuffer<FViewProjConstant>(VPConstantBuffer, &VPConstant);
+	DeviceContext->VSSetConstantBuffers(1, 1, &VPConstantBuffer);
+	
+	FMeshManager* MeshManager = FMeshManager::Get();
+	for (const auto& RenderProxy : RenderProxyList)
 	{
-		DeviceContext->VSSetConstantBuffers(0, 1, &ConstBuffer);
+		FMeshResource* Res = MeshManager->GetMeshResource(RenderProxy.MeshId);
+		FModelConstant MConstant{ RenderProxy.ModelWorldMatrix };
+		
+		UpdateConstantBuffer<FModelConstant>(MConstantBuffer, &MConstant);
+		DeviceContext->VSSetConstantBuffers(0, 1, &MConstantBuffer);
+		DeviceContext->IASetVertexBuffers(0, 1, &Res->VertexBuffer, &Res->Stride, &Res->Offset);
+		DeviceContext->Draw(Res->NumVertices, 0);
 	}
-}
-
-void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices)
-{
-	UINT offset = 0;
-	DeviceContext->IASetVertexBuffers(0, 1, &pBuffer, &Stride, &offset);
-	DeviceContext->Draw(numVertices, 0);
+	RenderProxyList.clear();
 }
 
 ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth)
@@ -217,11 +219,11 @@ ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexSimple* vertices, UINT byteWi
 	return vertexBuffer;
 }
 
-void URenderer::ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer)
+void URenderer::ReleaseVertexBuffer(ID3D11Buffer* VertexBuffer)
 {
-	if (vertexBuffer)
+	if (VertexBuffer)
 	{
-		vertexBuffer->Release();
+		VertexBuffer->Release();
 	}
 }
 
@@ -234,18 +236,7 @@ void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)
 	}
 }
 
-void URenderer::UpdateConstantBuffer(ID3D11Buffer* ConstantBuffer,const FMatrix& Model, const FMatrix& View, const FMatrix& Projection)
+void URenderer::SubmitProxy(const FRenderProxy& InRenderProxy)
 {
-	if (ConstantBuffer)
-	{
-		D3D11_MAPPED_SUBRESOURCE constantbufferMSR;
-
-		DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &constantbufferMSR);
-		FSimpleConstant* constants = (FSimpleConstant*)constantbufferMSR.pData;
-		constants->Model = Model;
-		constants->View = View;
-		constants->Projection = Projection;
-		DeviceContext->Unmap(ConstantBuffer, 0);
-	}
+	RenderProxyList.push_back(InRenderProxy);
 }
-

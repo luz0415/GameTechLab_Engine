@@ -133,6 +133,7 @@
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="PrimitiveComponent.cpp" />
     <ClCompile Include="SceneFileManager.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Class.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="ImGuiWindow.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SceneComponent.cpp" />
+    <ClCompile Include="SphereComp.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexSimple.h" />
@@ -175,6 +177,7 @@
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MeshManager.h" />
+    <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="RenderProxy.h" />
     <ClInclude Include="SceneFileManager.h" />
     <ClInclude Include="ShapeType.h" />
@@ -188,6 +191,7 @@
     <ClInclude Include="ImGuiWindow.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="SceneComponent.h" />
+    <ClInclude Include="SphereComp.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ImGui\imconfig.h" />

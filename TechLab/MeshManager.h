@@ -5,13 +5,15 @@
 class FMeshManager
 {
 public:
-	int RegisterMesh(ID3D11Device* Device, const EShapeType Type);
-	FMeshResource* Get(int MeshId);
-	ID3D11Buffer* CreateVertexBuffer(ID3D11Device* Device, FVertexSimple* vertices, UINT byteWidth);
-	static FMeshManager* Instance() {
+	static FMeshManager* Get() 
+	{
 		static FMeshManager Singleton;
 		return &Singleton;
 	}
+
+	int RegisterMesh(ID3D11Device* Device, const EShapeType Type);
+	FMeshResource* GetMeshResource(int MeshId);
+	ID3D11Buffer* CreateVertexBuffer(ID3D11Device* Device, FVertexSimple* vertices, UINT byteWidth);
 
 private:
 	FMeshManager() {}

@@ -12,7 +12,7 @@ public:
     uint32 UUID;
     uint32 InternalIndex;
 
-// 
+// UObject Derived Class Must Declaration
 public:
     static UObject* StaticUObjectFactory()
     {

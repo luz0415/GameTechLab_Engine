@@ -16,9 +16,11 @@
 #include "MeshManager.h"
 
 #include <memory>
-#include "Object.h"
+#include "ObjectFactory.h"
+#include "SphereComp.h"
 #include "ImGuiManager.h"
 #include "Core.h"
+#include "Math.h"
 #include "ImGuiAppConsole.h"
 
 #include "Camera.h"
@@ -105,24 +107,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080,
 		nullptr, nullptr, hInstance, nullptr);
 
-	URenderer renderer;
-	renderer.Create(hWnd);
-	renderer.CreateShader();
+	URenderer* Renderer = URenderer::Get();
+	Renderer->Create(hWnd);
+	Renderer->CreateShader();
+	// Test
+	FObjectFactory::Get()->ConstructObject<USphereComp>();
+	FObjectFactory::Get()->ConstructObject<USphereComp>()->Translate(FVector(5.0f, 0.0f, 0.0f));
+	auto& Objects = FObjectFactory::Get()->GetObjectArray();
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplWin32_Init((void*)hWnd);
-	ImGui_ImplDX11_Init(renderer.Device, renderer.DeviceContext);
+	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
 	UImGuiManager* ImGuiManager = new UImGuiManager();
 	ImGuiAppConsole* App = new ImGuiAppConsole();
-
-	int idCube = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Cube);
-	FMeshResource* CubeResource = FMeshManager::Instance()->Get(idCube);
-	int idSphere = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Sphere);
-	FMeshResource* SphereResource = FMeshManager::Instance()->Get(idSphere);
-	ID3D11Buffer* CubeConstant = renderer.CreateConstantBuffer<FSimpleConstant>();
 
 	RECT rect;
 	GetClientRect(hWnd, &rect);
@@ -133,7 +133,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	const FVector at = FVector(0, 0, 0);
 	const FVector up = FVector(0, 1, 0);
 	const float angle = 90.f;
-	const float radangle = angle * 3.1415926535f / 180.f;
+	const float radangle = angle * PI / 180.f;
 
 	Camera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
 
@@ -143,7 +143,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	QueryPerformanceCounter(&lastTime);
 
 	bool bIsExit = false;
-
 	while (bIsExit == false)
 	{
 		MSG msg;
@@ -170,7 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
 
-		renderer.Prepare();
+		Renderer->Prepare();
 
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
@@ -182,50 +181,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		float rotz = 0;
 		float scale = 1;
 
-		UE_LOG("xpos: %f", xpos);
-		UE_LOG("ypos: %f ", ypos);
-
 		if (ImGuiManager)
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
+		FObjectFactory::Get()->TickObjects(deltaTime);
+		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
+		for (UObject* Object : Objects)
+		{
+			if (Object->IsA(UPrimitiveComponent::StaticClass()))
+			{
+				dynamic_cast<UPrimitiveComponent*>(Object)->Render();
+			}
+		}
 
-		//xpos += 0.1f;
-		//ypos += 0.1f;
-		//if (xpos > 2.f)
-		//{
-		//	xpos = -2.f;
-		//}
-		//if (ypos > 2.f)
-		//{
-		//	ypos = -2.f;
-		//}
-		//rotz += 0.05f;
-		//roty += 0.05f;
-		//tmp += 1;
-		//scale += sin(tmp);
-
-
-		FMatrix trans = FMatrix::TranslateMatrix(FVector(xpos, 0, 0));
-		FMatrix rot = FMatrix::RotateMatrixZ(rotz)*FMatrix::RotateMatrixY(roty);
-		FMatrix sc = FMatrix::ScaleMatrix(FVector(scale, scale, scale));
-		FMatrix model = sc * rot * trans;
-
-		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
-		renderer.PrepareShader(CubeConstant);
-		renderer.RenderPrimitive(CubeResource->VertexBuffer, CubeResource->NumVerticies);
-
-		trans = FMatrix::TranslateMatrix(FVector(0, ypos, 0));
-		model = sc * rot * trans;
-
-		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
-		renderer.PrepareShader(CubeConstant);
-		renderer.RenderPrimitive(SphereResource->VertexBuffer, SphereResource->NumVerticies);
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-		renderer.SwapBuffer();
+
+		Renderer->RenderScene(MyCamera);
+		Renderer->SwapBuffer();
 	}
-	renderer.ReleaseShader();
-	renderer.Release();
+	Renderer->ReleaseShader();
+	Renderer->Release();
 
 	return 0;
 }

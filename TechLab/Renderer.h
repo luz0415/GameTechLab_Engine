@@ -12,9 +12,17 @@
 #include "Matrix.h"
 #include "Core.h"
 #include "RenderProxy.h"
+
 class URenderer
 {
 public:
+	// Singleton
+	static URenderer* Get()
+	{
+		static URenderer Instance;
+		return &Instance;
+	}
+
 	// 멤버 변수
 	ID3D11Device* Device = nullptr;
 	ID3D11DeviceContext* DeviceContext = nullptr;
@@ -23,7 +31,8 @@ public:
 	ID3D11Texture2D* FrameBuffer = nullptr;
 	ID3D11RenderTargetView* FrameBufferRTV = nullptr;
 	ID3D11RasterizerState* RasterizerState = nullptr;
-	ID3D11Buffer* ConstantBuffer = nullptr;
+	ID3D11Buffer* VPConstantBuffer = nullptr;
+	ID3D11Buffer* MConstantBuffer = nullptr;
 
 	FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
 	D3D11_VIEWPORT ViewportInfo;
@@ -31,9 +40,6 @@ public:
 	ID3D11VertexShader* SimpleVertexShader;
 	ID3D11PixelShader* SimplePixelShader;
 	ID3D11InputLayout* SimpleInputLayout;
-	unsigned int Stride;
-
-	TArray<FRenderProxy> RenderProxyList;
 
 public:
 	// 생성 및 해제 함수
@@ -50,16 +56,27 @@ public:
 	// 렌더링 준비 함수
 	void Prepare();
 	void PrepareShader();
-	void PrepareShader(ID3D11Buffer* ConstBuffer);
 
 	// 렌더링 함수
-	void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices);
+	void RenderScene(const class Camera& SceneCamera);
 
 	// 버퍼 생성 및 해제 함수
 	ID3D11Buffer* CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth);
 	void ReleaseVertexBuffer(ID3D11Buffer* vertexBuffer);
 	void ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer);
-	void UpdateConstantBuffer(ID3D11Buffer* ConstantBuffer, const FMatrix& Model, const FMatrix& View, const FMatrix& Projection);
+	template<typename T>
+	void UpdateConstantBuffer(ID3D11Buffer* ConstantBuffer, const T* Input)
+	{
+		if (ConstantBuffer)
+		{
+			D3D11_MAPPED_SUBRESOURCE ConstantBufferMSR;
+
+			DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMSR);
+			T* Constants = (T*)ConstantBufferMSR.pData;
+			memcpy(Constants, Input, sizeof(T));
+			DeviceContext->Unmap(ConstantBuffer, 0);
+		}
+	}
 
 	template<typename T>
 	ID3D11Buffer* CreateConstantBuffer()
@@ -74,8 +91,8 @@ public:
 		Device->CreateBuffer(&constantbufferdesc, nullptr, &constbuffer);
 		return constbuffer;
 	}
-	//void ReleaseConstantBuffer();
 
+	void SubmitProxy(const FRenderProxy& InRenderProxy);
 
 private:
 	// 내부 헬퍼 함수
@@ -87,4 +104,6 @@ private:
 
 	void CreateRasterizerState();
 	void ReleaseRasterizerState();
+
+	TArray<FRenderProxy> RenderProxyList;
 };

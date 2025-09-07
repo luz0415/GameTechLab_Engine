@@ -2,6 +2,10 @@
 cbuffer constants : register(b0)
 {
     row_major matrix Model;
+}
+
+cbuffer constants : register(b1)
+{
     row_major matrix View;
     row_major matrix Projection;
 }

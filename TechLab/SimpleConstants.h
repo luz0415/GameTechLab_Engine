@@ -6,3 +6,14 @@ struct FSimpleConstant
 	FMatrix View;
 	FMatrix Projection;
 };
+
+struct FModelConstant
+{
+	FMatrix Model;
+};
+
+struct FViewProjConstant
+{
+	FMatrix View;
+	FMatrix Projection;
+};

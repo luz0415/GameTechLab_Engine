@@ -1,5 +1,6 @@
 #include "MeshManager.h"
 #include "Shapes.h"
+
 int FMeshManager::RegisterMesh(ID3D11Device* Device, const EShapeType Type)
 {
     //이미 캐싱되어있다면
@@ -26,7 +27,7 @@ int FMeshManager::RegisterMesh(ID3D11Device* Device, const EShapeType Type)
             default:
                 break;
     }
-    Resource.NumVerticies = byteWidth / sizeof(FVertexSimple);
+    Resource.NumVertices = byteWidth / sizeof(FVertexSimple);
     Resource.VertexBuffer = CreateVertexBuffer(Device, Resource.Verticies, byteWidth);
     Resource.Stride = sizeof(FVertexSimple);
 
@@ -34,7 +35,7 @@ int FMeshManager::RegisterMesh(ID3D11Device* Device, const EShapeType Type)
     return ID;
 }
 
-FMeshResource* FMeshManager::Get(int MeshId)
+FMeshResource* FMeshManager::GetMeshResource(int MeshId)
 {
     auto iter = MeshResourceMap.find(MeshId);
     if (iter == MeshResourceMap.end())
@@ -44,7 +45,7 @@ FMeshResource* FMeshManager::Get(int MeshId)
     return &iter->second;
 }
 
-ID3D11Buffer* FMeshManager::CreateVertexBuffer(ID3D11Device* Device,FVertexSimple* vertices, UINT byteWidth)
+ID3D11Buffer* FMeshManager::CreateVertexBuffer(ID3D11Device* Device, FVertexSimple* vertices, UINT byteWidth)
 {
     D3D11_BUFFER_DESC vertexbufferdesc = {};
     vertexbufferdesc.ByteWidth = byteWidth;

@@ -16,5 +16,6 @@ struct FMeshResource
 	//UINT IndexCount = 0;
 	D3D_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	FVertexSimple* Verticies;
-	UINT NumVerticies = 0;
+	UINT NumVertices = 0;
+	UINT Offset = 0;
 };
