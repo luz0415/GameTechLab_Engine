@@ -42,5 +42,5 @@ using StaticUObjectFactory = class UObject* (*)();
 #define UE_LOG(fmt, ...) \
     do \
     { \
-        if (ImGuiManager && ImGuiManager->Console) Console->AddLog(fmt, ##__VA_ARGS__) \
+        if (ImGuiManager && ImGuiManager->GetConsole()) ImGuiManager->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
     } while(0)

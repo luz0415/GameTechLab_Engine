@@ -14,6 +14,9 @@ UImGuiManager::UImGuiManager()
     // ImGui_ImplDX11_Init(renderer.Device, renderer.DeviceContext);
 
     // 위 코드는 hWnd, renderer 등을 필요로 하므로 WinMain에 추가하기
+
+    Console = new UImGuiConsole();
+
 }
 
 UImGuiManager::~UImGuiManager()

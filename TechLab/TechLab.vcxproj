@@ -132,6 +132,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
+    <ClCompile Include="SceneFileManager.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
@@ -167,10 +168,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="RenderProxy.h" />
+    <ClInclude Include="SceneFileManager.h" />
     <ClInclude Include="ShapeType.h" />
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />

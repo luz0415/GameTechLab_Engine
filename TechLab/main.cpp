@@ -18,6 +18,8 @@
 #include <memory>
 #include "Object.h"
 #include "ImGuiManager.h"
+#include "Core.h"
+#include "ImGuiAppConsole.h"
 
 #include "Camera.h"
 
@@ -107,6 +109,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	renderer.Create(hWnd);
 	renderer.CreateShader();
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init((void*)hWnd);
+	ImGui_ImplDX11_Init(renderer.Device, renderer.DeviceContext);
+
+	UImGuiManager* ImGuiManager = new UImGuiManager();
+	ImGuiAppConsole* App = new ImGuiAppConsole();
+
 	int idCube = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Cube);
 	FMeshResource* CubeResource = FMeshManager::Instance()->Get(idCube);
 	int idSphere = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Sphere);
@@ -132,6 +143,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	QueryPerformanceCounter(&lastTime);
 
 	bool bIsExit = false;
+
 	while (bIsExit == false)
 	{
 		MSG msg;
@@ -160,9 +172,37 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		renderer.Prepare();
 
-		FMatrix trans = FMatrix::TransformMatrix(FVector(0, 0, 0));
-		FMatrix rot = FMatrix::RotateMatrixZ(0) * FMatrix::RotateMatrixY(0);
-		FMatrix sc = FMatrix::ScaleMatrix(FVector(1, 1, 1));
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+
+		UE_LOG("xpos: %f", xpos);
+		UE_LOG("ypos: %f ", ypos);
+
+		if (ImGuiManager)
+			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
+
+
+		//xpos += 0.1f;
+		//ypos += 0.1f;
+		//if (xpos > 2.f)
+		//{
+		//	xpos = -2.f;
+		//}
+		//if (ypos > 2.f)
+		//{
+		//	ypos = -2.f;
+		//}
+		//rotz += 0.05f;
+		//roty += 0.05f;
+		//tmp += 1;
+		//scale += sin(tmp);
+
+
+		FMatrix trans = FMatrix::TransformMatrix(FVector(xpos, 0, 0));
+		FMatrix rot = FMatrix::RotateMatrixZ(rotz)*FMatrix::RotateMatrixY(roty);
+		FMatrix sc = FMatrix::ScaleMatrix(FVector(scale, scale, scale));
 		FMatrix model = sc * rot * trans;
 
 		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
@@ -175,6 +215,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		renderer.UpdateConstantBuffer(CubeConstant, model, MyCamera.GetViewMatrix(), MyCamera.GetProjectionMatrix());
 		renderer.PrepareShader(CubeConstant);
 		renderer.RenderPrimitive(SphereResource->VertexBuffer, SphereResource->NumVerticies);
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 		renderer.SwapBuffer();
 	}
 	renderer.ReleaseShader();
