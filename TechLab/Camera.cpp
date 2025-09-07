@@ -85,7 +85,7 @@ void Camera::Update()
 	MoveUpDown = 0.0f;
 
 	At = Eye + At;
-	Up = FVector(0.f,1.f,0.f);
+	Up = CameraUp;
 
 	UpdateViewMatrix();
 }
