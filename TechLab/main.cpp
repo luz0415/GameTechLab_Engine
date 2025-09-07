@@ -176,6 +176,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
+		float xpos = 0;
+		float ypos = 0;
+		float roty = 0;
+		float rotz = 0;
+		float scale = 1;
 
 		UE_LOG("xpos: %f", xpos);
 		UE_LOG("ypos: %f ", ypos);
