@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="GridRenderer.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
@@ -147,7 +148,7 @@
     <ClCompile Include="SphereComp.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Vector4.cpp" />
-    <ClCompile Include="VertexSimple.h" />
+    <ClCompile Include="VertexData.h" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp">
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MeshResource.h" />

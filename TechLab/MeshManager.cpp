@@ -1,61 +1,141 @@
 #include "MeshManager.h"
 #include "Shapes.h"
 
-int FMeshManager::RegisterMesh(ID3D11Device* Device, const EShapeType Type)
+void FMeshManager::RegisterMesh(const FString& MeshKey, const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology)
 {
-    //이미 캐싱되어있다면
-    auto iter = ExistMap.find(Type);
-    if (iter != ExistMap.end())
+    auto iter = MeshResourceMap.find(MeshKey);
+    if (iter != MeshResourceMap.end())
     {
-        return iter->second;
+        return;
     }
 
-    int ID = NextId++;
-    ExistMap[Type] = ID;
-    FMeshResource Resource;
-    UINT byteWidth = 0;
+    MeshResourceMap[MeshKey] = CreateMeshResource(MeshData, Topology);
+}
+
+void FMeshManager::UpdateMesh(const FString& MeshKey, const FMeshData& NewMeshData)
+{
+    auto iter = MeshResourceMap.find(MeshKey);
+    if (iter != MeshResourceMap.end())
+    {
+        FMeshResource* OldResource = iter->second;
+        D3D_PRIMITIVE_TOPOLOGY Toplogy = OldResource->Topology;
+        if (OldResource)
+        {
+            if (OldResource->VertexBuffer) { OldResource->VertexBuffer->Release(); }
+            if (OldResource->IndexBuffer) { OldResource->IndexBuffer->Release(); }
+            delete OldResource;
+        }
+
+        iter->second = CreateMeshResource(NewMeshData, Toplogy);
+    }
+}
+
+FMeshResource* FMeshManager::GetPrimitiveMeshResource(const EPrimitiveType Type)
+{
+    // Alreay Cached
+    auto iter = PrimitiveMap.find(Type);
+    if (iter != PrimitiveMap.end())
+    {
+        return GetMeshResource(iter->second);
+    }
+    
+    FString Key;
+    FMeshData MeshData;
     switch(Type)
     {
-            case EShapeType::Cube:
-                Resource.Verticies = Shapes::cube_vertices;
-                byteWidth = sizeof(Shapes::cube_vertices);
+            case EPrimitiveType::Cube:
+                Key = "PrimitiveCube";
+                MeshData = Shapes::CubeMeshData;
                 break;
-            case EShapeType::Sphere:
-                Resource.Verticies = Shapes::sphere_vertices;
-                byteWidth = sizeof(Shapes::sphere_vertices);
+            case EPrimitiveType::Sphere:
+                Key = "PrimitiveSphere";
+                MeshData = Shapes::SphereMeshData;
                 break;
             default:
                 break;
     }
-    Resource.NumVertices = byteWidth / sizeof(FVertexSimple);
-    Resource.VertexBuffer = CreateVertexBuffer(Device, Resource.Verticies, byteWidth);
-    Resource.Stride = sizeof(FVertexSimple);
-
-    MeshResourceMap[ID] = Resource;
-    return ID;
+    RegisterMesh(Key, MeshData);
+    PrimitiveMap[Type] = Key;
+    return MeshResourceMap[Key];
 }
 
-FMeshResource* FMeshManager::GetMeshResource(int MeshId)
+FMeshResource* FMeshManager::GetMeshResource(const FString& MeshId)
 {
     auto iter = MeshResourceMap.find(MeshId);
     if (iter == MeshResourceMap.end())
     {
         return nullptr;
     }
-    return &iter->second;
+    return iter->second;
 }
 
-ID3D11Buffer* FMeshManager::CreateVertexBuffer(ID3D11Device* Device, FVertexSimple* vertices, UINT byteWidth)
+void FMeshManager::Release()
 {
-    D3D11_BUFFER_DESC vertexbufferdesc = {};
-    vertexbufferdesc.ByteWidth = byteWidth;
-    vertexbufferdesc.Usage = D3D11_USAGE_IMMUTABLE;
-    vertexbufferdesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    for (auto& Elem : MeshResourceMap)
+    {
+        FMeshResource* Resource = Elem.second;
+        if (Resource)
+        {
+            if (Resource->VertexBuffer)
+            {
+                Resource->VertexBuffer->Release();
+                Resource->VertexBuffer = nullptr;
+            }
+            if (Resource->IndexBuffer)
+            {
+                Resource->IndexBuffer->Release();
+                Resource->IndexBuffer = nullptr;
+            }
+            delete Resource;
+        }
+    }
 
-    D3D11_SUBRESOURCE_DATA vertexbufferSRD = { vertices };
+    MeshResourceMap.clear();
+}
 
-    ID3D11Buffer* vertexBuffer;
-    Device->CreateBuffer(&vertexbufferdesc, &vertexbufferSRD, &vertexBuffer);
+FMeshResource* FMeshManager::CreateMeshResource(const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology)
+{
+    FMeshResource* NewMeshResource = new FMeshResource();
+    NewMeshResource->Topology = Topology;
 
-    return vertexBuffer;
+    NewMeshResource->VertexCount = MeshData.Vertices.size();
+    NewMeshResource->IndexCount = MeshData.Indices.size();
+    NewMeshResource->Stride = sizeof(FVertex);
+
+    // Vertex Buffer
+    D3D11_BUFFER_DESC VertexBufferDesc = {};
+    VertexBufferDesc.ByteWidth = sizeof(FVertex) * NewMeshResource->VertexCount;
+    VertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+    VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+    D3D11_SUBRESOURCE_DATA vertexBufferSRD = { MeshData.Vertices.data() };
+    HRESULT hr = Device->CreateBuffer(&VertexBufferDesc, &vertexBufferSRD, &NewMeshResource->VertexBuffer);
+    if (FAILED(hr))
+    {
+        delete NewMeshResource;
+        return nullptr;
+    }
+
+    // Index Buffer
+    if (NewMeshResource->IndexCount > 0)
+    {
+        D3D11_BUFFER_DESC IndexBufferDesc = {};
+        IndexBufferDesc.ByteWidth = sizeof(uint32) * NewMeshResource->IndexCount;
+        IndexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+        IndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+        D3D11_SUBRESOURCE_DATA indexBufferSRD = { MeshData.Indices.data() };
+        hr = Device->CreateBuffer(&IndexBufferDesc, &indexBufferSRD, &NewMeshResource->IndexBuffer);
+        if (FAILED(hr))
+        {
+            delete NewMeshResource;
+            return nullptr;
+        }
+    }
+    else
+    {
+        NewMeshResource->IndexBuffer = nullptr;
+    }
+
+    return NewMeshResource;
 }

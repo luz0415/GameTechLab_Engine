@@ -23,9 +23,5 @@ public:
 
 public:
 	USphereComp();
-	virtual void Render() override;
-
-private:
-	uint32 MeshId;
 };
 

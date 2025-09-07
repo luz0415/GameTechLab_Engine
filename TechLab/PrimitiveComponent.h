@@ -5,6 +5,11 @@ class UPrimitiveComponent : public USceneComponent
 {
 // UObject Derived Class Must Declaration
 public:
+    static UObject* StaticUObjectFactory()
+    {
+        return new UPrimitiveComponent();
+    }
+
     static UClass* StaticClass()
     {
         static UClass Class(FString("UPrimitiveComponent"), nullptr, USceneComponent::StaticClass());
@@ -18,6 +23,10 @@ public:
 
 public:
 	UPrimitiveComponent() {};
-	virtual void Render() = 0;
+	virtual void Render();
+    void SetMesh(class FMeshResource* InMeshResource);
+
+private:
+    FMeshResource* MeshResource = nullptr;
 };
 

@@ -2,24 +2,24 @@
 #include "Core.h"
 #include "MeshResource.h"
 #include "ShapeType.h"
+
 class FMeshManager
 {
 public:
-	static FMeshManager* Get() 
-	{
-		static FMeshManager Singleton;
-		return &Singleton;
-	}
+	FMeshManager(ID3D11Device* InDevice) : Device(InDevice) {}
+	~FMeshManager() { Release(); }
 
-	int RegisterMesh(ID3D11Device* Device, const EShapeType Type);
-	FMeshResource* GetMeshResource(int MeshId);
-	ID3D11Buffer* CreateVertexBuffer(ID3D11Device* Device, FVertexSimple* vertices, UINT byteWidth);
+	void RegisterMesh(const FString& MeshKey, const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology = D3D_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	void UpdateMesh(const FString& MeshKey, const FMeshData& NewMeshData);
+	FMeshResource* GetPrimitiveMeshResource(const EPrimitiveType Type);
+	FMeshResource* GetMeshResource(const FString& MeshId);
+	void Release();
 
 private:
-	FMeshManager() {}
+	FMeshResource* CreateMeshResource(const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology);
 
-	int NextId{ 0 };
+	ID3D11Device* Device = nullptr;
 
-	TMap<int, FMeshResource> MeshResourceMap;//meshId <-> Resource
-	TMap<EShapeType, int> ExistMap;//이미 캐싱된 resource인지 확인
+	TMap<FString, FMeshResource*> MeshResourceMap; // { MeshId, MeshResource }
+	TMap<EPrimitiveType, FString> PrimitiveMap; // Primitive Type 별로 ID 저장
 };

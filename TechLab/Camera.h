@@ -19,6 +19,7 @@ public:
 
 	const FMatrix& GetViewMatrix() const noexcept { return ViewMatrix; }
 	const FMatrix& GetProjectionMatrix() const noexcept { return ProjectionMatrix; }
+	const FVector& GetEye() const noexcept { return Eye; }
 
 	void HandleInput(const struct FInput& Input, float DeltaTime);
 	void Update();

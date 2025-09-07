@@ -1,7 +1,6 @@
 #pragma once
 
-
-enum class EShapeType
+enum class EPrimitiveType
 {
 	Cube,
 	Sphere

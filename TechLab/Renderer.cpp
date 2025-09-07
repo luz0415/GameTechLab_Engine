@@ -2,7 +2,6 @@
 #include "SimpleConstants.h"
 #include "ImGuiManager.h"
 #include "Camera.h"
-#include "MeshManager.h"
 
 void URenderer::Create(HWND hWindow)
 {
@@ -11,6 +10,9 @@ void URenderer::Create(HWND hWindow)
 	CreateRasterizerState();
 	VPConstantBuffer = CreateConstantBuffer<FViewProjConstant>();
 	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
+	MeshManager = new FMeshManager(Device);
+	GridRenderer = new FGridRenderer();
+	GridRenderer->Init();
 }
 
 void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
@@ -110,10 +112,14 @@ void URenderer::Release()
 	DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
 
 	ReleaseRasterizerState();
-	//ReleaseConstantBuffer(); // 추가
+	ReleaseConstantBuffer(VPConstantBuffer);
+	ReleaseConstantBuffer(MConstantBuffer);
 	ReleaseShader(); // 추가
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
+
+	delete(MeshManager);
+	delete(GridRenderer);
 }
 
 void URenderer::SwapBuffer()
@@ -184,47 +190,39 @@ void URenderer::RenderScene(const Camera& SceneCamera)
 {
 	Prepare();
 	PrepareShader();
-	UINT Offset = 0;
 
 	FViewProjConstant VPConstant{ SceneCamera.GetViewMatrix(), SceneCamera.GetProjectionMatrix() };
 	UpdateConstantBuffer<FViewProjConstant>(VPConstantBuffer, &VPConstant);
 	DeviceContext->VSSetConstantBuffers(1, 1, &VPConstantBuffer);
-	
-	FMeshManager* MeshManager = FMeshManager::Get();
+
+	GridRenderer->Update(SceneCamera.GetEye());
+	GridRenderer->Render();
+
 	for (const auto& RenderProxy : RenderProxyList)
 	{
-		FMeshResource* Res = MeshManager->GetMeshResource(RenderProxy.MeshId);
+		FMeshResource* Res = RenderProxy.MeshResource;
+		if (!Res) { continue; }
+
+		DeviceContext->IASetPrimitiveTopology(RenderProxy.MeshResource->Topology);
+
 		FModelConstant MConstant{ RenderProxy.ModelWorldMatrix };
-		
 		UpdateConstantBuffer<FModelConstant>(MConstantBuffer, &MConstant);
-		DeviceContext->VSSetConstantBuffers(0, 1, &MConstantBuffer);
+		DeviceContext->VSSetConstantBuffers(0, 1, &MConstantBuffer);	
 		DeviceContext->IASetVertexBuffers(0, 1, &Res->VertexBuffer, &Res->Stride, &Res->Offset);
-		DeviceContext->Draw(Res->NumVertices, 0);
+
+		if (Res->IndexBuffer)
+		{
+			DeviceContext->IASetIndexBuffer(Res->IndexBuffer, DXGI_FORMAT_R32_UINT, Res->Offset);
+			DeviceContext->DrawIndexed(Res->IndexCount, 0, 0);
+		}
+		else
+		{
+			DeviceContext->Draw(Res->VertexCount, 0);
+		}
 	}
+
 	RenderProxyList.clear();
-}
 
-ID3D11Buffer* URenderer::CreateVertexBuffer(FVertexSimple* vertices, UINT byteWidth)
-{
-	D3D11_BUFFER_DESC vertexbufferdesc = {};
-	vertexbufferdesc.ByteWidth = byteWidth;
-	vertexbufferdesc.Usage = D3D11_USAGE_IMMUTABLE;
-	vertexbufferdesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA vertexbufferSRD = { vertices };
-
-	ID3D11Buffer* vertexBuffer;
-	Device->CreateBuffer(&vertexbufferdesc, &vertexbufferSRD, &vertexBuffer);
-
-	return vertexBuffer;
-}
-
-void URenderer::ReleaseVertexBuffer(ID3D11Buffer* VertexBuffer)
-{
-	if (VertexBuffer)
-	{
-		VertexBuffer->Release();
-	}
 }
 
 void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)
@@ -239,4 +237,26 @@ void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)
 void URenderer::SubmitProxy(const FRenderProxy& InRenderProxy)
 {
 	RenderProxyList.push_back(InRenderProxy);
+}
+
+void URenderer::RegisterMesh(const FString& MeshKey, const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology)
+{
+	if (MeshManager) { MeshManager->RegisterMesh(MeshKey, MeshData, Topology); }
+}
+
+void URenderer::UpdateMesh(const FString& MeshKey, const FMeshData& NewMeshData)
+{
+	if (MeshManager) { MeshManager->UpdateMesh(MeshKey, NewMeshData); }
+}
+
+FMeshResource* URenderer::GetPrimitiveMeshResource(const EPrimitiveType Type)
+{
+	if (MeshManager) { return MeshManager->GetPrimitiveMeshResource(Type); }
+	return nullptr;
+}
+
+FMeshResource* URenderer::GetMeshResource(const FString& MeshId)
+{
+	if (MeshManager) { return MeshManager->GetMeshResource(MeshId); }
+	return nullptr;
 }
