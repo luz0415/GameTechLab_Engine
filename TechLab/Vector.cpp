@@ -115,6 +115,11 @@ FVector FVector::GetNormalized() const noexcept
 	return Copy;
 }
 
+FVector FVector::GetAbs() const noexcept
+{
+	return FVector(std::fabs(X), std::fabs(Y), std::fabs(Z));
+}
+
 bool FVector::IsNearlyZero(float Tolerance) const noexcept
 {
 	return LengthSquared() < (Tolerance * Tolerance);
