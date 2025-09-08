@@ -1,28 +1,22 @@
+#pragma comment(lib,"user32")
+#pragma comment(lib, "d3d11")
+#pragma comment(lib, "d3dcompiler")
+
 #include <windows.h>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
-
-#pragma comment(lib,"user32")
-#pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
-
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include "Renderer.h"
-#include "SimpleConstants.h"
-#include "MeshManager.h"
-
-#include <memory>
-#include "ObjectFactory.h"
-#include "SphereComp.h"
 #include "ImGuiManager.h"
+
 #include "Core.h"
 #include "Math.h"
-#include "ImGuiAppConsole.h"
-
+#include "Renderer.h"
+#include "ObjectFactory.h"
+#include "SphereComp.h"
 #include "Camera.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

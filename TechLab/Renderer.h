@@ -4,16 +4,15 @@
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
+#include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
-#include <Windows.h> // HWND Å¸ÀÔÀ» À§ÇØ Ãß°¡
+
+#include "Core.h"
 #include "Vector.h"
 #include "Matrix.h"
-#include "Core.h"
 #include "RenderProxy.h"
-#include "MeshManager.h"
-#include "GridRenderer.h"
-#include "VisualInterface.h"
+#include "ShapeType.h"
 
 class URenderer
 {
@@ -26,23 +25,18 @@ public:
 	}
 
 public:
-	// »ý¼º ¹× ÇØÁ¦ ÇÔ¼ö
 	void Create(HWND hWindow);
 	void CreateVisualInterfaces();
 	void Release();
 
-	// ¹öÆÛ ½º¿Ò
 	void SwapBuffer();
 
-	// ¼ÎÀÌ´õ °ü·Ã ÇÔ¼ö
 	void CreateShader();
 	void ReleaseShader();
 
-	// ·»´õ¸µ ÁØºñ ÇÔ¼ö
 	void Prepare();
 	void PrepareShader();
 
-	// ·»´õ¸µ ÇÔ¼ö
 	void RenderScene(const class Camera* SceneCamera);
 
 	// Constant Buffer
@@ -51,7 +45,7 @@ public:
 	{
 		ID3D11Buffer* constbuffer;
 		D3D11_BUFFER_DESC constantbufferdesc = {};
-		constantbufferdesc.ByteWidth = sizeof(T) + 0xf & 0xfffffff0; // 16¹ÙÀÌÆ® ¹è¼ö·Î ¸ÂÃã
+		constantbufferdesc.ByteWidth = sizeof(T) + 0xf & 0xfffffff0; // 16ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;
 		constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -88,7 +82,7 @@ public:
 	FMeshResource* GetMeshResource(const FString& MeshId);
 
 private:
-	// ³»ºÎ ÇïÆÛ ÇÔ¼ö
+	// Helper Function
 	void CreateDeviceAndSwapChain(HWND& hWindow);
 	void ReleaseDeviceAndSwapChain();
 
@@ -101,7 +95,6 @@ private:
 	void CreateDepthStencilResources(HWND& Hwnd);
 	void ReleaseDepthStencilResources();
 	
-
 	IDXGISwapChain* SwapChain = nullptr;
 
 	ID3D11Texture2D* FrameBuffer = nullptr;
@@ -110,7 +103,7 @@ private:
 	ID3D11Buffer* VPConstantBuffer = nullptr;
 	ID3D11Buffer* MConstantBuffer = nullptr;
 
-	//±íÀÌ Å×½ºÆ®
+	// Depth Stencil
 	ID3D11DepthStencilState* DepthStencilState = nullptr;
 	ID3D11Texture2D* DepthStencilBuffer = nullptr;
 	ID3D11DepthStencilView* DepthStencilView = nullptr;
@@ -122,8 +115,8 @@ private:
 	ID3D11PixelShader* SimplePixelShader;
 	ID3D11InputLayout* SimpleInputLayout;
 
-	FMeshManager* MeshManager = nullptr;
-
-	TArray<VisualInterface*> VisualInterfaceList;
+	class FMeshManager* MeshManager = nullptr;
+	class FGridRenderer* GridRenderer = nullptr;
+	TArray<class VisualInterface*> VisualInterfaceList;
 	TArray<FRenderProxy> RenderProxyList;
 };
