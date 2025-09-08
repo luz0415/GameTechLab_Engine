@@ -1,4 +1,7 @@
 #include "ImGuiControlPanel.h"
+#include "SceneManager.h"
+
+#define CURRENT_CAMERA USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()
 
 void UImGuiControlPanel::Render()
 {
@@ -7,6 +10,10 @@ void UImGuiControlPanel::Render()
 
 	static int currentItem = 0;
 	const char* items[] = { "Sphere", "Cube" };
+
+	CameraProperty.CameraLocation = CURRENT_CAMERA->GetEye();
+	CameraProperty.CameraRotation = { CURRENT_CAMERA->GetRoll(), CURRENT_CAMERA->GetYaw(),CURRENT_CAMERA->GetPitch() };
+	CameraProperty.FOV = CURRENT_CAMERA->GetFOVInAngle();
 
 	//ImGuiStyle& style = ImGui::GetStyle();
 	//style.ButtonTextAlign = ImVec2(0.5, 0.5);
@@ -62,31 +69,65 @@ void UImGuiControlPanel::Render()
 	ImGui::Checkbox("Orthogonal", &bOrthogonal);
 
 	ImGui::SetNextItemWidth(286);
-	ImGui::InputFloat("FOV", &(CameraProperty.FOV));
+	ImGui::InputFloat("FOV", &(CameraProperty.FOV), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetFOVWithAngle(CameraProperty.FOV);
+		CURRENT_CAMERA->UpdateEventByImGui();
+	}
 
+	// Camera Location
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CLX", &(CameraProperty.CameraLocation.X), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetEyeX(CameraProperty.CameraLocation.X);
+	}
 	ImGui::SameLine();
+
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CLY", &(CameraProperty.CameraLocation.Y), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetEyeY(CameraProperty.CameraLocation.Y);
+	}
 	ImGui::SameLine();
+
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CLZ", &(CameraProperty.CameraLocation.Z), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetEyeZ(CameraProperty.CameraLocation.Z);
+	}
 	ImGui::SameLine();
-	ImGui::Text("Camera Location");
 
+	ImGui::Text("Camera Location");
+	
+	// Camera Rotation
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CRX", &(CameraProperty.CameraRotation.X), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetRoll(CameraProperty.CameraRotation.X);
+	}
 	ImGui::SameLine();
+
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CRY", &(CameraProperty.CameraRotation.Y), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetYaw(CameraProperty.CameraRotation.Y);
+	}
 	ImGui::SameLine();
+
 	ImGui::SetNextItemWidth(90);
 	ImGui::InputFloat("##CRZ", &(CameraProperty.CameraRotation.Z), 0, 0, "%.3f");
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		CURRENT_CAMERA->SetPitch(CameraProperty.CameraRotation.Z);
+	}
 	ImGui::SameLine();
 	ImGui::Text("Camera Rotation");
-
-
 	
 	//if (io.WantCaptureKeyboard || io.WantCaptureMouse)
 	//{

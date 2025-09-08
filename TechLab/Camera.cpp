@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Math.h"
+#include "SceneManager.h"
 
 Camera::Camera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
@@ -24,6 +25,17 @@ Camera::Camera(
 {
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
+}
+
+
+const float Camera::GetFOVInAngle()
+{
+	return FovYRad * 180 / PI;
+}
+
+void Camera::SetFOVWithAngle(const float fov)
+{
+	FovYRad = fov * PI / 180;
 }
 
 void Camera::HandleInput(const FInput& Input, float DeltaTime)
@@ -93,6 +105,11 @@ void Camera::Update()
 	Up = CameraUp;
 
 	UpdateViewMatrix();
+}
+
+void Camera::UpdateEventByImGui()
+{
+	UpdateProjectionMatrix();
 }
 
 void Camera::UpdateViewMatrix() noexcept

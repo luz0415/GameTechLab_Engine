@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "ObjectFactory.h"
 #include "SceneManager.h"
+#include "Math.h"
 
 UScene::UScene()
 {
@@ -11,15 +12,18 @@ UScene::UScene()
 	//	UPrimitiveComponent* obj = PrimToPrimComp(primitive);
 	//	Objects.push_back(obj);
 	//}
+	InitCamera();
 }
 
 UScene::UScene(const USceneData& sceneData)
 {
+	InitCamera();
 	CopyPrimComp(sceneData);
 }
 
 UScene::UScene(const std::string& path)
 {
+	InitCamera();
 	USceneData sceneData = USceneManager::LoadUSceneData(path);
 	CopyPrimComp(sceneData);
 }
@@ -76,4 +80,19 @@ void UScene::Render()
 	{
 		elem->Render();
 	}
+}
+
+void UScene::InitCamera()
+{
+	RECT Rect;
+	GetClientRect(USceneManager::Get()->GetHWND(), &Rect);
+	const int Width = Rect.right - Rect.left;
+	const int Height = Rect.bottom - Rect.top;
+	const FVector Eye = FVector(0, 3, -5);
+	const FVector At = FVector(0, 0, 0);
+	const FVector Up = FVector(0, 1, 0);
+	const float Angle = 90.f;
+	const float RadAngle = DegreeToRadians(Angle);
+
+	CurrentCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 }

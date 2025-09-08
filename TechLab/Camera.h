@@ -22,17 +22,24 @@ public:
 	const FVector& GetEye() const noexcept { return Eye; }
 
 	const float GetRoll() { return Roll; }
-	const float GetPith() { return Pitch; }
-	const float GetYaw() { return Yaw; }
+	const float GetPitch() { return Pitch; }
+	const float GetYaw() { return Yaw; }	
+	const float GetFOVInAngle();
 
 	void SetEye(const FVector eye) { Eye = eye; }
+	void SetEyeX(const float x) { Eye.X = x; }
+	void SetEyeY(const float y) { Eye.Y = y; }
+	void SetEyeZ(const float z) { Eye.Z = z; }
 	void SetRoll(const float roll) { Roll = roll; }
 	void SetPitch(const float pitch) { Pitch = pitch; }
 	void SetYaw(const float yaw) { Yaw = yaw; }
+	void SetFOVWithAngle(const float fov);
 
 	void HandleInput(const struct FInput& Input, float DeltaTime);
 	void UpdateAspectRatio(float InAspectRatio);
 	void Update();
+
+	void UpdateEventByImGui();
 
 private:
 	void UpdateViewMatrix() noexcept;
