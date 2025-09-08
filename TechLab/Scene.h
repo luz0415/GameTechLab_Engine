@@ -39,9 +39,9 @@ public:
 
     void InitCamera();
 
-    Camera* GetCurrentCamera() { return CurrentCamera; }
+    UCamera* GetCurrentCamera() { return CurrentCamera; }
 
 private:
 	TArray<UPrimitiveComponent*> Objects;
-    Camera* CurrentCamera = nullptr;
+    UCamera* CurrentCamera = nullptr;
 };

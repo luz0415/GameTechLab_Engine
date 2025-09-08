@@ -2,7 +2,7 @@
 #include "Math.h"
 #include "SceneManager.h"
 
-Camera::Camera(
+UCamera::UCamera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
 	float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ) noexcept
 	: Eye(InPosition)
@@ -28,17 +28,17 @@ Camera::Camera(
 }
 
 
-const float Camera::GetFOVInAngle()
+const float UCamera::GetFOVInAngle()
 {
 	return FovYRad * 180 / PI;
 }
 
-void Camera::SetFOVWithAngle(const float fov)
+void UCamera::SetFOVWithAngle(const float fov)
 {
 	FovYRad = fov * PI / 180;
 }
 
-void Camera::HandleInput(const FInput& Input, float DeltaTime)
+void UCamera::HandleInput(const FInput& Input, float DeltaTime)
 {
 	if (Input.bFront)
 	{
@@ -77,13 +77,13 @@ void Camera::HandleInput(const FInput& Input, float DeltaTime)
 	}
 }
 
-void Camera::UpdateAspectRatio(float InAspectRatio)
+void UCamera::UpdateAspectRatio(float InAspectRatio)
 {
 	AspectRatio = InAspectRatio;
 	UpdateProjectionMatrix();
 }
 
-void Camera::Update()
+void UCamera::Update()
 {
 	FMatrix RotationMatrix = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
 	At = RotationMatrix.TransformVector(FVector(0.f, 0.f, 1.f));
@@ -107,17 +107,17 @@ void Camera::Update()
 	UpdateViewMatrix();
 }
 
-void Camera::UpdateEventByImGui()
+void UCamera::UpdateEventByImGui()
 {
 	UpdateProjectionMatrix();
 }
 
-void Camera::UpdateViewMatrix() noexcept
+void UCamera::UpdateViewMatrix() noexcept
 {
 	ViewMatrix = FMatrix::ViewMatrix(Eye, At, Up);
 }
 
-void Camera::UpdateProjectionMatrix() noexcept
+void UCamera::UpdateProjectionMatrix() noexcept
 {
 	ProjectionMatrix = FMatrix::ProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
 }

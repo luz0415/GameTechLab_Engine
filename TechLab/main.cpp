@@ -21,13 +21,30 @@
 #include "SceneManager.h"
 #include "SphereComp.h"
 #include "CubeComp.h"
+#include "ObjectPicker.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-Camera* MainCamera;
+UCamera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
 USceneComponent* Test;
+
+// Object Picker (TEMP)
+UObjectPicker* GObjectPicker = nullptr;
+uint32_t GPickedObjectID = 0;
+
+// Mouse Position (TEMP)
+int GMouseX = 0;
+int GMouseY = 0;
+
+// Picking Debug Info (TEMP)
+FVector GRayOrigin = { 0,0,0 };
+FVector GRayDirection = { 0,0,0 };
+int GTotalObjectCount = 0;
+int GSuccessfulCastCount = 0;
+float GLastBestT = 0.0f;
+uint32_t GNewSelectionID = 0;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -45,7 +62,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		GInput.bMouseRightClick = false;
 		break;
-	case WM_MOUSEMOVE:
+			case WM_MOUSEMOVE:
 		if (GInput.bMouseRightClick)
 		{
 			POINT currentMousePos;
@@ -61,6 +78,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GInput.MouseY = 0;
 		}
 		break;
+		case WM_LBUTTONDOWN:
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
+			{
+				POINT currentMousePos;
+								GetCursorPos(&currentMousePos);
+				ScreenToClient(hWnd, &currentMousePos);
+				GMouseX = currentMousePos.x;
+				GMouseY = currentMousePos.y;
+				USceneManager::Get()->GetObjectPicker()->HandleMouseClick(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
+			}
+			break;
+		}
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
@@ -122,11 +153,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080,
 		nullptr, nullptr, hInstance, nullptr);
 
-	USceneManager::Get()->SetHWND(hWnd);
-
 	URenderer* Renderer = URenderer::Get();
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
+
+	USceneManager::Get()->SetHWND(hWnd);
+	USceneManager::Get()->GetCurrentScene()->InitCamera();
+
+	USceneManager::Get()->SetObjectPickerCamera();
 	// Test
 
 
@@ -151,6 +185,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+
+	// Object Picker (TEMP)
+	/*GObjectPicker = new UObjectPicker(MainCamera);
+	GObjectPicker->SetViewportSize(Width, Height);*/
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;
@@ -184,6 +222,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
 
+		// 1. Clear Screen
 		Renderer->Prepare();
 
 		ImGui_ImplDX11_NewFrame();
@@ -192,6 +231,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		UImGuiManager::Get()->Render();
 
+		/*ImGui::Begin("Jungle Property Window");
+		ImGui::Text("Hello Jungle World!");
+		ImGui::Text("Picked Object ID: %u", GPickedObjectID);
+		ImGui::Text("Picked Position (Client): %d, %d", GMouseX, GMouseY);
+
+		ImGui::Separator();
+		ImGui::Text("-- Picking Debug --");
+		ImGui::Text("Ray Origin: %.3f, %.3f, %.3f", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
+		ImGui::Text("Ray Direction: %.3f, %.3f, %.3f", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
+		ImGui::Text("Total Objects in Scene: %d", GTotalObjectCount);
+		ImGui::Text("Successful Raycasts: %d", GSuccessfulCastCount);
+		ImGui::Text("Closest Hit Time (BestT): %f", GLastBestT);
+		ImGui::Text("New Selection ID (before update): %u", GNewSelectionID);
+		ImGui::End();*/
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 

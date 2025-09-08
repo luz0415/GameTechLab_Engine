@@ -8,6 +8,12 @@
 #include <memory>
 
 #include "ImGuiAppConsole.h"
+#include "Vector.h"
+//#include "ImGuiManager.h"
+
+//#include "ObjectPicker.h"
+
+class UImGuiManager;
 
 template<typename T>
 using TArray = std::vector<T>;
@@ -45,3 +51,11 @@ using StaticUObjectFactory = class UObject* (*)();
     { \
         if (UImGuiManager::Get() && UImGuiManager::Get()->GetConsole()) UImGuiManager::Get()->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
     } while(0)
+
+// Ray
+struct FHitRecord
+{
+    FVector Point;
+    FVector normal;
+    float Time;
+};

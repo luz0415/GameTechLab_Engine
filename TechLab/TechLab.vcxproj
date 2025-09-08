@@ -151,6 +151,7 @@
     <ClCompile Include="SceneComponent.cpp" />
     <ClCompile Include="SphereComp.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="ObjectPicker.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexData.h" />
     <ClCompile Include="Vector.cpp" />
@@ -183,12 +184,15 @@
     <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="ImGuiControlPanel.h" />
     <ClInclude Include="ImGuiPropertyWindow.h" />
+    <ClInclude Include="Pickable.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PrimitiveComponent.h" />
+    <ClInclude Include="Ray.h" />
+    <ClInclude Include="Raycastable.h" />
     <ClInclude Include="RenderProxy.h" />
     <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="Scene.h" />
@@ -206,6 +210,7 @@
     <ClInclude Include="SceneComponent.h" />
     <ClInclude Include="SphereComp.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="ObjectPicker.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />

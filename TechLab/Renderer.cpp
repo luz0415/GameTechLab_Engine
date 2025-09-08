@@ -81,8 +81,8 @@ void URenderer::CreateFrameBuffer()
 	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&FrameBuffer);
 
 	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
-	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // »ö»ó Æ÷¸Ë
-	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D ÅØ½ºÃ³
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D ï¿½Ø½ï¿½Ã³
 
 	Device->CreateRenderTargetView(FrameBuffer, &framebufferRTVdesc, &FrameBufferRTV);
 }
@@ -151,7 +151,7 @@ void URenderer::CreateDepthStencilResources(HWND& Hwnd)
 
 	dsDesc.DepthEnable = TRUE;
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;//±âÁ¸ ÇÈ¼¿º¸´Ù z°ªÀÌ ÀûÀº°É ±íÀÌ¹öÆÛ¿¡ Àû´Â´Ù
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;//ê¸°ì¡´ í”½ì…€ë³´ë‹¤ zê°’ì´ ì ì€ê±¸ ê¹Šì´ë²„í¼ì— ì ëŠ”ë‹¤
 
 	dsDesc.StencilEnable = FALSE;
 	dsDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
@@ -182,8 +182,8 @@ void URenderer::CreateDepthStencilResources(HWND& Hwnd)
 		// UE_LOG("CreateDepthStencilView : [FAILED TO CREATE DEPTH_STENCIL_BUFFER]");
 	}
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-	dsvDesc.Format = texDesc.Format;                   // ÅØ½ºÃ³ÀÇ Æ÷¸Ë°ú µ¿ÀÏÇÏ°Ô ¼³Á¤
-	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // 2D ÅØ½ºÃ³ ºä·Î ¼³Á¤
+	dsvDesc.Format = texDesc.Format;                   // í…ìŠ¤ì²˜ì˜ í¬ë§·ê³¼ ë™ì¼í•˜ê²Œ ì„¤ì •
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // 2D í…ìŠ¤ì²˜ ë·°ë¡œ ì„¤ì •
 	dsvDesc.Texture2D.MipSlice = 0;
 
 	hr = Device->CreateDepthStencilView(DepthStencilBuffer, &dsvDesc, &DepthStencilView);
@@ -200,7 +200,7 @@ void URenderer::Release()
 	ReleaseRasterizerState();
 	ReleaseConstantBuffer(VPConstantBuffer);
 	ReleaseConstantBuffer(MConstantBuffer);
-	ReleaseShader(); // Ãß°¡
+	ReleaseShader(); // ï¿½ß°ï¿½
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
 	ReleaseDepthStencilResources();
@@ -278,7 +278,7 @@ void URenderer::PrepareShader()
 	DeviceContext->IASetInputLayout(SimpleInputLayout);
 }
 
-void URenderer::RenderScene(const Camera* SceneCamera)
+void URenderer::RenderScene(const UCamera* SceneCamera)
 {
 	//Prepare();
 	PrepareShader();

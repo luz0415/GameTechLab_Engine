@@ -12,18 +12,24 @@ UScene::UScene()
 	//	UPrimitiveComponent* obj = PrimToPrimComp(primitive);
 	//	Objects.push_back(obj);
 	//}
-	InitCamera();
+
+	USphereComp* Sph1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
+	Sph1->SetWorldLocation(FVector(0.f, 0.f, 0.f));
+
+	USphereComp* Cube1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
+	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));
+
+	Objects.push_back(Sph1);
+	Objects.push_back(Cube1);
 }
 
 UScene::UScene(const USceneData& sceneData)
 {
-	InitCamera();
 	CopyPrimComp(sceneData);
 }
 
 UScene::UScene(const std::string& path)
 {
-	InitCamera();
 	USceneData sceneData = USceneManager::LoadUSceneData(path);
 	CopyPrimComp(sceneData);
 }
@@ -85,6 +91,7 @@ void UScene::Render()
 void UScene::InitCamera()
 {
 	RECT Rect;
+	//USceneManager* SManager = USceneManager::Get();
 	GetClientRect(USceneManager::Get()->GetHWND(), &Rect);
 	const int Width = Rect.right - Rect.left;
 	const int Height = Rect.bottom - Rect.top;
@@ -94,5 +101,5 @@ void UScene::InitCamera()
 	const float Angle = 90.f;
 	const float RadAngle = DegreeToRadians(Angle);
 
-	CurrentCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
+	CurrentCamera = new UCamera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 }

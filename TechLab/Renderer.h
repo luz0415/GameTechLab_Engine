@@ -37,7 +37,7 @@ public:
 	void Prepare();
 	void PrepareShader();
 
-	void RenderScene(const class Camera* SceneCamera);
+	void RenderScene(const class UCamera* SceneCamera);
 
 	// Constant Buffer
 	template<typename T>

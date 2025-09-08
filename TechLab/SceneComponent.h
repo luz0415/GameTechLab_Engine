@@ -1,8 +1,10 @@
 #pragma once
 #include "Object.h"
 #include "Transform.h"
+#include "Pickable.h"
+#include "Raycastable.h"
 
-class USceneComponent : public UObject
+class USceneComponent : public UObject, public IPickable, public IRaycastable
 {
 public:
     static UObject* StaticUObjectFactory()
@@ -71,4 +73,10 @@ private:
     USceneComponent* Attachment = nullptr;
     TArray<USceneComponent*> Children;
     bool bIsDirty = true;
+
+// Picking
+public:
+    virtual void OnSelected() override {};
+    virtual void OnDeselected() override {};
+    virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
 };

@@ -1,12 +1,14 @@
 #pragma once
 
 struct FVector;
+struct FVector4;
 struct FMatrix
 {
 	float M[4][4]{};
 
 	static FMatrix Identity() noexcept;
 	FMatrix Transpose() const noexcept;
+	FMatrix Inverse() const noexcept;
 	FMatrix InverseAffine() const noexcept;
 	FVector TransformVector(const FVector& InVector) const noexcept;
 
@@ -24,6 +26,9 @@ struct FMatrix
 	static FMatrix ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept;
 
 	FMatrix operator*(const FMatrix& Other) const noexcept;
+	FVector4 operator*(const FVector4& Other) const noexcept;
+
 	float(&operator[](int Row) noexcept)[4] { return M[Row]; }
 	const float(&operator[](int Row) const noexcept)[4] { return M[Row]; }
 };
+FVector4 operator*(const FVector4& v, const FMatrix& M) noexcept;

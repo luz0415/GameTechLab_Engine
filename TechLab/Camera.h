@@ -2,10 +2,10 @@
 #include "Matrix.h"
 #include "Vector.h"
 
-class Camera
+class UCamera
 {
 public:
-	Camera(
+	UCamera(
 		const FVector& InPosition,
 		const FVector& InTarget,
 		const FVector& InUpDirection,
@@ -15,7 +15,7 @@ public:
 		float InFarZ
 	) noexcept;
 
-	virtual ~Camera() = default;
+	virtual ~UCamera() = default;
 
 	const FMatrix& GetViewMatrix() const noexcept { return ViewMatrix; }
 	const FMatrix& GetProjectionMatrix() const noexcept { return ProjectionMatrix; }
@@ -58,9 +58,9 @@ private:
 	FMatrix ViewMatrix;
 	FMatrix ProjectionMatrix;
 
-	float Roll;
-	float Yaw;
-	float Pitch;
+	float Roll{ 0 };
+	float Yaw{ 0 };
+	float Pitch{ 0 };
 
 	float MoveLeftRight;
 	float MoveBackForward;

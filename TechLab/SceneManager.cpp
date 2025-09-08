@@ -1,11 +1,20 @@
 #include "SceneManager.h"
 #include "json.hpp"
+#include "ObjectPicker.h"
 
 using namespace json;
 
+USceneManager::USceneManager()
+{
+    CurrentScene = new UScene();
+    //CurrentScene->InitCamera();
+    ObjectPicker = new UObjectPicker();
+
+   
+}
+
 USceneManager::~USceneManager()
 {
-
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
@@ -158,4 +167,16 @@ void USceneManager::LoadSceneByExplorer()
     UScene* scene = new UScene(JSONToUSceneData(sceneJSON));
 
     Get()->CurrentScene = scene;
+}
+
+void USceneManager::SetObjectPickerCamera()
+{
+    ObjectPicker->SetCamera(CurrentScene->GetCurrentCamera());
+
+    RECT Rect;
+    GetClientRect(g_hWnd, &Rect);
+    const int Width = Rect.right - Rect.left;
+    const int Height = Rect.bottom - Rect.top;
+
+    ObjectPicker->SetViewportSize(Width, Height);
 }

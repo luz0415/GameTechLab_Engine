@@ -1,5 +1,6 @@
 #include "ImGuiPropertyWindow.h"
 #include "SceneManager.h"
+#include "Core.h"
 
 #define INPUT_BOX_WIDTH 70
 
@@ -90,6 +91,15 @@ void UImGuiPropertyWindow::Render()
 	ImGui::SameLine();
 
 	ImGui::Text("Scale");
+
+	static int a = 1234;
+
+	if (!USceneManager::Get()->GetObjectPicker()->GetCurrentSelection().empty())
+	{
+		a = (dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]))->UUID;
+	}
+
+	ImGui::Text("%d", a);
 
 	ImGui::End();
 }
