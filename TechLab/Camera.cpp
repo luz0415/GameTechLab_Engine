@@ -119,5 +119,6 @@ void UCamera::UpdateViewMatrix() noexcept
 
 void UCamera::UpdateProjectionMatrix() noexcept
 {
-	ProjectionMatrix = FMatrix::ProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
+	//ProjectionMatrix = FMatrix::PrespectiveProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
+	ProjectionMatrix = FMatrix::OrthographicProjectionMatrix(-10.f, 10.f, -10.f, 10.f, NearZ, FarZ);
 }
