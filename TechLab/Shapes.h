@@ -4,15 +4,32 @@
 namespace Shapes {
 FMeshData CubeMeshData = FMeshData
 {
-	{
-		{ {-1.f, -1.f, 0.0f}, {1.0f, 0.0f, 0.0f, 1.0f} }, // »¡°­
-		{ { 1.f, -1.f, 0.0f}, {0.0f, 1.0f, 0.0f, 1.0f} }, // ÃÊ·Ï
-		{ { 1.f,  1.f, 0.0f}, {0.0f, 0.0f, 1.0f, 1.0f} }, // ÆÄ¶û
-		{ {-1.f,  1.f, 0.0f}, {1.0f, 1.0f, 0.0f, 1.0f} }  // ³ë¶û
-	},
-	{ 0,1,2,0,2,3 }
+    {
+        { {-1.0f, -1.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f} }, // 0: Front bottom-left (red)
+        { {-1.0f, 1.0f, 1.0f}, {1.0f, 1.0f, 0.0f, 1.0f} },  // 1: Front top-left (yellow)
+        { {1.0f, -1.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f} },  // 2: Front bottom-right (green)
+        { {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f} },   // 3: Front top-right (blue)
+        { {-1.0f, -1.0f, -1.0f}, {0.0f, 1.0f, 1.0f, 1.0f} }, // 4: Back bottom-left (cyan)
+        { {-1.0f, 1.0f, -1.0f}, {1.0f, 0.0f, 1.0f, 1.0f} },  // 5: Back top-left (magenta)
+        { {1.0f, -1.0f, -1.0f}, {1.0f, 0.5f, 0.0f, 1.0f} },  // 6: Back bottom-right (orange)
+        { {1.0f, 1.0f, -1.0f}, {0.5f, 0.0f, 0.5f, 1.0f} }    // 7: Back top-right (purple)
+    },
+    {
+       // Front face (Z+)
+        0, 2, 1,  1, 2, 3,
+        // Back face (Z-) 
+        6, 4, 5,  6, 5, 7,
+        // Left face (X-)
+        4, 0, 1,  4, 1, 5,
+        // Right face (X+)
+        2, 6, 7,  2, 7, 3,
+        // Top face (Y+)
+        1, 3, 7,  1, 7, 5,
+        // Bottom face (Y-)
+        4, 6, 2,  4, 2, 0
+    }
 };
-FMeshData SphereMeshData = FMeshData{
+FMeshData SphereMeshData {
 {
 { {0.000000f, 1.000000f, 0.000000f}, {0.500000f, 1.000000f, 0.500000f, 1.000000f} },
 { {0.156434f, 0.987688f, 0.000000f}, {0.578217f, 0.993844f, 0.500000f, 1.000000f} },

@@ -83,7 +83,7 @@ void Camera::Update()
 
 	Eye += CameraRight * MoveLeftRight;
 	Eye += CameraForward * MoveBackForward;
-	Eye += CameraUp * MoveUpDown;
+	Eye += FVector(0, 1, 0) * MoveUpDown;
 
 	MoveLeftRight = 0.0f;
 	MoveBackForward = 0.0f;

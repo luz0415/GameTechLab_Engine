@@ -20,7 +20,7 @@ void FGridRenderer::Init()
 void FGridRenderer::Update(const FVector& CameraPos)
 {
     float Distance = FVector::Dist(CameraPos, LastCameraPos);
-    if (Distance > GridSize * 5)
+    if (Distance > GridSize)
     {
         RegenerateGrid(CameraPos);
         LastCameraPos = CameraPos;

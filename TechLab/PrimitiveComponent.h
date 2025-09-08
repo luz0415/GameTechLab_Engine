@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneComponent.h"
+#include "PrimitiveType.h"
 
 class UPrimitiveComponent : public USceneComponent
 {
@@ -22,11 +23,14 @@ public:
     }
 
 public:
-	UPrimitiveComponent() {};
+	UPrimitiveComponent();
 	virtual void Render();
     void SetMesh(class FMeshResource* InMeshResource);
+    EPrimitiveType GetPrimitiveType() const { return Type; }
+    void SetPrimitiveType(EPrimitiveType InType);
 
 private:
+    EPrimitiveType Type = EPrimitiveType::Custom;
     FMeshResource* MeshResource = nullptr;
 };
 

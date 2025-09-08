@@ -1,18 +1,18 @@
 #pragma once
 #include "PrimitiveComponent.h"
 
-class USphereComp : public UPrimitiveComponent
+class UCubeComp : public UPrimitiveComponent
 {
     // UObject Derived Class Must Declaration
 public:
     static UObject* StaticUObjectFactory()
     {
-        return new USphereComp();
+        return new UCubeComp();
     }
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("USphereComp"), StaticUObjectFactory, UPrimitiveComponent::StaticClass());
+        static UClass Class(FString("UCubeComp"), StaticUObjectFactory, UPrimitiveComponent::StaticClass());
         return &Class;
     }
 
@@ -22,5 +22,6 @@ public:
     }
 
 public:
-	USphereComp();
+    UCubeComp();
 };
+

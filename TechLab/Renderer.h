@@ -12,7 +12,7 @@
 #include "Vector.h"
 #include "Matrix.h"
 #include "RenderProxy.h"
-#include "ShapeType.h"
+#include "PrimitiveType.h"
 
 class URenderer
 {

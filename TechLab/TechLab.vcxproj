@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="CubeComp.cpp" />
     <ClCompile Include="GridRenderer.cpp" />
     <ClCompile Include="ImGuiPropertyWindow.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CubeComp.h" />
     <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="ImGuiPropertyWindow.h" />
     <ClInclude Include="json.hpp" />
@@ -186,7 +188,7 @@
     <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="RenderProxy.h" />
     <ClInclude Include="SceneFileManager.h" />
-    <ClInclude Include="ShapeType.h" />
+    <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="Core.h" />

@@ -32,6 +32,8 @@ void FMeshManager::UpdateMesh(const FString& MeshKey, const FMeshData& NewMeshDa
 
 FMeshResource* FMeshManager::GetPrimitiveMeshResource(const EPrimitiveType Type)
 {
+    if (Type == EPrimitiveType::Custom) { return nullptr; }
+
     // Alreay Cached
     auto iter = PrimitiveMap.find(Type);
     if (iter != PrimitiveMap.end())

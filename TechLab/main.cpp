@@ -16,8 +16,10 @@
 #include "Math.h"
 #include "Renderer.h"
 #include "ObjectFactory.h"
-#include "SphereComp.h"
 #include "Camera.h"
+
+#include "SphereComp.h"
+#include "CubeComp.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -121,7 +123,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Test
 	USceneComponent* Test = FObjectFactory::Get()->ConstructObject<USphereComp>();
 	FObjectFactory::Get()->ConstructObject<USphereComp>()->Translate(FVector(5.0f, 0.0f, 0.0f));
-	auto& Objects = FObjectFactory::Get()->GetObjectArray();
+	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(0.0f, 5.0f, 5.0f));
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
