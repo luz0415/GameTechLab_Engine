@@ -65,16 +65,21 @@ void Camera::HandleInput(const FInput& Input, float DeltaTime)
 	}
 }
 
+void Camera::UpdateAspectRatio(float InAspectRatio)
+{
+	AspectRatio = InAspectRatio;
+	UpdateProjectionMatrix();
+}
+
 void Camera::Update()
 {
-	FMatrix rotation = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
-
-	At = rotation.TransformVector(FVector(0.f, 0.f, 1.f));
+	FMatrix RotationMatrix = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
+	At = RotationMatrix.TransformVector(FVector(0.f, 0.f, 1.f));
 	At.Normalize();
 
 	CameraForward = At;
-	CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
-	CameraUp = rotation.TransformVector(FVector(0.f, 1.f, 0.f));
+	CameraRight = RotationMatrix.TransformVector(FVector(1.f, 0.f, 0.f));
+	CameraUp = RotationMatrix.TransformVector(FVector(0.f, 1.f, 0.f));
 
 	Eye += CameraRight * MoveLeftRight;
 	Eye += CameraForward * MoveBackForward;

@@ -185,16 +185,16 @@ void URenderer::PrepareShader()
 	DeviceContext->IASetInputLayout(SimpleInputLayout);
 }
 
-void URenderer::RenderScene(const Camera& SceneCamera)
+void URenderer::RenderScene(const Camera* SceneCamera)
 {
 	Prepare();
 	PrepareShader();
 
-	FViewProjConstant VPConstant{ SceneCamera.GetViewMatrix(), SceneCamera.GetProjectionMatrix() };
+	FViewProjConstant VPConstant{ SceneCamera->GetViewMatrix(), SceneCamera->GetProjectionMatrix() };
 	UpdateConstantBuffer<FViewProjConstant>(VPConstantBuffer, &VPConstant);
 	DeviceContext->VSSetConstantBuffers(1, 1, &VPConstantBuffer);
 
-	GridRenderer->Update(SceneCamera.GetEye());
+	GridRenderer->Update(SceneCamera->GetEye());
 	GridRenderer->Render();
 
 	for (const auto& RenderProxy : RenderProxyList)

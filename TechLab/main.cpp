@@ -27,6 +27,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+Camera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
 
@@ -86,6 +87,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		default: break;
 		}
 		break;
+	case WM_SIZE:
+	{
+		WPARAM ResizeType = wParam;
+		if (ResizeType == SIZE_MINIMIZED)
+			return 0;
+		UINT Width = LOWORD(lParam);
+		UINT Height = HIWORD(lParam);
+		float AspectRatio = (float)Width / (float)Height;
+
+		if (MainCamera) { MainCamera->UpdateAspectRatio(AspectRatio); }
+
+		break;
+	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -124,18 +138,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	UImGuiManager* ImGuiManager = new UImGuiManager();
 	ImGuiAppConsole* App = new ImGuiAppConsole();
 
-	RECT rect;
-	GetClientRect(hWnd, &rect);
-	const int width = rect.right - rect.left;
-	const int height = rect.bottom - rect.top;
-
-	const FVector eye = FVector(0, 0, -5);
-	const FVector at = FVector(0, 0, 0);
-	const FVector up = FVector(0, 1, 0);
-	const float angle = 90.f;
-	const float radangle = angle * PI / 180.f;
-
-	Camera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
+	RECT Rect;
+	GetClientRect(hWnd, &Rect);
+	const int Width = Rect.right - Rect.left;
+	const int Height = Rect.bottom - Rect.top;
+	const FVector Eye = FVector(0, 0, -5);
+	const FVector At = FVector(0, 0, 0);
+	const FVector Up = FVector(0, 1, 0);
+	const float Angle = 90.f;
+	const float RadAngle = DegreeToRadians(Angle);
+	MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;
@@ -159,12 +171,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// Calculate DeltaTime
 		QueryPerformanceCounter(&currentTime);
-		float deltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
+		float DeltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
 		lastTime = currentTime;
 
 		// Update Camera
-		MyCamera.HandleInput(GInput, deltaTime);
-		MyCamera.Update();
+		MainCamera->HandleInput(GInput, DeltaTime);
+		MainCamera->Update();
 		// Reset mouse delta after processing
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
@@ -175,35 +187,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		float xpos = 0;
-		float ypos = 0;
-		float roty = 0;
-		float rotz = 0;
-		float scale = 1;
-
 		if (ImGuiManager)
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
-		FObjectFactory::Get()->TickObjects(deltaTime);
 		Test->AddRelativeRotationZ(10);
-		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
-
-		for (UObject* Object : Objects)
-		{
-			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Object))
-			{
-				PrimComp->Render();
-			}
-		}
+		FObjectFactory::Get()->TickObjects(DeltaTime);
 
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		Renderer->RenderScene(MyCamera);
+		Renderer->RenderScene(MainCamera);
 		Renderer->SwapBuffer();
 	}
 	Renderer->ReleaseShader();
 	Renderer->Release();
+	
+	delete ImGuiManager;
+	delete App;
+	delete MainCamera;
 
 	return 0;
 }

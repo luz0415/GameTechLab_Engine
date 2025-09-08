@@ -22,6 +22,7 @@ public:
 	const FVector& GetEye() const noexcept { return Eye; }
 
 	void HandleInput(const struct FInput& Input, float DeltaTime);
+	void UpdateAspectRatio(float InAspectRatio);
 	void Update();
 
 private:
