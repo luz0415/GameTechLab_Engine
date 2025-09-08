@@ -25,20 +25,29 @@ UScene::~UScene()
 
 UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
 {
-	UPrimitiveComponent* primComp;
-	
+	UPrimitiveComponent* pPrimComp = new UPrimitiveComponent();
+
 	if (primitive.Type == "Sphere")
 	{
-		primComp->Type
+		pPrimComp->SetPrimitiveType(EPrimitiveType::Sphere);
 	}
 	else if (primitive.Type == "Cube")
 	{
-		primComp->
+		pPrimComp->SetPrimitiveType(EPrimitiveType::Cube);
+	}
+	else if (primitive.Type == "Custom")
+	{
+		pPrimComp->SetPrimitiveType(EPrimitiveType::Custom);
+	}
+	else
+	{
+		return nullptr;
 	}
 
-	primitive.Location;
+	pPrimComp->SetWorldLocation(primitive.Location);
+	pPrimComp->SetWorldRotation(primitive.Rotation);
+	pPrimComp->SetWorldScale(primitive.Scale);
 
-	pUSceneComp = new SphereComponent()
-	return nullptr;
+	return pPrimComp;
 }
 

@@ -81,11 +81,16 @@ Primitive USceneManager::ParsePrimitive(const json::JSON& j)
     Primitive p;
     p.Type = j.at("Type").ToString();
 
-    for (int i = 0; i < 3; i++) {
-        p.Location[i] = (float)j.at("Location").at(i).ToFloat();
-        p.Rotation[i] = (float)j.at("Rotation").at(i).ToFloat();
-        p.Scale[i] = (float)j.at("Scale").at(i).ToFloat();
-    }
+    p.Location.X = (float)j.at("Location").at(0).ToFloat();
+    p.Location.Y = (float)j.at("Location").at(1).ToFloat();
+    p.Location.Z = (float)j.at("Location").at(2).ToFloat();
+    p.Rotation.X = (float)j.at("Rotation").at(0).ToFloat();
+    p.Rotation.Y = (float)j.at("Rotation").at(1).ToFloat();
+    p.Rotation.Z = (float)j.at("Rotation").at(2).ToFloat();
+    p.Scale.X = (float)j.at("Scale").at(0).ToFloat();
+    p.Scale.Y = (float)j.at("Scale").at(1).ToFloat();
+    p.Scale.Z = (float)j.at("Scale").at(2).ToFloat();
+    
     return p;
 }
 
