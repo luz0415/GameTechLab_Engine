@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "ImGuiAppConsole.h"
+#include "ImGuiManager.h"
 
 template<typename T>
 using TArray = std::vector<T>;
