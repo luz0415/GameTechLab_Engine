@@ -137,7 +137,8 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="PrimitiveComponent.cpp" />
-    <ClCompile Include="SceneFileManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
@@ -187,8 +188,14 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="RenderProxy.h" />
+<<<<<<< Updated upstream
     <ClInclude Include="SceneFileManager.h" />
     <ClInclude Include="PrimitiveType.h" />
+=======
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ShapeType.h" />
+>>>>>>> Stashed changes
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="Core.h" />
