@@ -114,6 +114,7 @@ FMeshResource* FMeshManager::CreateMeshResource(const FMeshData& MeshData, D3D_P
     HRESULT hr = Device->CreateBuffer(&VertexBufferDesc, &vertexBufferSRD, &NewMeshResource->VertexBuffer);
     if (FAILED(hr))
     {
+        NewMeshResource->VertexBuffer->Release();
         delete NewMeshResource;
         return nullptr;
     }
@@ -130,6 +131,7 @@ FMeshResource* FMeshManager::CreateMeshResource(const FMeshData& MeshData, D3D_P
         hr = Device->CreateBuffer(&IndexBufferDesc, &indexBufferSRD, &NewMeshResource->IndexBuffer);
         if (FAILED(hr))
         {
+            NewMeshResource->IndexBuffer->Release();
             delete NewMeshResource;
             return nullptr;
         }

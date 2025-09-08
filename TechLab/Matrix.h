@@ -23,7 +23,9 @@ struct FMatrix
 	FVector GetRotation() const noexcept;
 
 	static FMatrix ViewMatrix(const FVector& Eye, const FVector& At, const FVector& Up) noexcept;
-	static FMatrix ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept;
+	static FMatrix PrespectiveProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept;
+
+	static FMatrix OrthographicProjectionMatrix(float Left, float Right, float Bottom, float Top, float NearZ, float FarZ) noexcept;
 
 	FMatrix operator*(const FMatrix& Other) const noexcept;
 	FVector4 operator*(const FVector4& Other) const noexcept;

@@ -4,6 +4,10 @@
 #include <cmath>
 #include "Math.h"
 
+
+//-1 : 1 = left :right
+//
+
 FMatrix FMatrix::Identity() noexcept
 {
 	FMatrix Output{};
@@ -230,7 +234,7 @@ FMatrix FMatrix::ViewMatrix(const FVector& Eye, const FVector& At, const FVector
 	return Output;
 }
 
-FMatrix FMatrix::ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept
+FMatrix FMatrix::PrespectiveProjectionMatrix(float FovYRad, float AspectRatio, float NearZ, float FarZ) noexcept
 {
 	FMatrix P{};
 
@@ -242,6 +246,22 @@ FMatrix FMatrix::ProjectionMatrix(float FovYRad, float AspectRatio, float NearZ,
 	P[2][2] = FarZ / (FarZ - NearZ);
 	P[3][2] = -FarZ * NearZ / (FarZ - NearZ);
 	P[2][3] = 1.0f;
+
+	return P;
+}
+
+FMatrix FMatrix::OrthographicProjectionMatrix(float Left, float Right, float Bottom, float Top, float NearZ, float FarZ) noexcept
+{
+	FMatrix P{};
+
+	P[0][0] = 2.0f / (Right - Left);
+	P[1][1] = 2.0f / (Top - Bottom);
+	P[2][2] = 1.0f / (FarZ - NearZ);
+
+	P[3][0] = -(Right + Left) / (Right - Left);
+	P[3][1] = -(Top + Bottom) / (Top - Bottom);
+	P[3][2] = -NearZ / (FarZ - NearZ);
+	P[3][3] = 1.0f;
 
 	return P;
 }
