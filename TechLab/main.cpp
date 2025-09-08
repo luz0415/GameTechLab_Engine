@@ -21,7 +21,7 @@
 #include "ImGuiManager.h"
 #include "Core.h"
 #include "ImGuiAppConsole.h"
-#include "ImGuiSizeController.h"
+#include "ImguiPropertyWindow.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -66,7 +66,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	UImGuiManager* ImGuiManager = new UImGuiManager();
 	ImGuiAppConsole* App = new ImGuiAppConsole();
-	UImGuiSizeController* SC = dynamic_cast<UImGuiSizeController*>((ImGuiManager->GetImGuiArray())[0]);
+	UImGuiPropertyWindow* PropWindow = dynamic_cast<UImGuiPropertyWindow*>((ImGuiManager->GetImGuiArray())[0]);
 
 	int idCube = FMeshManager::Instance()->RegisterMesh(renderer.Device, EShapeType::Cube);
 	FMeshResource* CubeResource = FMeshManager::Instance()->Get(idCube);
@@ -109,8 +109,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (ImGuiManager)
 			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
-		if (SC)
-			xpos = SC->GetSize()[0];
+		if (PropWindow)
+			xpos = PropWindow->GetSize()[0];
 
 		xpos += 0.1f;
 		ypos += 0.1f;

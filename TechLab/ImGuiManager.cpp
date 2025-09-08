@@ -30,7 +30,7 @@ void UImGuiManager::Init()
 {
     // renderer.Prepare 다음에 추가
 
-    UImGuiSizeController* SC = new UImGuiSizeController();
+    UImGuiPropertyWindow* SC = new UImGuiPropertyWindow();
 
     ImGuiArray.push_back(SC);
 }

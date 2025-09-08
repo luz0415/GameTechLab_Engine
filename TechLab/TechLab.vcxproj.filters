@@ -129,7 +129,7 @@
     <ClCompile Include="SceneFileManager.cpp">
       <Filter>소스 파일\SceneFileManager</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiSizeController.cpp">
+    <ClCompile Include="ImGuiPropertyWindow.cpp">
       <Filter>소스 파일\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -235,7 +235,7 @@
     <ClInclude Include="SceneFileManager.h">
       <Filter>헤더 파일\SceneFileManager</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiSizeController.h">
+    <ClInclude Include="ImGuiPropertyWindow.h">
       <Filter>헤더 파일\ImGui</Filter>
     </ClInclude>
   </ItemGroup>

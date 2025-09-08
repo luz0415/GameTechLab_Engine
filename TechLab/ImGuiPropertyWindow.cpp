@@ -1,6 +1,6 @@
-#include "ImGuiSizeController.h"
+#include "ImGuiPropertyWindow.h"
 
-void UImGuiSizeController::Render()
+void UImGuiPropertyWindow::Render()
 {
 	static float Position[3] = { 0 };
 

@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "ImGuiConsole.h"
-#include "ImGuiSizeController.h"
+#include "ImGuiPropertyWindow.h"
 
 class UImGuiManager
 {

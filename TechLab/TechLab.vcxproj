@@ -129,7 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="ImGuiSizeController.cpp" />
+    <ClCompile Include="ImGuiPropertyWindow.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="SceneFileManager.cpp" />
@@ -167,7 +167,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImGuiSizeController.h" />
+    <ClInclude Include="ImGuiPropertyWindow.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="MeshResource.h" />
     <ClInclude Include="Matrix.h" />

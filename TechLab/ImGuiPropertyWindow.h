@@ -4,7 +4,7 @@
 #include "ImGui/imgui.h"
 #include <array>
 
-class UImGuiSizeController : public IImGuiWindow
+class UImGuiPropertyWindow : public IImGuiWindow
 {
 public:
 	virtual void Render() override;
