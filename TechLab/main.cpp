@@ -227,7 +227,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		UE_LOG("Hit");
+		//UE_LOG("Hit");
 
 		UImGuiManager::Get()->Render();
 		FObjectFactory::Get()->TickObjects(DeltaTime);
