@@ -26,6 +26,7 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam
 Camera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
+USceneComponent* Test;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -68,6 +69,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case'd': case 'D': GInput.bRight = true; break;
 		case'e': case 'E': GInput.bUp = true; break;
 		case'q': case 'Q': GInput.bDown = true; break;
+		case'r': case 'R': Test->AddRelativeRotationX(10); break;
+		case't': case 'T': Test->AddRelativeRotationY(10); break;
+		case'y': case 'Y': Test->AddRelativeRotationZ(10); break;
 		default: break;
 		}
 		break;
@@ -121,9 +125,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 	// Test
-	USceneComponent* Test = FObjectFactory::Get()->ConstructObject<USphereComp>();
+	Test = FObjectFactory::Get()->ConstructObject<UCubeComp>();
+	Test->Translate(FVector(10.0f, 0.0f, 0.0f));
 	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(2.7f, 0.0f, 0.0f));
 	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(0.0f, 5.0f, 5.0f));
+
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -148,7 +154,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LARGE_INTEGER lastTime, currentTime, frequency;
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&lastTime);
-
+	int count = 0;
 	bool bIsExit = false;
 	while (bIsExit == false)
 	{
@@ -184,7 +190,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		UImGuiManager::Get()->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
-		Test->AddRelativeRotationZ(10);
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 
 		ImGui::Render();
