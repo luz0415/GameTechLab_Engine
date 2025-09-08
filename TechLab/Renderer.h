@@ -41,7 +41,7 @@ public:
 	void PrepareShader();
 
 	// ·»´õ¸µ ÇÔ¼ö
-	void RenderScene(const class Camera& SceneCamera);
+	void RenderScene(const class UCamera& SceneCamera);
 
 	// Constant Buffer
 	template<typename T>

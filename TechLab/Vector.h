@@ -35,3 +35,5 @@ struct FVector
 	static float Dist(const FVector& V1, const FVector& V2) noexcept;
 	static float DistSquared(const FVector& V1, const FVector& V2) noexcept;
 };
+
+inline FVector operator*(float Scale, const FVector& V) noexcept { return V * Scale; }

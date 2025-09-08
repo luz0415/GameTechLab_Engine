@@ -1,7 +1,7 @@
 #include "Camera.h"
 #include <algorithm>
 
-Camera::Camera(
+UCamera::UCamera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
 	float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ) noexcept
 	: Eye(InPosition)
@@ -26,7 +26,7 @@ Camera::Camera(
 	UpdateProjectionMatrix();
 }
 
-void Camera::HandleInput(const FInput& Input, float DeltaTime)
+void UCamera::HandleInput(const FInput& Input, float DeltaTime)
 {
 	if (Input.bFront)
 	{
@@ -65,7 +65,7 @@ void Camera::HandleInput(const FInput& Input, float DeltaTime)
 	}
 }
 
-void Camera::Update()
+void UCamera::Update()
 {
 	FMatrix rotation = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
 
@@ -90,12 +90,12 @@ void Camera::Update()
 	UpdateViewMatrix();
 }
 
-void Camera::UpdateViewMatrix() noexcept
+void UCamera::UpdateViewMatrix() noexcept
 {
 	ViewMatrix = FMatrix::ViewMatrix(Eye, At, Up);
 }
 
-void Camera::UpdateProjectionMatrix() noexcept
+void UCamera::UpdateProjectionMatrix() noexcept
 {
 	ProjectionMatrix = FMatrix::ProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
 }

@@ -24,11 +24,30 @@
 #include "ImGuiAppConsole.h"
 
 #include "Camera.h"
+#include "ObjectPicker.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 FInput GInput;
 POINT GLastMousePosition;
+
+// Object Picker
+ObjectPicker* GObjectPicker = nullptr;
+
+// UI Variables
+uint32_t GPickedObjectID = 0;
+
+// Mouse Position
+int GMouseX = 0;
+int GMouseY = 0;
+
+// Picking Debug Info
+FVector GRayOrigin = { 0,0,0 };
+FVector GRayDirection = { 0,0,0 };
+int GTotalObjectCount = 0;
+int GSuccessfulCastCount = 0;
+float GLastBestT = 0.0f;
+uint32_t GNewSelectionID = 0;
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -46,7 +65,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		GInput.bMouseRightClick = false;
 		break;
-	case WM_MOUSEMOVE:
+			case WM_MOUSEMOVE:
 		if (GInput.bMouseRightClick)
 		{
 			POINT currentMousePos;
@@ -62,6 +81,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GInput.MouseY = 0;
 		}
 		break;
+		case WM_LBUTTONDOWN:
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (!io.WantCaptureMouse && GObjectPicker)
+			{
+				POINT currentMousePos;
+								GetCursorPos(&currentMousePos);
+				ScreenToClient(hWnd, &currentMousePos);
+				GMouseX = currentMousePos.x;
+				GMouseY = currentMousePos.y;
+				GObjectPicker->HandleMouseClick(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
+			}
+			break;
+		}
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
@@ -121,9 +154,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImGui_ImplWin32_Init((void*)hWnd);
 	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
-	UImGuiManager* ImGuiManager = new UImGuiManager();
-	ImGuiAppConsole* App = new ImGuiAppConsole();
-
 	RECT rect;
 	GetClientRect(hWnd, &rect);
 	const int width = rect.right - rect.left;
@@ -135,7 +165,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	const float angle = 90.f;
 	const float radangle = angle * PI / 180.f;
 
-	Camera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
+	UCamera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
+
+	GObjectPicker = new ObjectPicker(&MyCamera);
+	GObjectPicker->SetViewportSize(width, height);
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;
@@ -169,21 +202,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
 
+		// 1. Clear Screen
 		Renderer->Prepare();
 
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		float xpos = 0;
-		float ypos = 0;
-		float roty = 0;
-		float rotz = 0;
-		float scale = 1;
-
-		if (ImGuiManager)
-			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
-
+		// 2. Update game logic and submit render proxies
 		FObjectFactory::Get()->TickObjects(deltaTime);
 		Test->AddRelativeRotationZ(10);
 		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
@@ -196,10 +218,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 
+		// 3. Render 3D Scene
+		Renderer->RenderScene(MyCamera);
+
+		// 4. Prepare and Render ImGui UI on top of the scene
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::Begin("Jungle Property Window");
+		ImGui::Text("Hello Jungle World!");
+		ImGui::Text("Picked Object ID: %u", GPickedObjectID);
+		ImGui::Text("Picked Position (Client): %d, %d", GMouseX, GMouseY);
+
+		ImGui::Separator();
+		ImGui::Text("-- Picking Debug --");
+		ImGui::Text("Ray Origin: %.3f, %.3f, %.3f", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
+		ImGui::Text("Ray Direction: %.3f, %.3f, %.3f", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
+		ImGui::Text("Total Objects in Scene: %d", GTotalObjectCount);
+		ImGui::Text("Successful Raycasts: %d", GSuccessfulCastCount);
+		ImGui::Text("Closest Hit Time (BestT): %f", GLastBestT);
+		ImGui::Text("New Selection ID (before update): %u", GNewSelectionID);
+		ImGui::End();
+
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-		Renderer->RenderScene(MyCamera);
+		// 5. Present the final image
 		Renderer->SwapBuffer();
 	}
 	Renderer->ReleaseShader();

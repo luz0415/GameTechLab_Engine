@@ -68,8 +68,8 @@ void URenderer::CreateFrameBuffer()
 	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&FrameBuffer);
 
 	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
-	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // »ö»ó Æ÷¸Ë
-	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D ÅØ½ºÃ³
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D ï¿½Ø½ï¿½Ã³
 
 	Device->CreateRenderTargetView(FrameBuffer, &framebufferRTVdesc, &FrameBufferRTV);
 }
@@ -114,7 +114,7 @@ void URenderer::Release()
 	ReleaseRasterizerState();
 	ReleaseConstantBuffer(VPConstantBuffer);
 	ReleaseConstantBuffer(MConstantBuffer);
-	ReleaseShader(); // Ãß°¡
+	ReleaseShader(); // ï¿½ß°ï¿½
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
 
@@ -186,9 +186,8 @@ void URenderer::PrepareShader()
 	DeviceContext->IASetInputLayout(SimpleInputLayout);
 }
 
-void URenderer::RenderScene(const Camera& SceneCamera)
+void URenderer::RenderScene(const UCamera& SceneCamera)
 {
-	Prepare();
 	PrepareShader();
 
 	FViewProjConstant VPConstant{ SceneCamera.GetViewMatrix(), SceneCamera.GetProjectionMatrix() };

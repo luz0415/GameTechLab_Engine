@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "ImGuiAppConsole.h"
+#include "Vector.h"
 
 template<typename T>
 using TArray = std::vector<T>;
@@ -44,3 +45,11 @@ using StaticUObjectFactory = class UObject* (*)();
     { \
         if (ImGuiManager && ImGuiManager->GetConsole()) ImGuiManager->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
     } while(0)
+
+// Ray
+struct FHitRecord
+{
+    FVector Point;
+    FVector normal;
+    float Time;
+};

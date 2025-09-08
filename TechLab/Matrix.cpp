@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include "Vector.h"
+#include "Vector4.h"
 #include <cmath>
 #include "Math.h"
 
@@ -19,6 +20,53 @@ FMatrix FMatrix::Transpose() const noexcept
 			Output[R][C] = M[C][R];
 		}
 	}
+	return Output;
+}
+
+static inline float Cofactor(const float M[4][4], int R0, int R1, int R2, int C0, int C1, int C2)
+{
+	const float A = M[R0][C0], B = M[R0][C1], C = M[R0][C2];
+	const float D = M[R1][C0], E = M[R1][C1], F = M[R1][C2];
+	const float G = M[R2][C0], H = M[R2][C1], I = M[R2][C2];
+	return A * (E * I - F * H) - B * (D * I - F * G) + C * (D * H - E * G);
+}
+
+FMatrix FMatrix::Inverse() const noexcept
+{
+	FMatrix Output{};
+
+	// Use the adjugate matrix formula.
+	float C00 = Cofactor(M, 1, 2, 3, 1, 2, 3);
+	float C01 = -Cofactor(M, 1, 2, 3, 0, 2, 3);
+	float C02 = Cofactor(M, 1, 2, 3, 0, 1, 3);
+	float C03 = -Cofactor(M, 1, 2, 3, 0, 1, 2);
+
+	float Determinant = M[0][0] * C00 + M[0][1] * C01 + M[0][2] * C02 + M[0][3] * C03;
+	if (std::fabs(Determinant) < 1e-8f) {
+		return FMatrix{};
+	}
+	float InvDet = 1.0f / Determinant;
+
+	Output.M[0][0] = C00 * InvDet;
+	Output.M[1][0] = C01 * InvDet;
+	Output.M[2][0] = C02 * InvDet;
+	Output.M[3][0] = C03 * InvDet;
+
+	Output.M[0][1] = -Cofactor(M, 0, 2, 3, 1, 2, 3) * InvDet;
+	Output.M[1][1] = Cofactor(M, 0, 2, 3, 0, 2, 3) * InvDet;
+	Output.M[2][1] = -Cofactor(M, 0, 2, 3, 0, 1, 3) * InvDet;
+	Output.M[3][1] = Cofactor(M, 0, 2, 3, 0, 1, 2) * InvDet;
+
+	Output.M[0][2] = Cofactor(M, 0, 1, 3, 1, 2, 3) * InvDet;
+	Output.M[1][2] = -Cofactor(M, 0, 1, 3, 0, 2, 3) * InvDet;
+	Output.M[2][2] = Cofactor(M, 0, 1, 3, 0, 1, 3) * InvDet;
+	Output.M[3][2] = -Cofactor(M, 0, 1, 3, 0, 1, 2) * InvDet;
+
+	Output.M[0][3] = -Cofactor(M, 0, 1, 2, 1, 2, 3) * InvDet;
+	Output.M[1][3] = Cofactor(M, 0, 1, 2, 0, 2, 3) * InvDet;
+	Output.M[2][3] = -Cofactor(M, 0, 1, 2, 0, 1, 3) * InvDet;
+	Output.M[3][3] = Cofactor(M, 0, 1, 2, 0, 1, 2) * InvDet;
+
 	return Output;
 }
 
@@ -212,5 +260,15 @@ FMatrix FMatrix::operator*(const FMatrix& Other) const noexcept
 			}
 		}
 	}
+	return Output;
+}
+
+FVector4 FMatrix::operator*(const FVector4& Other) const noexcept
+{
+	FVector4 Output;
+	Output.X = M[0][0] * Other.X + M[1][0] * Other.Y + M[2][0] * Other.Z + M[3][0] * Other.W;
+	Output.Y = M[0][1] * Other.X + M[1][1] * Other.Y + M[2][1] * Other.Z + M[3][1] * Other.W;
+	Output.Z = M[0][2] * Other.X + M[1][2] * Other.Y + M[2][2] * Other.Z + M[3][2] * Other.W;
+	Output.W = M[0][3] * Other.X + M[1][3] * Other.Y + M[2][3] * Other.Z + M[3][3] * Other.W;
 	return Output;
 }
