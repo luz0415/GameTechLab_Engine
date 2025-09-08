@@ -3,15 +3,16 @@
 #include <d3d11.h>
 
 #include "Core.h"
-#include "Vector.h"
 #include "MeshResource.h"
-
-class FGridRenderer
+#include "VisualInterface.h"
+class FGridRenderer : public VisualInterface 
 {
 public:
     FGridRenderer();
-    void Update(const FVector& CameraPos);
-    void Render();
+    ~FGridRenderer() override;
+    void Init() override;
+    void Update(const FVector& CameraPos) override;
+    void Render() override;
 
 private:
     void RegenerateGrid(const FVector& CameraPos);
@@ -20,7 +21,5 @@ private:
     float GridSize = 1.0f;
     int32 GridRadius = 80;
     FVector LastCameraPos = FVector();
-
-    TArray<FVertex> Vertices;
 };
 

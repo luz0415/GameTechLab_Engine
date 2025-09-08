@@ -162,6 +162,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="VisualInterface.cpp" />
+    <ClCompile Include="WorldAxisRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader.hlsl">
@@ -208,6 +210,8 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="VisualInterface.h" />
+    <ClInclude Include="WorldAxisRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

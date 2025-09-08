@@ -13,6 +13,7 @@
 #include "RenderProxy.h"
 #include "MeshManager.h"
 #include "GridRenderer.h"
+#include "VisualInterface.h"
 
 class URenderer
 {
@@ -27,6 +28,7 @@ public:
 public:
 	// 생성 및 해제 함수
 	void Create(HWND hWindow);
+	void CreateVisualInterfaces();
 	void Release();
 
 	// 버퍼 스왑
@@ -87,7 +89,7 @@ public:
 
 private:
 	// 내부 헬퍼 함수
-	void CreateDeviceAndSwapChain(HWND hWindow);
+	void CreateDeviceAndSwapChain(HWND& hWindow);
 	void ReleaseDeviceAndSwapChain();
 
 	void CreateFrameBuffer();
@@ -96,6 +98,10 @@ private:
 	void CreateRasterizerState();
 	void ReleaseRasterizerState();
 
+	void CreateDepthStencilResources(HWND& Hwnd);
+	void ReleaseDepthStencilResources();
+	
+
 	IDXGISwapChain* SwapChain = nullptr;
 
 	ID3D11Texture2D* FrameBuffer = nullptr;
@@ -103,7 +109,11 @@ private:
 	ID3D11RasterizerState* RasterizerState = nullptr;
 	ID3D11Buffer* VPConstantBuffer = nullptr;
 	ID3D11Buffer* MConstantBuffer = nullptr;
+
+	//깊이 테스트
 	ID3D11DepthStencilState* DepthStencilState = nullptr;
+	ID3D11Texture2D* DepthStencilBuffer = nullptr;
+	ID3D11DepthStencilView* DepthStencilView = nullptr;
 
 	FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
 	D3D11_VIEWPORT ViewportInfo;
@@ -113,6 +123,7 @@ private:
 	ID3D11InputLayout* SimpleInputLayout;
 
 	FMeshManager* MeshManager = nullptr;
-	FGridRenderer* GridRenderer = nullptr;
+
+	TArray<VisualInterface*> VisualInterfaceList;
 	TArray<FRenderProxy> RenderProxyList;
 };

@@ -26,6 +26,7 @@ typedef unsigned int uint32;
 struct MemoryHeader
 {
     size_t Size;
+    char _padding[8];
 };
 
 void* operator new(size_t Size) noexcept;

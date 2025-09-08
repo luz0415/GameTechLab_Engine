@@ -1,5 +1,5 @@
 #include "Core.h"
-
+#include <malloc.h>
 //uint32 TotalAllocationBytes = 0;
 //uint32 TotalAllocationCount = 0;
 
@@ -17,8 +17,9 @@ uint32& GetTotalAllocationCount()
 
 
 void* operator new(size_t Size) noexcept {
+    constexpr size_t alignment = 16;
     size_t TotalSize = Size + sizeof(MemoryHeader);
-    void* Ptr = malloc(TotalSize);
+    void* Ptr = _aligned_malloc(TotalSize,alignment);
     if (Ptr == nullptr) { return nullptr; }
 
     MemoryHeader* Header = static_cast<MemoryHeader*>(Ptr);
@@ -37,13 +38,14 @@ void operator delete(void* Ptr) noexcept {
     size_t TotalSize = OriginalSize + sizeof(MemoryHeader);
     GetTotalAllocationCount()--;
     GetTotalAllocationBytes() -= TotalSize;
-    free(HeaderPtr);
+    _aligned_free(HeaderPtr);
 }
 
 void* operator new[](size_t Size) noexcept
 {
+    constexpr size_t alignment = 16;
     size_t totalSize = Size + sizeof(MemoryHeader);
-    void* Ptr = malloc(totalSize);
+    void* Ptr = _aligned_malloc(totalSize,alignment);
     if (Ptr == nullptr) { return nullptr; }
 
     MemoryHeader* header = static_cast<MemoryHeader*>(Ptr);
@@ -68,5 +70,5 @@ void operator delete[](void* Ptr) noexcept
     GetTotalAllocationCount()--;
     GetTotalAllocationBytes() -= TotalSize;
 
-    free(HeaderPtr);
+    _aligned_free(HeaderPtr);
 }
