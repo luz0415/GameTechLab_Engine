@@ -21,8 +21,8 @@ UImGuiManager::UImGuiManager()
 
 UImGuiManager::~UImGuiManager()
 {
-
 }
+
 
 void UImGuiManager::Init()
 {

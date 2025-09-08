@@ -129,7 +129,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImGui_ImplWin32_Init((void*)hWnd);
 	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
-	UImGuiManager* ImGuiManager = new UImGuiManager();
 	ImGuiAppConsole* App = new ImGuiAppConsole();
 
 	RECT Rect;
@@ -161,6 +160,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				bIsExit = true;
 				break;
 			}
+			UE_LOG("Fuck");
+
 		}
 
 		// Calculate DeltaTime
@@ -181,8 +182,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		if (ImGuiManager)
-			ImGuiManager->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
+		UImGuiManager::Get()->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
 
 		Test->AddRelativeRotationZ(10);
 		FObjectFactory::Get()->TickObjects(DeltaTime);
@@ -196,7 +196,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->ReleaseShader();
 	Renderer->Release();
 	
-	delete ImGuiManager;
 	delete App;
 	delete MainCamera;
 

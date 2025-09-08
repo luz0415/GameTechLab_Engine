@@ -5,13 +5,13 @@
 class UImGuiManager
 {
 private:
-	UImGuiManager() = default;
+	UImGuiManager();
     ~UImGuiManager();
     UImGuiManager(const UImGuiManager&) = delete;
     UImGuiManager& operator=(const UImGuiManager&) = delete;
 
 public:
-	    static UImGuiManager* Get()
+	static UImGuiManager* Get()
     {
         static UImGuiManager Instance;
         return &Instance;
@@ -19,7 +19,6 @@ public:
 
 	void Init();
 	void Release();
-
 	void Render();
 
 	UImGuiConsole* GetConsole() { return Console; }
