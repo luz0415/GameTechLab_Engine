@@ -188,17 +188,12 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="RenderProxy.h" />
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
     <ClInclude Include="SceneFileManager.h" />
     <ClInclude Include="PrimitiveType.h" />
-=======
-=======
->>>>>>> Stashed changes
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShapeType.h" />
->>>>>>> Stashed changes
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="Core.h" />
