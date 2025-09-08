@@ -230,21 +230,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		UE_LOG("Hit");
 
 		UImGuiManager::Get()->Render();
-
-		/*ImGui::Begin("Jungle Property Window");
-		ImGui::Text("Hello Jungle World!");
-		ImGui::Text("Picked Object ID: %u", GPickedObjectID);
-		ImGui::Text("Picked Position (Client): %d, %d", GMouseX, GMouseY);
-
-		ImGui::Separator();
-		ImGui::Text("-- Picking Debug --");
-		ImGui::Text("Ray Origin: %.3f, %.3f, %.3f", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
-		ImGui::Text("Ray Direction: %.3f, %.3f, %.3f", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
-		ImGui::Text("Total Objects in Scene: %d", GTotalObjectCount);
-		ImGui::Text("Successful Raycasts: %d", GSuccessfulCastCount);
-		ImGui::Text("Closest Hit Time (BestT): %f", GLastBestT);
-		ImGui::Text("New Selection ID (before update): %u", GNewSelectionID);
-		ImGui::End();*/
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 
