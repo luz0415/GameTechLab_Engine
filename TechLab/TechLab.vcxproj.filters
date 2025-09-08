@@ -40,11 +40,11 @@
     <Filter Include="헤더 파일\ImGui">
       <UniqueIdentifier>{7d766aa3-a2dd-4ec8-aadd-9baa62f6a014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\SceneFileManager">
-      <UniqueIdentifier>{a08a1fb1-262d-40c0-9aad-5e96253eebaa}</UniqueIdentifier>
+    <Filter Include="헤더 파일\Scene">
+      <UniqueIdentifier>{0e18691c-2f65-4ab2-8265-854f0b925c57}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\SceneFileManager">
-      <UniqueIdentifier>{66dbb9eb-9f02-4051-af2c-2bf884a24d43}</UniqueIdentifier>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{f0bfc746-c772-45a9-a207-3d7bc4caa0c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="Vector.cpp">
       <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="VertexSimple.h">
-      <Filter>헤더 파일</Filter>
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
@@ -129,11 +126,41 @@
     <ClCompile Include="Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SceneFileManager.cpp">
-      <Filter>소스 파일\SceneFileManager</Filter>
-    </ClCompile>
     <ClCompile Include="ImGuiPropertyWindow.cpp">
       <Filter>소스 파일\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="CubeComp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GridRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveComponent.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SphereComp.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexData.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="VisualInterface.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldAxisRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,11 +265,41 @@
     <ClInclude Include="json.hpp">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneFileManager.h">
-      <Filter>헤더 파일\SceneFileManager</Filter>
-    </ClInclude>
     <ClInclude Include="ImGuiPropertyWindow.h">
       <Filter>헤더 파일\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="CubeComp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GridRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveComponent.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveType.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SphereComp.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="VisualInterface.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldAxisRenderer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
