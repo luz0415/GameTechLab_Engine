@@ -1,7 +1,5 @@
 #pragma once
-
-#include <vector>
-
+#include "Core.h"
 #include "ImGuiConsole.h" 
 
 class UImGuiManager
@@ -18,6 +16,6 @@ public:
 	UImGuiConsole* GetConsole() { return Console; }
 
 private:
-	std::vector<IImGuiWindow*> ImGuiArray;
+	TArray<IImGuiWindow*> ImGuiArray;
 	UImGuiConsole* Console = nullptr;
 };
