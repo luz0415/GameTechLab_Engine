@@ -4,6 +4,7 @@
 
 #include "SphereComp.h"
 #include "CubeComp.h"
+#include "Camera.h"
 
 struct Primitive
 {
@@ -36,6 +37,11 @@ public:
     void CopyPrimComp(const USceneData& sceneData);
     void Render();
 
+    void InitCamera();
+
+    Camera* GetCurrentCamera() { return CurrentCamera; }
+
 private:
 	TArray<UPrimitiveComponent*> Objects;
+    Camera* CurrentCamera = nullptr;
 };

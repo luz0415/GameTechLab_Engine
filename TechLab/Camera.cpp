@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Math.h"
+#include "SceneManager.h"
 
 UCamera::UCamera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
@@ -26,7 +27,18 @@ UCamera::UCamera(
 	UpdateProjectionMatrix();
 }
 
-void UCamera::HandleInput(const FInput& Input, float DeltaTime)
+
+const float Camera::GetFOVInAngle()
+{
+	return FovYRad * 180 / PI;
+}
+
+void Camera::SetFOVWithAngle(const float fov)
+{
+	FovYRad = fov * PI / 180;
+}
+
+void Camera::HandleInput(const FInput& Input, float DeltaTime)
 {
 	if (Input.bFront)
 	{
@@ -95,7 +107,12 @@ void UCamera::Update()
 	UpdateViewMatrix();
 }
 
-void UCamera::UpdateViewMatrix() noexcept
+void Camera::UpdateEventByImGui()
+{
+	UpdateProjectionMatrix();
+}
+
+void Camera::UpdateViewMatrix() noexcept
 {
 	ViewMatrix = FMatrix::ViewMatrix(Eye, At, Up);
 }

@@ -95,27 +95,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
-		case'w': case 'W': GInput.bFront = true; break;
-		case's': case 'S': GInput.bBack = true; break;
-		case'a': case 'A': GInput.bLeft = true; break;
-		case'd': case 'D': GInput.bRight = true; break;
-		case'e': case 'E': GInput.bUp = true; break;
-		case'q': case 'Q': GInput.bDown = true; break;
-		case'r': case 'R': Test->AddRelativeRotationX(10); break;
-		case't': case 'T': Test->AddRelativeRotationY(10); break;
-		case'y': case 'Y': Test->AddRelativeRotationZ(10); break;
+		 case 'W': GInput.bFront = true; break;
+		 case 'S': GInput.bBack = true; break;
+		 case 'A': GInput.bLeft = true; break;
+		 case 'D': GInput.bRight = true; break;
+		 case 'E': GInput.bUp = true; break;
+		 case 'Q': GInput.bDown = true; break;
+		 case 'R': Test->AddRelativeRotationX(10); break;
+		 case 'T': Test->AddRelativeRotationY(10); break;
+		 case 'Y': Test->AddRelativeRotationZ(10); break;
 		default: break;
 		}
 		break;
 	case WM_KEYUP:
 		switch (wParam)
 		{
-		case'w': case 'W': GInput.bFront = false; break;
-		case's': case 'S': GInput.bBack = false; break;
-		case'a': case 'A': GInput.bLeft = false; break;
-		case'd': case 'D': GInput.bRight = false; break;
-		case'e': case 'E': GInput.bUp = false; break;
-		case'q': case 'Q': GInput.bDown = false; break;
+		 case 'W': GInput.bFront = false; break;
+		 case 'S': GInput.bBack = false; break;
+		 case 'A': GInput.bLeft = false; break;
+		 case 'D': GInput.bRight = false; break;
+		 case 'E': GInput.bUp = false; break;
+		 case 'Q': GInput.bDown = false; break;
 		default: break;
 		}
 		break;
@@ -153,6 +153,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080,
 		nullptr, nullptr, hInstance, nullptr);
 
+	USceneManager::Get()->SetHWND(hWnd);
+
 	URenderer* Renderer = URenderer::Get();
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
@@ -176,8 +178,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	const FVector Up = FVector(0, 1, 0);
 	const float Angle = 90.f;
 	const float RadAngle = DegreeToRadians(Angle);
-	MainCamera = new UCamera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 
+	
+	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
+	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 
 	// Object Picker (TEMP)
 	GObjectPicker = new ObjectPicker(MainCamera);

@@ -41,6 +41,9 @@ public:
 
     static void LoadSceneByExplorer();
 
+    void SetHWND(HWND hWnd) { g_hWnd = hWnd; }
+    HWND GetHWND() { return g_hWnd; }
+
     UScene* GetCurrentScene()
     {
         if (CurrentScene)
@@ -55,4 +58,5 @@ public:
 	
 private:
     UScene* CurrentScene = nullptr;
+    HWND g_hWnd;
 };
