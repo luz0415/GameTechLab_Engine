@@ -6,15 +6,17 @@ class UCamera;
 struct FRay;
 struct FHitResult;
 
-class ObjectPicker
+class UObjectPicker
 {
 public:
-    ObjectPicker(UCamera* camera);
-    ~ObjectPicker() {};
+    UObjectPicker();
+    ~UObjectPicker() {};
 
     void HandleMouseClick(float ScreenX, float ScreenY);
     void SetViewportSize(int Width, int Height) { ViewportWidth = Width; ViewportHeight = Height; }
     const std::vector<IPickable*>& GetCurrentSelection() const;
+
+    void SetCamera(UCamera* camera);
 
 private:
     FRay CreateRayFromScreen(float ScreenX, float ScreenY) const;

@@ -24,10 +24,10 @@ public:
 public:
 	USphereComp();
 
-    virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override;
+    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override;
 
-    virtual void OnSelected() override;
-    virtual void OnDeselected() override;
+    void OnSelected() override;
+    void OnDeselected() override;
 
 private:
     bool bSelected = false;

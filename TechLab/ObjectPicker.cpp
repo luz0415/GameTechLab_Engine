@@ -9,8 +9,7 @@
 #include "ImGuiManager.h"
 #include "ImGuiAppConsole.h"
 
-ObjectPicker::ObjectPicker(UCamera* camera)
-	: Camera(camera) {}
+UObjectPicker::UObjectPicker() {}
 
 // Debug Info (TEMP)
 extern FVector GRayOrigin;
@@ -20,7 +19,7 @@ extern int GSuccessfulCastCount;
 extern float GLastBestT;
 extern uint32_t GNewSelectionID;
 
-void ObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
+void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 {
 	// Reset debug info
 	GSuccessfulCastCount = 0;
@@ -67,12 +66,17 @@ void ObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	UpdateSelection(NewSelection);
 }
 
-const std::vector<IPickable*>& ObjectPicker::GetCurrentSelection() const
+const std::vector<IPickable*>& UObjectPicker::GetCurrentSelection() const
 {
 	return CurrentSelections;
 }
 
-FRay ObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
+void UObjectPicker::SetCamera(UCamera* camera)
+{
+	Camera = camera;
+}
+
+FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 {
 	const float NDCx = (2.0f * ScreenX) / static_cast<float>(ViewportWidth) - 1.0f;
 	const float NDCy = -(2.0f * ScreenY) / static_cast<float>(ViewportHeight) + 1.0f;
@@ -108,7 +112,7 @@ FRay ObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 	return FRay(originWS, dirWS);
 }
 
-void ObjectPicker::UpdateSelection(IPickable* NewSelection)
+void UObjectPicker::UpdateSelection(IPickable* NewSelection)
 {
 	// TODO: enable multiple selection (bool bIsCtrlPressed)
 	// Current: single ~
@@ -128,7 +132,7 @@ void ObjectPicker::UpdateSelection(IPickable* NewSelection)
 	}
 }
 
-void ObjectPicker::ClearSelection()
+void UObjectPicker::ClearSelection()
 {
 	for (IPickable* Selected : CurrentSelections)
 	{

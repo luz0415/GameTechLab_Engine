@@ -8,6 +8,7 @@
 #include <commdlg.h> 
 
 #include "Scene.h"
+#include "ObjectPicker.h"
 
 namespace json
 { 
@@ -17,7 +18,7 @@ namespace json
 class USceneManager
 {
 private:
-    USceneManager() = default;
+    USceneManager();
     ~USceneManager();
     USceneManager(const USceneManager&) = delete;
     USceneManager& operator=(const USceneManager&) = delete;
@@ -44,19 +45,22 @@ public:
     void SetHWND(HWND hWnd) { g_hWnd = hWnd; }
     HWND GetHWND() { return g_hWnd; }
 
-    UScene* GetCurrentScene()
-    {
+    UScene* GetCurrentScene() { 
         if (CurrentScene)
         {
             return CurrentScene;
         }
 
         CurrentScene = new UScene();
-
-        return CurrentScene;
+        return CurrentScene; 
     }
+
+    void SetObjectPickerCamera();
+    UObjectPicker* GetObjectPicker() const { return ObjectPicker; }
+
 	
 private:
+    UObjectPicker* ObjectPicker = nullptr;
     UScene* CurrentScene = nullptr;
     HWND g_hWnd;
 };

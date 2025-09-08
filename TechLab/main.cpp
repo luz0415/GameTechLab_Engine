@@ -31,7 +31,7 @@ POINT GLastMousePosition;
 USceneComponent* Test;
 
 // Object Picker (TEMP)
-ObjectPicker* GObjectPicker = nullptr;
+UObjectPicker* GObjectPicker = nullptr;
 uint32_t GPickedObjectID = 0;
 
 // Mouse Position (TEMP)
@@ -81,14 +81,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_LBUTTONDOWN:
 		{
 			ImGuiIO& io = ImGui::GetIO();
-			if (!io.WantCaptureMouse && GObjectPicker)
+			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
 			{
 				POINT currentMousePos;
 								GetCursorPos(&currentMousePos);
 				ScreenToClient(hWnd, &currentMousePos);
 				GMouseX = currentMousePos.x;
 				GMouseY = currentMousePos.y;
-				GObjectPicker->HandleMouseClick(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
+				USceneManager::Get()->GetObjectPicker()->HandleMouseClick(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
 			}
 			break;
 		}
@@ -153,11 +153,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CW_USEDEFAULT, CW_USEDEFAULT, 1920, 1080,
 		nullptr, nullptr, hInstance, nullptr);
 
-	USceneManager::Get()->SetHWND(hWnd);
-
 	URenderer* Renderer = URenderer::Get();
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
+
+	USceneManager::Get()->SetHWND(hWnd);
+	USceneManager::Get()->GetCurrentScene()->InitCamera();
+
+	USceneManager::Get()->SetObjectPickerCamera();
 	// Test
 
 
@@ -184,8 +187,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 
 	// Object Picker (TEMP)
-	GObjectPicker = new ObjectPicker(MainCamera);
-	GObjectPicker->SetViewportSize(Width, Height);
+	/*GObjectPicker = new UObjectPicker(MainCamera);
+	GObjectPicker->SetViewportSize(Width, Height);*/
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;

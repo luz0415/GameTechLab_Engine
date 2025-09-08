@@ -28,17 +28,17 @@ UCamera::UCamera(
 }
 
 
-const float Camera::GetFOVInAngle()
+const float UCamera::GetFOVInAngle()
 {
 	return FovYRad * 180 / PI;
 }
 
-void Camera::SetFOVWithAngle(const float fov)
+void UCamera::SetFOVWithAngle(const float fov)
 {
 	FovYRad = fov * PI / 180;
 }
 
-void Camera::HandleInput(const FInput& Input, float DeltaTime)
+void UCamera::HandleInput(const FInput& Input, float DeltaTime)
 {
 	if (Input.bFront)
 	{
@@ -107,12 +107,12 @@ void UCamera::Update()
 	UpdateViewMatrix();
 }
 
-void Camera::UpdateEventByImGui()
+void UCamera::UpdateEventByImGui()
 {
 	UpdateProjectionMatrix();
 }
 
-void Camera::UpdateViewMatrix() noexcept
+void UCamera::UpdateViewMatrix() noexcept
 {
 	ViewMatrix = FMatrix::ViewMatrix(Eye, At, Up);
 }
