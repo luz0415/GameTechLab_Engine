@@ -25,7 +25,7 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-Camera* MainCamera;
+UCamera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
 USceneComponent* Test;
@@ -176,11 +176,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	const FVector Up = FVector(0, 1, 0);
 	const float Angle = 90.f;
 	const float RadAngle = DegreeToRadians(Angle);
-	MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
+	MainCamera = new UCamera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
+
 
 	// Object Picker (TEMP)
-	GObjectPicker = new ObjectPicker(&MyCamera);
-	GObjectPicker->SetViewportSize(width, height);
+	GObjectPicker = new ObjectPicker(MainCamera);
+	GObjectPicker->SetViewportSize(Width, Height);
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;
@@ -223,7 +224,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		UImGuiManager::Get()->Render();
 
-		ImGui::Begin("Jungle Property Window");
+		/*ImGui::Begin("Jungle Property Window");
 		ImGui::Text("Hello Jungle World!");
 		ImGui::Text("Picked Object ID: %u", GPickedObjectID);
 		ImGui::Text("Picked Position (Client): %d, %d", GMouseX, GMouseY);
@@ -236,7 +237,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui::Text("Successful Raycasts: %d", GSuccessfulCastCount);
 		ImGui::Text("Closest Hit Time (BestT): %f", GLastBestT);
 		ImGui::Text("New Selection ID (before update): %u", GNewSelectionID);
-		ImGui::End();
+		ImGui::End();*/
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 

@@ -11,6 +11,15 @@ UScene::UScene()
 	//	UPrimitiveComponent* obj = PrimToPrimComp(primitive);
 	//	Objects.push_back(obj);
 	//}
+
+	USphereComp* Sph1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
+	Sph1->SetWorldLocation(FVector(0.f, 0.f, 0.f));
+
+	UCubeComp* Cube1 = FObjectFactory::Get()->ConstructObject<UCubeComp>();
+	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));
+
+	Objects.push_back(Sph1);
+	Objects.push_back(Cube1);
 }
 
 UScene::UScene(const USceneData& sceneData)

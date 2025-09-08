@@ -1,6 +1,5 @@
 #include "SphereComp.h"
 #include "Renderer.h"
-#include "ShapeType.h"
 #include "Ray.h"
 
 USphereComp::USphereComp() : UPrimitiveComponent()

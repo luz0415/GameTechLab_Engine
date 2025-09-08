@@ -278,7 +278,7 @@ void URenderer::PrepareShader()
 	DeviceContext->IASetInputLayout(SimpleInputLayout);
 }
 
-void URenderer::RenderScene(const UCamera& SceneCamera)
+void URenderer::RenderScene(const UCamera* SceneCamera)
 {
 	//Prepare();
 	PrepareShader();
