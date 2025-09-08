@@ -2,8 +2,8 @@
 #include "SimpleConstants.h"
 #include "Camera.h"
 #include "WorldAxisRenderer.h"
-#include "MeshManager.h"
 #include "GridRenderer.h"
+#include "MeshManager.h"
 
 void URenderer::Create(HWND hWindow)
 {
@@ -15,8 +15,6 @@ void URenderer::Create(HWND hWindow)
 	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
 	MeshManager = new FMeshManager(Device);
 	CreateVisualInterfaces();
-
-
 }
 
 void URenderer::CreateVisualInterfaces()

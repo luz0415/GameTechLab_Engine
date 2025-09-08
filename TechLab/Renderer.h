@@ -116,7 +116,6 @@ private:
 	ID3D11InputLayout* SimpleInputLayout;
 
 	class FMeshManager* MeshManager = nullptr;
-	class FGridRenderer* GridRenderer = nullptr;
 	TArray<class VisualInterface*> VisualInterfaceList;
 	TArray<FRenderProxy> RenderProxyList;
 };

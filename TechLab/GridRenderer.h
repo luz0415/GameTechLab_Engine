@@ -5,6 +5,7 @@
 #include "Core.h"
 #include "MeshResource.h"
 #include "VisualInterface.h"
+
 class FGridRenderer : public VisualInterface 
 {
 public:
