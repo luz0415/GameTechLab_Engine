@@ -18,6 +18,8 @@ class UImGuiManager;
 
 class UImGuiManager;
 
+class UImGuiManager;
+
 template<typename T>
 using TArray = std::vector<T>;
 template<typename KeyType, typename ValueType>
