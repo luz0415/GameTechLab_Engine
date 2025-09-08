@@ -1,6 +1,8 @@
 #include "SphereComp.h"
 #include "Renderer.h"
 #include "Ray.h"
+#include "Core.h"
+#include "ImGuiManager.h"
 
 USphereComp::USphereComp() : UPrimitiveComponent()
 {
@@ -28,6 +30,7 @@ bool USphereComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 			OutHit.Time = Temp;
 			OutHit.Point = Ray.At(Temp);
 			OutHit.normal = (OutHit.Point - Center) / Radius;
+			UE_LOG("Hit!");
 			return true;
 		}
 		Temp = (-B + sqrt(Discriminant)) / (2.0f * A);
@@ -36,6 +39,7 @@ bool USphereComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 			OutHit.Time = Temp;
 			OutHit.Point = Ray.At(Temp);
 			OutHit.normal = (OutHit.Point - Center) / Radius;
+			UE_LOG("Hit!");
 			return true;
 		}
 	}

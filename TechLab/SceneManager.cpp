@@ -9,6 +9,8 @@ USceneManager::USceneManager()
     CurrentScene = new UScene();
     //CurrentScene->InitCamera();
     ObjectPicker = new UObjectPicker();
+
+   
 }
 
 USceneManager::~USceneManager()
@@ -170,4 +172,11 @@ void USceneManager::LoadSceneByExplorer()
 void USceneManager::SetObjectPickerCamera()
 {
     ObjectPicker->SetCamera(CurrentScene->GetCurrentCamera());
+
+    RECT Rect;
+    GetClientRect(g_hWnd, &Rect);
+    const int Width = Rect.right - Rect.left;
+    const int Height = Rect.bottom - Rect.top;
+
+    ObjectPicker->SetViewportSize(Width, Height);
 }

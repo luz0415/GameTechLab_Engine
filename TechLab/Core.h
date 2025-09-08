@@ -9,9 +9,11 @@
 
 #include "ImGuiAppConsole.h"
 #include "Vector.h"
+//#include "ImGuiManager.h"
 
 //#include "ObjectPicker.h"
 
+class UImGuiManager;
 
 template<typename T>
 using TArray = std::vector<T>;

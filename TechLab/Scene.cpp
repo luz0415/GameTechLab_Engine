@@ -16,7 +16,7 @@ UScene::UScene()
 	USphereComp* Sph1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
 	Sph1->SetWorldLocation(FVector(0.f, 0.f, 0.f));
 
-	UCubeComp* Cube1 = FObjectFactory::Get()->ConstructObject<UCubeComp>();
+	USphereComp* Cube1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
 	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));
 
 	Objects.push_back(Sph1);

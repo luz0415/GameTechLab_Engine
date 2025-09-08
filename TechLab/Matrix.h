@@ -27,6 +27,8 @@ struct FMatrix
 
 	FMatrix operator*(const FMatrix& Other) const noexcept;
 	FVector4 operator*(const FVector4& Other) const noexcept;
+
 	float(&operator[](int Row) noexcept)[4] { return M[Row]; }
 	const float(&operator[](int Row) const noexcept)[4] { return M[Row]; }
 };
+FVector4 operator*(const FVector4& v, const FMatrix& M) noexcept;

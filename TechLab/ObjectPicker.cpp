@@ -26,9 +26,14 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	GLastBestT = 0.0f;
 	GNewSelectionID = 0;
 
+	//UE_LOG("(%f %f)", ScreenX, ScreenY);
+
 	FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
 	GRayOrigin = Ray.GetOrigin();
 	GRayDirection = Ray.GetDirection();
+	/*UE_LOG("[%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
+	UE_LOG("[%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);*/
+
 
 	// TODO: check Gizmo interaction
 
@@ -81,6 +86,8 @@ FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 	const float NDCx = (2.0f * ScreenX) / static_cast<float>(ViewportWidth) - 1.0f;
 	const float NDCy = -(2.0f * ScreenY) / static_cast<float>(ViewportHeight) + 1.0f;
 
+	//UE_LOG("Screen : %f %f", ScreenX, ScreenY);
+
 	const FMatrix View = Camera->GetViewMatrix();
 	const FMatrix Proj = Camera->GetProjectionMatrix();
 
@@ -92,6 +99,8 @@ FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 
 	FVector4 pNearVS = InvProj * pNearNDC;
 	FVector4 pFarVS = InvProj * pFarNDC;
+	//FVector4 pNearVS = pNearNDC * InvProj;
+	//FVector4 pFarVS = pFarNDC * InvProj;
 
 	// Perspective division for view space points
 	pNearVS.X /= pNearVS.W; pNearVS.Y /= pNearVS.W; pNearVS.Z /= pNearVS.W; pNearVS.W = 1.0f;
@@ -106,8 +115,12 @@ FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 	// No perspective divide needed here as View matrix is affine and W should remain 1.0
 
 	const FVector originWS(pNearH.X, pNearH.Y, pNearH.Z);
+
+
 	FVector dirWS = FVector(pFarH.X - pNearH.X, pFarH.Y - pNearH.Y, pFarH.Z - pNearH.Z);
 	dirWS.Normalize();
+	UE_LOG("(%f %f %f)", dirWS.X, dirWS.Y, dirWS.Z);
+
 
 	return FRay(originWS, dirWS);
 }

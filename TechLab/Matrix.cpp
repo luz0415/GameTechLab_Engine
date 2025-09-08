@@ -272,3 +272,12 @@ FVector4 FMatrix::operator*(const FVector4& Other) const noexcept
 	Output.W = M[0][3] * Other.X + M[1][3] * Other.Y + M[2][3] * Other.Z + M[3][3] * Other.W;
 	return Output;
 }
+
+FVector4 operator*(const FVector4& v, const FMatrix& M) noexcept {
+	return FVector4(
+		v.X * M[0][0] + v.Y * M[1][0] + v.Z * M[2][0] + v.W * M[3][0],
+		v.X * M[0][1] + v.Y * M[1][1] + v.Z * M[2][1] + v.W * M[3][1],
+		v.X * M[0][2] + v.Y * M[1][2] + v.Z * M[2][2] + v.W * M[3][2],
+		v.X * M[0][3] + v.Y * M[1][3] + v.Z * M[2][3] + v.W * M[3][3]
+	);
+}

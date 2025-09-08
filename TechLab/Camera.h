@@ -58,9 +58,9 @@ private:
 	FMatrix ViewMatrix;
 	FMatrix ProjectionMatrix;
 
-	float Roll;
-	float Yaw;
-	float Pitch;
+	float Roll{ 0 };
+	float Yaw{ 0 };
+	float Pitch{ 0 };
 
 	float MoveLeftRight;
 	float MoveBackForward;
