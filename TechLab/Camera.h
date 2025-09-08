@@ -21,6 +21,15 @@ public:
 	const FMatrix& GetProjectionMatrix() const noexcept { return ProjectionMatrix; }
 	const FVector& GetEye() const noexcept { return Eye; }
 
+	const float GetRoll() { return Roll; }
+	const float GetPith() { return Pitch; }
+	const float GetYaw() { return Yaw; }
+
+	void SetEye(const FVector eye) { Eye = eye; }
+	void SetRoll(const float roll) { Roll = roll; }
+	void SetPitch(const float pitch) { Pitch = pitch; }
+	void SetYaw(const float yaw) { Yaw = yaw; }
+
 	void HandleInput(const struct FInput& Input, float DeltaTime);
 	void UpdateAspectRatio(float InAspectRatio);
 	void Update();
@@ -42,6 +51,7 @@ private:
 	FMatrix ViewMatrix;
 	FMatrix ProjectionMatrix;
 
+	float Roll;
 	float Yaw;
 	float Pitch;
 
