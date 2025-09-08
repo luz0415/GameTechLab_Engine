@@ -130,7 +130,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
 	ImGuiAppConsole* App = new ImGuiAppConsole();
-	UImGuiPropertyWindow* PropWindow = dynamic_cast<UImGuiPropertyWindow*>((ImGuiManager->GetImGuiArray())[0]);
 
 	RECT Rect;
 	GetClientRect(hWnd, &Rect);
@@ -161,8 +160,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				bIsExit = true;
 				break;
 			}
-			UE_LOG("Fuck");
-
 		}
 
 		// Calculate DeltaTime

@@ -4,6 +4,7 @@
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "ImGui/imgui_impl_win32.h"
+#include "ImGuiPropertyWindow.h"
 
 UImGuiManager::UImGuiManager()
 {
@@ -30,9 +31,9 @@ void UImGuiManager::Init()
 {
     // renderer.Prepare 다음에 추가
 
-    UImGuiPropertyWindow* SC = new UImGuiPropertyWindow();
+    UImGuiPropertyWindow* PW = new UImGuiPropertyWindow();
 
-    ImGuiArray.push_back(SC);
+    ImGuiArray.push_back(PW);
 }
 
 void UImGuiManager::Release()
