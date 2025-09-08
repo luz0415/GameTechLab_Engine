@@ -132,6 +132,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CubeComp.cpp" />
     <ClCompile Include="GridRenderer.cpp" />
+    <ClCompile Include="ImGuiControlPanel.cpp" />
     <ClCompile Include="ImGuiPropertyWindow.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeComp.h" />
     <ClInclude Include="GridRenderer.h" />
+    <ClInclude Include="ImGuiControlPanel.h" />
     <ClInclude Include="ImGuiPropertyWindow.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Math.h" />

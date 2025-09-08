@@ -13,7 +13,7 @@ public:
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("UPrimitiveComponent"), nullptr, USceneComponent::StaticClass());
+        static UClass Class(FString("UPrimitiveComponent"), StaticUObjectFactory, USceneComponent::StaticClass());
         return &Class;
     }
 

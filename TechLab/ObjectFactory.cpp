@@ -51,10 +51,6 @@ void FObjectFactory::TickObjects(float DeltaTimes)
             else 
             { 
                 Object->Tick(DeltaTimes);
-                if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Object))
-                {
-                    PrimComp->Render();
-                }
             }
         }
     }

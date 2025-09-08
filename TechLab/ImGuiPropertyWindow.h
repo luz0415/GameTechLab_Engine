@@ -2,14 +2,23 @@
 
 #include "ImGuiWindow.h"
 #include "ImGui/imgui.h"
-#include <array>
+#include "Vector.h"
 
 class UImGuiPropertyWindow : public IImGuiWindow
 {
 public:
 	virtual void Render() override;
-	std::array<float, 3> GetSize() { return SizeArray; }
+
+	FVector GetTranslation() const { return Translation; }
+	FVector GetRotation() const { return Rotation; }
+	FVector GetScale() const { return Scale; }
+
+	void SetTranslation(const FVector& translation) { Translation = translation; }
+	void SetRotation(const FVector& rotation) { Rotation = rotation; }
+	void SetScale(const FVector& scale) { Scale = scale; }
 
 private:
-	std::array<float, 3> SizeArray = { 0 };
+	FVector Translation;
+	FVector Rotation;
+	FVector Scale;
 };

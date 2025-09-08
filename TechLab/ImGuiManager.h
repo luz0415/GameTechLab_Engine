@@ -1,6 +1,9 @@
 #pragma once
+
 #include "Core.h"
-#include "ImGuiConsole.h" 
+#include "ImGuiConsole.h"
+#include "ImGuiPropertyWindow.h"
+#include "ImGuiControlPanel.h"
 
 class UImGuiManager
 {
@@ -22,9 +25,13 @@ public:
 	void Render();
 
 	UImGuiConsole* GetConsole() { return Console; }
-	std::vector<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
+	UImGuiControlPanel* GetControlPanel() { return ControlPanel; }
+	UImGuiPropertyWindow* GetPropertyWindow() { return PropertyWindow; }
+	TArray<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
 
 private:
-	TArray<IImGuiWindow*> ImGuiArray;
+	TArray< IImGuiWindow*> ImGuiArray;
 	UImGuiConsole* Console = nullptr;
+	UImGuiControlPanel* ControlPanel = nullptr;
+	UImGuiPropertyWindow* PropertyWindow = nullptr;
 };

@@ -1,17 +1,27 @@
 #include "Scene.h"
+#include "ObjectFactory.h"
+#include "SceneManager.h"
 
 UScene::UScene()
 {
+	//USceneData tempSceneData = USceneManager::LoadUSceneDataByExplorer();
+	//
+	//for (auto primitive : tempSceneData.PrimArray)
+	//{
+	//	UPrimitiveComponent* obj = PrimToPrimComp(primitive);
+	//	Objects.push_back(obj);
+	//}
 }
 
 UScene::UScene(const USceneData& sceneData)
 {
+	CopyPrimComp(sceneData);
+}
 
-	for (auto& primitive : sceneData.PrimArray)
-	{
-		USceneComponent* obj;
-		Objects.push_back(obj);
-	}
+UScene::UScene(const std::string& path)
+{
+	USceneData sceneData = USceneManager::LoadUSceneData(path);
+	CopyPrimComp(sceneData);
 }
 
 UScene::~UScene()
@@ -25,7 +35,7 @@ UScene::~UScene()
 
 UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
 {
-	UPrimitiveComponent* pPrimComp = new UPrimitiveComponent();
+	UPrimitiveComponent* pPrimComp = FObjectFactory::Get()->ConstructObject<UPrimitiveComponent>();
 
 	if (primitive.Type == "Sphere")
 	{
@@ -51,3 +61,19 @@ UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
 	return pPrimComp;
 }
 
+void UScene::CopyPrimComp(const USceneData& sceneData)
+{
+	for (auto& primitive : sceneData.PrimArray)
+	{
+		UPrimitiveComponent* obj;
+		Objects.push_back(obj);
+	}
+}
+
+void UScene::Render() 
+{
+	for (const auto& elem : Objects)
+	{
+		elem->Render();
+	}
+}

@@ -280,7 +280,7 @@ void URenderer::PrepareShader()
 
 void URenderer::RenderScene(const Camera* SceneCamera)
 {
-	Prepare();
+	//Prepare();
 	PrepareShader();
 
 	FViewProjConstant VPConstant{ SceneCamera->GetViewMatrix(), SceneCamera->GetProjectionMatrix() };

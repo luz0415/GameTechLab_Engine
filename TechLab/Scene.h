@@ -29,10 +29,13 @@ class UScene
 public:
 	UScene();
     UScene(const USceneData& sceneData);
+    UScene(const std::string&);
 	~UScene();
 
     UPrimitiveComponent* PrimToPrimComp(const Primitive& primitive);
+    void CopyPrimComp(const USceneData& sceneData);
+    void Render();
 
 private:
-	TArray<USceneComponent*> Objects;
+	TArray<UPrimitiveComponent*> Objects;
 };

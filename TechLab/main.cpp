@@ -1,6 +1,7 @@
 #pragma comment(lib,"user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
+#pragma once
 
 #include <windows.h>
 #include <d3d11.h>
@@ -17,7 +18,7 @@
 #include "Renderer.h"
 #include "ObjectFactory.h"
 #include "Camera.h"
-
+#include "SceneManager.h"
 #include "SphereComp.h"
 #include "CubeComp.h"
 
@@ -125,10 +126,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 	// Test
-	Test = FObjectFactory::Get()->ConstructObject<UCubeComp>();
-	Test->Translate(FVector(10.0f, 0.0f, 0.0f));
-	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(2.7f, 0.0f, 0.0f));
-	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(0.0f, 5.0f, 5.0f));
 
 
 	IMGUI_CHECKVERSION();
@@ -188,12 +185,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		UImGuiManager::Get()->GetConsole()->GetAppConsole()->Draw("Console", nullptr);
+		UImGuiManager::Get()->Render();
 
 		FObjectFactory::Get()->TickObjects(DeltaTime);
-
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		USceneManager::Get()->GetCurrentScene()->Render();
 
 		Renderer->RenderScene(MainCamera);
 		Renderer->SwapBuffer();

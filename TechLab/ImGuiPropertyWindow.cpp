@@ -1,19 +1,46 @@
 #include "ImGuiPropertyWindow.h"
 
+#define INPUT_BOX_WIDTH 70
+
 void UImGuiPropertyWindow::Render()
 {
-	static float Position[3] = { 0 };
-
-	SizeArray[0] = Position[0];
-	SizeArray[1] = Position[1];
-	SizeArray[2] = Position[2];
+	ImGui::SetNextWindowPos(ImVec2(600, 0), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_Appearing);
 
 	ImGui::Begin("Jungle Property Window");
 
-	ImGui::InputFloat3("Position", Position);
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##TX", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##TY", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##TZ", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::Text("Translation");
 
-	// 현재 값 출력
-	ImGui::Text("X: %.3f, Y: %.3f, Z: %.3f", SizeArray[0], SizeArray[1], SizeArray[2]);
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##RX", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##RY", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##RZ", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::Text("Rotation");
+
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##SX", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##SY", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
+	ImGui::InputFloat("##SZ", &Translation.X, 0, 0, "%.3f");
+	ImGui::SameLine();
+	ImGui::Text("Scale");
 
 	ImGui::End();
 }

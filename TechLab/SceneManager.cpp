@@ -1,4 +1,7 @@
 #include "SceneManager.h"
+#include "json.hpp"
+
+using namespace json;
 
 USceneManager::~USceneManager()
 {
@@ -15,6 +18,7 @@ JSON USceneManager::LoadScene(const std::string& path)
 
     std::string content((std::istreambuf_iterator<char>(file)),
         std::istreambuf_iterator<char>());
+
     return JSON::Load(content);
 }
 
@@ -32,9 +36,10 @@ void USceneManager::SaveScene(const std::string& path, const JSON& sceneJson)
 // Path에서 Scene 파일을 열어서 USceneData로 반환
 USceneData USceneManager::LoadUSceneData(const std::string& path)
 {
-    json::JSON root = LoadScene(path);
+    JSON root = LoadScene(path);
 
     USceneData scene;
+
     scene.Version = (int)root["Version"].ToInt();
     scene.NextUUID = (int)root["NextUUID"].ToInt();
 
@@ -76,7 +81,7 @@ std::wstring USceneManager::OpenFileDialog()
 }
 
 // JSON 객체를 Primitive 단위로 분해하여 Primitive로 반환
-Primitive USceneManager::ParsePrimitive(const json::JSON& j)
+Primitive USceneManager::ParsePrimitive(const JSON& j)
 {
     Primitive p;
     p.Type = j.at("Type").ToString();
@@ -94,7 +99,7 @@ Primitive USceneManager::ParsePrimitive(const json::JSON& j)
     return p;
 }
 
-JSON USceneManager::LoadSceneByExplorer()
+JSON USceneManager::LoadJSONByExplorer()
 {
     JSON tempjson;
 
@@ -120,7 +125,7 @@ JSON USceneManager::LoadSceneByExplorer()
 
 USceneData USceneManager::LoadUSceneDataByExplorer()
 {
-    JSON tempjson = LoadSceneByExplorer();
+    JSON tempjson = LoadJSONByExplorer();
     USceneData USceneData = JSONToUSceneData(tempjson);
 
     return USceneData;
@@ -144,5 +149,13 @@ USceneData USceneManager::JSONToUSceneData(JSON& j)
 
         scene.PrimArray.push_back(p);
     }
-    return USceneData();
+    return scene;
+}
+
+void USceneManager::LoadSceneByExplorer()
+{
+    json::JSON sceneJSON = LoadJSONByExplorer();
+    UScene* scene = new UScene(JSONToUSceneData(sceneJSON));
+
+    Get()->CurrentScene = scene;
 }

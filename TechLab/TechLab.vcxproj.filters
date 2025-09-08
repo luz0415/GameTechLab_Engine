@@ -40,11 +40,11 @@
     <Filter Include="헤더 파일\ImGui">
       <UniqueIdentifier>{7d766aa3-a2dd-4ec8-aadd-9baa62f6a014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Scene">
-      <UniqueIdentifier>{0e18691c-2f65-4ab2-8265-854f0b925c57}</UniqueIdentifier>
+    <Filter Include="소스 파일\SceneFileManager">
+      <UniqueIdentifier>{a08a1fb1-262d-40c0-9aad-5e96253eebaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Scene">
-      <UniqueIdentifier>{f0bfc746-c772-45a9-a207-3d7bc4caa0c2}</UniqueIdentifier>
+    <Filter Include="헤더 파일\SceneFileManager">
+      <UniqueIdentifier>{66dbb9eb-9f02-4051-af2c-2bf884a24d43}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -157,10 +157,13 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>소스 파일\Scene</Filter>
+      <Filter>소스 파일\SceneFileManager</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일\Scene</Filter>
+      <Filter>소스 파일\SceneFileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiControlPanel.cpp">
+      <Filter>소스 파일\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -295,11 +298,14 @@
     <ClInclude Include="WorldAxisRenderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>헤더 파일\Scene</Filter>
+      <Filter>헤더 파일\SceneFileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\SceneFileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiControlPanel.h">
+      <Filter>헤더 파일\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

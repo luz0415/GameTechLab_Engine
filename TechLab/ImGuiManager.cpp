@@ -17,6 +17,8 @@ UImGuiManager::UImGuiManager()
     // 위 코드는 hWnd, renderer 등을 필요로 하므로 WinMain에 추가하기
 
     Console = new UImGuiConsole();
+    ControlPanel = new UImGuiControlPanel();
+    PropertyWindow = new UImGuiPropertyWindow();
 
     Init();
 
@@ -31,9 +33,9 @@ void UImGuiManager::Init()
 {
     // renderer.Prepare 다음에 추가
 
-    UImGuiPropertyWindow* PW = new UImGuiPropertyWindow();
-
-    ImGuiArray.push_back(PW);
+    //UImGuiPropertyWindow* PW = new UImGuiPropertyWindow();
+    //
+    //ImGuiArray.push_back(PW);
 }
 
 void UImGuiManager::Release()
@@ -47,10 +49,13 @@ void UImGuiManager::Release()
 
 void UImGuiManager::Render()
 {
-    for (int i = 0; i < ImGuiArray.size(); i++)
-    {
-        ImGuiArray[i]->Render();
-    }
+    //for (int i = 0; i < ImGuiArray.size(); i++)
+    //{
+    //    ImGuiArray[i]->Render();
+    //}
+    Console->GetAppConsole()->Draw("Console", nullptr);
+    PropertyWindow->Render();
+    ControlPanel->Render();
 
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

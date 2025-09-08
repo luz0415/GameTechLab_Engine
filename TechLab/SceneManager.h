@@ -7,10 +7,12 @@
 #include <windows.h>
 #include <commdlg.h> 
 
-#include "json.hpp"
 #include "Scene.h"
 
-using namespace json;
+namespace json
+{ 
+    class JSON;
+}
 
 class USceneManager
 {
@@ -27,15 +29,30 @@ public:
         return &Instance;
     }
 
-    JSON LoadScene(const std::string& path);
-    void SaveScene(const std::string& path, const JSON& sceneJson);
-    std::wstring OpenFileDialog();
-    USceneData LoadUSceneData(const std::string& path);
-    Primitive ParsePrimitive(const json::JSON& j);
+    static json::JSON LoadScene(const std::string& path);
+    static void SaveScene(const std::string& path, const json::JSON& sceneJson);
+    static std::wstring OpenFileDialog();
+    static USceneData LoadUSceneData(const std::string& path);
+    static Primitive ParsePrimitive(const json::JSON& j);
 
-    JSON LoadSceneByExplorer();
-    USceneData LoadUSceneDataByExplorer();
-    USceneData JSONToUSceneData(JSON& j);
+    static json::JSON LoadJSONByExplorer();
+    static USceneData LoadUSceneDataByExplorer();
+    static USceneData JSONToUSceneData(json::JSON& j);
+
+    static void LoadSceneByExplorer();
+
+    UScene* GetCurrentScene()
+    {
+        if (CurrentScene)
+        {
+            return CurrentScene;
+        }
+
+        CurrentScene = new UScene();
+
+        return CurrentScene;
+    }
 	
 private:
+    UScene* CurrentScene = nullptr;
 };
