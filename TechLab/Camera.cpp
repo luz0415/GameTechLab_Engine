@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include <algorithm>
+#include "Math.h"
 
 UCamera::UCamera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
@@ -60,25 +60,30 @@ void UCamera::HandleInput(const FInput& Input, float DeltaTime)
 			Yaw += static_cast<float>(Input.MouseX) * RotationSpeed;
 			Pitch += static_cast<float>(Input.MouseY) * RotationSpeed;
 			// Clamp pitch
-			Pitch = std::max(-3.1415926535f / 2.0f, std::min(3.1415926535f / 2.0f, Pitch));
+			Pitch = Max(-PI / 2.0f, Min(PI / 2.0f, Pitch));
 		}
 	}
 }
 
+void UCamera::UpdateAspectRatio(float InAspectRatio)
+{
+	AspectRatio = InAspectRatio;
+	UpdateProjectionMatrix();
+}
+
 void UCamera::Update()
 {
-	FMatrix rotation = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
-
-	At = rotation.TransformVector(FVector(0.f, 0.f, 1.f));
+	FMatrix RotationMatrix = FMatrix::RotateMatrixX(-Pitch) * FMatrix::RotateMatrixY(Yaw);
+	At = RotationMatrix.TransformVector(FVector(0.f, 0.f, 1.f));
 	At.Normalize();
 
 	CameraForward = At;
-	CameraRight = rotation.TransformVector(FVector(1.f, 0.f, 0.f));
-	CameraUp = rotation.TransformVector(FVector(0.f, 1.f, 0.f));
+	CameraRight = RotationMatrix.TransformVector(FVector(1.f, 0.f, 0.f));
+	CameraUp = RotationMatrix.TransformVector(FVector(0.f, 1.f, 0.f));
 
 	Eye += CameraRight * MoveLeftRight;
 	Eye += CameraForward * MoveBackForward;
-	Eye += CameraUp * MoveUpDown;
+	Eye += FVector(0, 1, 0) * MoveUpDown;
 
 	MoveLeftRight = 0.0f;
 	MoveBackForward = 0.0f;

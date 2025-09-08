@@ -1,7 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "MeshResource.h"
-#include "ShapeType.h"
+#include "PrimitiveType.h"
 
 class FMeshManager
 {

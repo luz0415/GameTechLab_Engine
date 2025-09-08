@@ -1,5 +1,6 @@
 #include "ObjectFactory.h"
 #include "Object.h"
+#include "PrimitiveComponent.h"
 
 FObjectFactory::~FObjectFactory()
 {
@@ -47,7 +48,10 @@ void FObjectFactory::TickObjects(float DeltaTimes)
                 ReleaseObject(Object);
                 --i;
             }
-            else { Object->Tick(DeltaTimes); }
+            else 
+            { 
+                Object->Tick(DeltaTimes);
+            }
         }
     }
 }

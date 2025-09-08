@@ -1,12 +1,15 @@
-#include "SceneFileManager.h"
+#include "SceneManager.h"
+#include "json.hpp"
 
-USceneFileManager::~USceneFileManager()
+using namespace json;
+
+USceneManager::~USceneManager()
 {
 
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
-JSON USceneFileManager::LoadScene(const std::string& path)
+JSON USceneManager::LoadScene(const std::string& path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -15,11 +18,12 @@ JSON USceneFileManager::LoadScene(const std::string& path)
 
     std::string content((std::istreambuf_iterator<char>(file)),
         std::istreambuf_iterator<char>());
+
     return JSON::Load(content);
 }
 
 // JSON 객체를 Path에 저장
-void USceneFileManager::SaveScene(const std::string& path, const JSON& sceneJson)
+void USceneManager::SaveScene(const std::string& path, const JSON& sceneJson)
 {
     std::ofstream file(path);
     if (!file.is_open()) {
@@ -29,12 +33,13 @@ void USceneFileManager::SaveScene(const std::string& path, const JSON& sceneJson
     file << sceneJson.dump(1, "  "); // depth=1, tab="  " → 보기 좋은 포맷
 }
 
-// Path에서 Scene 파일을 열어서 SceneData로 반환
-SceneData USceneFileManager::LoadSceneData(const std::string& path)
+// Path에서 Scene 파일을 열어서 USceneData로 반환
+USceneData USceneManager::LoadUSceneData(const std::string& path)
 {
-    json::JSON root = LoadScene(path);
+    JSON root = LoadScene(path);
 
-    SceneData scene;
+    USceneData scene;
+
     scene.Version = (int)root["Version"].ToInt();
     scene.NextUUID = (int)root["NextUUID"].ToInt();
 
@@ -54,7 +59,7 @@ SceneData USceneFileManager::LoadSceneData(const std::string& path)
 }
 
 // 파일 탐색기를 염
-std::wstring USceneFileManager::OpenFileDialog()
+std::wstring USceneManager::OpenFileDialog()
 {
     wchar_t filename[MAX_PATH] = { 0 };
 
@@ -76,20 +81,25 @@ std::wstring USceneFileManager::OpenFileDialog()
 }
 
 // JSON 객체를 Primitive 단위로 분해하여 Primitive로 반환
-Primitive USceneFileManager::ParsePrimitive(const json::JSON& j)
+Primitive USceneManager::ParsePrimitive(const JSON& j)
 {
     Primitive p;
     p.Type = j.at("Type").ToString();
 
-    for (int i = 0; i < 3; i++) {
-        p.Location[i] = (float)j.at("Location").at(i).ToFloat();
-        p.Rotation[i] = (float)j.at("Rotation").at(i).ToFloat();
-        p.Scale[i] = (float)j.at("Scale").at(i).ToFloat();
-    }
+    p.Location.X = (float)j.at("Location").at(0).ToFloat();
+    p.Location.Y = (float)j.at("Location").at(1).ToFloat();
+    p.Location.Z = (float)j.at("Location").at(2).ToFloat();
+    p.Rotation.X = (float)j.at("Rotation").at(0).ToFloat();
+    p.Rotation.Y = (float)j.at("Rotation").at(1).ToFloat();
+    p.Rotation.Z = (float)j.at("Rotation").at(2).ToFloat();
+    p.Scale.X = (float)j.at("Scale").at(0).ToFloat();
+    p.Scale.Y = (float)j.at("Scale").at(1).ToFloat();
+    p.Scale.Z = (float)j.at("Scale").at(2).ToFloat();
+    
     return p;
 }
 
-JSON USceneFileManager::LoadSceneByExplorer()
+JSON USceneManager::LoadJSONByExplorer()
 {
     JSON tempjson;
 
@@ -113,17 +123,17 @@ JSON USceneFileManager::LoadSceneByExplorer()
     return tempjson;
 }
 
-SceneData USceneFileManager::LoadSceneDataByExplorer()
+USceneData USceneManager::LoadUSceneDataByExplorer()
 {
-    JSON tempjson = LoadSceneByExplorer();
-    SceneData scenedata = JSONToSceneData(tempjson);
+    JSON tempjson = LoadJSONByExplorer();
+    USceneData USceneData = JSONToUSceneData(tempjson);
 
-    return scenedata;
+    return USceneData;
 }
 
-SceneData USceneFileManager::JSONToSceneData(JSON& j)
+USceneData USceneManager::JSONToUSceneData(JSON& j)
 {
-    SceneData scene;
+    USceneData scene;
 
     scene.Version = (int)j["Version"].ToInt();
     scene.NextUUID = (int)j["NextUUID"].ToInt();
@@ -139,5 +149,13 @@ SceneData USceneFileManager::JSONToSceneData(JSON& j)
 
         scene.PrimArray.push_back(p);
     }
-    return SceneData();
+    return scene;
+}
+
+void USceneManager::LoadSceneByExplorer()
+{
+    json::JSON sceneJSON = LoadJSONByExplorer();
+    UScene* scene = new UScene(JSONToUSceneData(sceneJSON));
+
+    Get()->CurrentScene = scene;
 }

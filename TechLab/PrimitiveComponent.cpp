@@ -1,6 +1,10 @@
 #include "PrimitiveComponent.h"
 #include "Renderer.h"
 
+UPrimitiveComponent::UPrimitiveComponent() : USceneComponent()
+{
+}
+
 void UPrimitiveComponent::Render()
 {
 	if (MeshResource != nullptr)
@@ -14,4 +18,13 @@ void UPrimitiveComponent::Render()
 void UPrimitiveComponent::SetMesh(FMeshResource* InMeshResource)
 {
 	MeshResource = InMeshResource;
+}
+
+void UPrimitiveComponent::SetPrimitiveType(EPrimitiveType InType)
+{
+	Type = InType;
+	if (Type != EPrimitiveType::Custom)
+	{
+		SetMesh(URenderer::Get()->GetPrimitiveMeshResource(GetPrimitiveType()));
+	}
 }

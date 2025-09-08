@@ -1,5 +1,6 @@
 #pragma once
 #include "SceneComponent.h"
+#include "PrimitiveType.h"
 
 class UPrimitiveComponent : public USceneComponent
 {
@@ -12,7 +13,7 @@ public:
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("UPrimitiveComponent"), nullptr, USceneComponent::StaticClass());
+        static UClass Class(FString("UPrimitiveComponent"), StaticUObjectFactory, USceneComponent::StaticClass());
         return &Class;
     }
 
@@ -22,11 +23,14 @@ public:
     }
 
 public:
-	UPrimitiveComponent() {};
+	UPrimitiveComponent();
 	virtual void Render();
     void SetMesh(class FMeshResource* InMeshResource);
+    EPrimitiveType GetPrimitiveType() const { return Type; }
+    void SetPrimitiveType(EPrimitiveType InType);
 
 private:
+    EPrimitiveType Type = EPrimitiveType::Custom;
     FMeshResource* MeshResource = nullptr;
 };
 

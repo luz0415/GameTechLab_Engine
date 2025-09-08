@@ -1,12 +1,11 @@
 #include "SphereComp.h"
-#include "MeshManager.h"
 #include "Renderer.h"
 #include "ShapeType.h"
 #include "Ray.h"
 
 USphereComp::USphereComp() : UPrimitiveComponent()
 {
-	SetMesh(URenderer::Get()->GetPrimitiveMeshResource(EPrimitiveType::Sphere));
+	SetPrimitiveType(EPrimitiveType::Sphere);
 }
 
 bool USphereComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)

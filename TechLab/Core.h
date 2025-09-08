@@ -27,6 +27,7 @@ typedef unsigned int uint32;
 struct MemoryHeader
 {
     size_t Size;
+    char _padding[8];
 };
 
 void* operator new(size_t Size) noexcept;
@@ -43,7 +44,7 @@ using StaticUObjectFactory = class UObject* (*)();
 #define UE_LOG(fmt, ...) \
     do \
     { \
-        if (ImGuiManager && ImGuiManager->GetConsole()) ImGuiManager->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
+        if (UImGuiManager::Get() && UImGuiManager::Get()->GetConsole()) UImGuiManager::Get()->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
     } while(0)
 
 // Ray

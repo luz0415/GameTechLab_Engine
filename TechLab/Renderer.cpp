@@ -1,21 +1,34 @@
 #include "Renderer.h"
 #include "SimpleConstants.h"
-#include "ImGuiManager.h"
 #include "Camera.h"
+#include "WorldAxisRenderer.h"
+#include "GridRenderer.h"
+#include "MeshManager.h"
 
 void URenderer::Create(HWND hWindow)
 {
 	CreateDeviceAndSwapChain(hWindow);
 	CreateFrameBuffer();
 	CreateRasterizerState();
+	CreateDepthStencilResources(hWindow);
 	VPConstantBuffer = CreateConstantBuffer<FViewProjConstant>();
 	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
 	MeshManager = new FMeshManager(Device);
-	GridRenderer = new FGridRenderer();
-	GridRenderer->Init();
+	CreateVisualInterfaces();
 }
 
-void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
+void URenderer::CreateVisualInterfaces()
+{
+	FGridRenderer* GridRenderer = new FGridRenderer();
+	GridRenderer->Init();
+	FWorldAxisRenderer* WorldAxisRenderer = new FWorldAxisRenderer();
+	WorldAxisRenderer->Init();
+
+	VisualInterfaceList.push_back(GridRenderer);
+	VisualInterfaceList.push_back(WorldAxisRenderer);
+}
+
+void URenderer::CreateDeviceAndSwapChain(HWND& hWindow)
 {
 	D3D_FEATURE_LEVEL featurelevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
@@ -107,6 +120,79 @@ void URenderer::ReleaseRasterizerState()
 	}
 }
 
+
+void URenderer::ReleaseDepthStencilResources()
+{
+	if (DepthStencilState)
+	{
+		DepthStencilState->Release();
+		DepthStencilState = nullptr;
+	}
+	if (DepthStencilView)
+	{
+		DepthStencilView->Release();
+		DepthStencilView = nullptr;
+	}
+	if (DepthStencilBuffer)
+	{
+		DepthStencilBuffer->Release();
+		DepthStencilBuffer = nullptr;
+	}
+}
+
+void URenderer::CreateDepthStencilResources(HWND& Hwnd)
+{
+	RECT rect;
+	GetClientRect(Hwnd, &rect);
+	const int width = rect.right - rect.left;
+	const int height = rect.bottom - rect.top;
+
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+
+	dsDesc.DepthEnable = TRUE;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;//기존 픽셀보다 z값이 적은걸 깊이버퍼에 적는다
+
+	dsDesc.StencilEnable = FALSE;
+	dsDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	dsDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+
+	HRESULT hr = Device->CreateDepthStencilState(&dsDesc, &DepthStencilState);
+	if (FAILED(hr))
+	{
+		//UE_LOG("CreateDepthStencilState : [FAILED TO CREATE DEPTH_STENCIL_STATE");
+	}
+
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = width;                           
+	texDesc.Height = height;                         
+	texDesc.MipLevels = 1;                             
+	texDesc.ArraySize = 1;                             
+	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;    
+	texDesc.SampleDesc.Count = 1;                      
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;               
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;      
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	hr = Device->CreateTexture2D(&texDesc, nullptr, &DepthStencilBuffer);
+	if (FAILED(hr))
+	{
+		// UE_LOG("CreateDepthStencilView : [FAILED TO CREATE DEPTH_STENCIL_BUFFER]");
+	}
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	dsvDesc.Format = texDesc.Format;                   // 텍스처의 포맷과 동일하게 설정
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D; // 2D 텍스처 뷰로 설정
+	dsvDesc.Texture2D.MipSlice = 0;
+
+	hr = Device->CreateDepthStencilView(DepthStencilBuffer, &dsvDesc, &DepthStencilView);
+	if (FAILED(hr))
+	{
+		// UE_LOG("CreateDepthStencilView : [FAILED TO CREATE DEPTH_STENCIL_VIEW]");
+	}
+}
+
 void URenderer::Release()
 {
 	DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
@@ -117,9 +203,13 @@ void URenderer::Release()
 	ReleaseShader(); // �߰�
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
+	ReleaseDepthStencilResources();
 
 	delete(MeshManager);
-	delete(GridRenderer);
+	for (auto elem : VisualInterfaceList)
+	{
+		delete elem;
+	}
 }
 
 void URenderer::SwapBuffer()
@@ -172,11 +262,13 @@ void URenderer::ReleaseShader()
 void URenderer::Prepare()
 {
 	DeviceContext->ClearRenderTargetView(FrameBufferRTV, ClearColor);
+	DeviceContext->ClearDepthStencilView(DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DeviceContext->RSSetViewports(1, &ViewportInfo);
 	DeviceContext->RSSetState(RasterizerState);
-	DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, nullptr);
+	DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView);
 	DeviceContext->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+	DeviceContext->OMSetDepthStencilState(DepthStencilState, 1);
 }
 
 void URenderer::PrepareShader()
@@ -188,14 +280,18 @@ void URenderer::PrepareShader()
 
 void URenderer::RenderScene(const UCamera& SceneCamera)
 {
+	//Prepare();
 	PrepareShader();
 
-	FViewProjConstant VPConstant{ SceneCamera.GetViewMatrix(), SceneCamera.GetProjectionMatrix() };
+	FViewProjConstant VPConstant{ SceneCamera->GetViewMatrix(), SceneCamera->GetProjectionMatrix() };
 	UpdateConstantBuffer<FViewProjConstant>(VPConstantBuffer, &VPConstant);
 	DeviceContext->VSSetConstantBuffers(1, 1, &VPConstantBuffer);
 
-	GridRenderer->Update(SceneCamera.GetEye());
-	GridRenderer->Render();
+	for (auto elem : VisualInterfaceList)
+	{
+		elem->Update(SceneCamera->GetEye());
+		elem->Render();
+	}
 
 	for (const auto& RenderProxy : RenderProxyList)
 	{
@@ -221,7 +317,6 @@ void URenderer::RenderScene(const UCamera& SceneCamera)
 	}
 
 	RenderProxyList.clear();
-
 }
 
 void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)

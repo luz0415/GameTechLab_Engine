@@ -1,47 +1,44 @@
+#pragma comment(lib,"user32")
+#pragma comment(lib, "d3d11")
+#pragma comment(lib, "d3dcompiler")
+#pragma once
+
 #include <windows.h>
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "imGui/imgui_impl_win32.h"
-
-#pragma comment(lib,"user32")
-#pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
-
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include "Renderer.h"
-#include "SimpleConstants.h"
-#include "MeshManager.h"
-
-#include <memory>
-#include "ObjectFactory.h"
-#include "SphereComp.h"
 #include "ImGuiManager.h"
+
 #include "Core.h"
 #include "Math.h"
-#include "ImGuiAppConsole.h"
-
+#include "Renderer.h"
+#include "ObjectFactory.h"
 #include "Camera.h"
+#include "SceneManager.h"
+#include "SphereComp.h"
+#include "CubeComp.h"
 #include "ObjectPicker.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+Camera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
+USceneComponent* Test;
 
-// Object Picker
+// Object Picker (TEMP)
 ObjectPicker* GObjectPicker = nullptr;
-
-// UI Variables
 uint32_t GPickedObjectID = 0;
 
-// Mouse Position
+// Mouse Position (TEMP)
 int GMouseX = 0;
 int GMouseY = 0;
 
-// Picking Debug Info
+// Picking Debug Info (TEMP)
 FVector GRayOrigin = { 0,0,0 };
 FVector GRayDirection = { 0,0,0 };
 int GTotalObjectCount = 0;
@@ -104,6 +101,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case'd': case 'D': GInput.bRight = true; break;
 		case'e': case 'E': GInput.bUp = true; break;
 		case'q': case 'Q': GInput.bDown = true; break;
+		case'r': case 'R': Test->AddRelativeRotationX(10); break;
+		case't': case 'T': Test->AddRelativeRotationY(10); break;
+		case'y': case 'Y': Test->AddRelativeRotationZ(10); break;
 		default: break;
 		}
 		break;
@@ -119,6 +119,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		default: break;
 		}
 		break;
+	case WM_SIZE:
+	{
+		WPARAM ResizeType = wParam;
+		if (ResizeType == SIZE_MINIMIZED)
+			return 0;
+		UINT Width = LOWORD(lParam);
+		UINT Height = HIWORD(lParam);
+		float AspectRatio = (float)Width / (float)Height;
+
+		if (MainCamera) { MainCamera->UpdateAspectRatio(AspectRatio); }
+
+		break;
+	}
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
@@ -144,9 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 	// Test
-	USceneComponent* Test = FObjectFactory::Get()->ConstructObject<USphereComp>();
-	FObjectFactory::Get()->ConstructObject<USphereComp>()->Translate(FVector(5.0f, 0.0f, 0.0f));
-	auto& Objects = FObjectFactory::Get()->GetObjectArray();
+
 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
@@ -154,19 +165,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ImGui_ImplWin32_Init((void*)hWnd);
 	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
-	RECT rect;
-	GetClientRect(hWnd, &rect);
-	const int width = rect.right - rect.left;
-	const int height = rect.bottom - rect.top;
+	ImGuiAppConsole* App = new ImGuiAppConsole();
 
-	const FVector eye = FVector(0, 0, -5);
-	const FVector at = FVector(0, 0, 0);
-	const FVector up = FVector(0, 1, 0);
-	const float angle = 90.f;
-	const float radangle = angle * PI / 180.f;
+	RECT Rect;
+	GetClientRect(hWnd, &Rect);
+	const int Width = Rect.right - Rect.left;
+	const int Height = Rect.bottom - Rect.top;
+	const FVector Eye = FVector(0, 0, -5);
+	const FVector At = FVector(0, 0, 0);
+	const FVector Up = FVector(0, 1, 0);
+	const float Angle = 90.f;
+	const float RadAngle = DegreeToRadians(Angle);
+	MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 
-	UCamera MyCamera(eye, at, up, radangle, (float)width / (float)height, 0.1f, 100.f);
-
+	// Object Picker (TEMP)
 	GObjectPicker = new ObjectPicker(&MyCamera);
 	GObjectPicker->SetViewportSize(width, height);
 
@@ -174,7 +186,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LARGE_INTEGER lastTime, currentTime, frequency;
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&lastTime);
-
+	int count = 0;
 	bool bIsExit = false;
 	while (bIsExit == false)
 	{
@@ -192,12 +204,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// Calculate DeltaTime
 		QueryPerformanceCounter(&currentTime);
-		float deltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
+		float DeltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
 		lastTime = currentTime;
 
 		// Update Camera
-		MyCamera.HandleInput(GInput, deltaTime);
-		MyCamera.Update();
+		MainCamera->HandleInput(GInput, DeltaTime);
+		MainCamera->Update();
 		// Reset mouse delta after processing
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
@@ -205,26 +217,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 1. Clear Screen
 		Renderer->Prepare();
 
-		// 2. Update game logic and submit render proxies
-		FObjectFactory::Get()->TickObjects(deltaTime);
-		Test->AddRelativeRotationZ(10);
-		const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
-
-		for (UObject* Object : Objects)
-		{
-			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Object))
-			{
-				PrimComp->Render();
-			}
-		}
-
-		// 3. Render 3D Scene
-		Renderer->RenderScene(MyCamera);
-
-		// 4. Prepare and Render ImGui UI on top of the scene
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+
+		UImGuiManager::Get()->Render();
 
 		ImGui::Begin("Jungle Property Window");
 		ImGui::Text("Hello Jungle World!");
@@ -240,15 +237,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui::Text("Closest Hit Time (BestT): %f", GLastBestT);
 		ImGui::Text("New Selection ID (before update): %u", GNewSelectionID);
 		ImGui::End();
+		FObjectFactory::Get()->TickObjects(DeltaTime);
+		USceneManager::Get()->GetCurrentScene()->Render();
 
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-		// 5. Present the final image
+		Renderer->RenderScene(MainCamera);
 		Renderer->SwapBuffer();
 	}
 	Renderer->ReleaseShader();
 	Renderer->Release();
+	
+	delete App;
+	delete MainCamera;
 
 	return 0;
 }

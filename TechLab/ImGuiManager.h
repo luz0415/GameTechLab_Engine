@@ -1,23 +1,37 @@
 #pragma once
 
-#include <vector>
-
-#include "ImGuiConsole.h" 
+#include "Core.h"
+#include "ImGuiConsole.h"
+#include "ImGuiPropertyWindow.h"
+#include "ImGuiControlPanel.h"
 
 class UImGuiManager
 {
-public:
+private:
 	UImGuiManager();
-	~UImGuiManager();
+    ~UImGuiManager();
+    UImGuiManager(const UImGuiManager&) = delete;
+    UImGuiManager& operator=(const UImGuiManager&) = delete;
+
+public:
+	static UImGuiManager* Get()
+    {
+        static UImGuiManager Instance;
+        return &Instance;
+    }
 
 	void Init();
 	void Release();
-
 	void Render();
 
 	UImGuiConsole* GetConsole() { return Console; }
+	UImGuiControlPanel* GetControlPanel() { return ControlPanel; }
+	UImGuiPropertyWindow* GetPropertyWindow() { return PropertyWindow; }
+	TArray<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
 
 private:
-	std::vector<IImGuiWindow*> ImGuiArray;
+	TArray< IImGuiWindow*> ImGuiArray;
 	UImGuiConsole* Console = nullptr;
+	UImGuiControlPanel* ControlPanel = nullptr;
+	UImGuiPropertyWindow* PropertyWindow = nullptr;
 };

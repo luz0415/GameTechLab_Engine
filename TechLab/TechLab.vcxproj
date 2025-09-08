@@ -130,12 +130,16 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="CubeComp.cpp" />
     <ClCompile Include="GridRenderer.cpp" />
+    <ClCompile Include="ImGuiControlPanel.cpp" />
+    <ClCompile Include="ImGuiPropertyWindow.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="PrimitiveComponent.cpp" />
-    <ClCompile Include="SceneFileManager.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shapes.cpp" />
     <ClCompile Include="Class.cpp" />
     <ClCompile Include="EngineStatics.cpp" />
@@ -163,6 +167,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="VisualInterface.cpp" />
+    <ClCompile Include="WorldAxisRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader.hlsl">
@@ -174,7 +180,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CubeComp.h" />
     <ClInclude Include="GridRenderer.h" />
+    <ClInclude Include="ImGuiControlPanel.h" />
+    <ClInclude Include="ImGuiPropertyWindow.h" />
     <ClInclude Include="Pickable.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Math.h" />
@@ -185,7 +194,9 @@
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Raycastable.h" />
     <ClInclude Include="RenderProxy.h" />
-    <ClInclude Include="SceneFileManager.h" />
+    <ClInclude Include="PrimitiveType.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShapeType.h" />
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
@@ -213,6 +224,8 @@
     <ClInclude Include="Shapes.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Vector4.h" />
+    <ClInclude Include="VisualInterface.h" />
+    <ClInclude Include="WorldAxisRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

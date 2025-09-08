@@ -140,6 +140,16 @@ FMatrix FMatrix::RotateMatrixY(float AngleRad) noexcept
 	return R;
 }
 
+FMatrix FMatrix::RotateMatrixZ(float AngleRad) noexcept
+{
+	FMatrix R = FMatrix::Identity();
+	float c = std::cos(AngleRad);
+	float s = std::sin(AngleRad);
+	R[0][0] = c; R[0][1] = s;
+	R[1][0] = -s; R[1][1] = c;
+	return R;
+}
+
 FVector FMatrix::GetTranslation() const noexcept
 {
 	return FVector(M[3][0], M[3][1], M[3][2]);
@@ -197,16 +207,6 @@ FVector FMatrix::GetRotation() const noexcept
 	}
 
 	return FVector(Pitch, Yaw, Roll);
-}
-
-FMatrix FMatrix::RotateMatrixZ(float AngleRad) noexcept
-{
-	FMatrix R = FMatrix::Identity();
-	float c = std::cos(AngleRad);
-	float s = std::sin(AngleRad);
-	R[0][0] = c; R[0][1] = s;
-	R[1][0] = -s; R[1][1] = c;
-	return R;
 }
 
 FMatrix FMatrix::ViewMatrix(const FVector& Eye, const FVector& At, const FVector& Up) noexcept

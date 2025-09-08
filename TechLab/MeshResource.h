@@ -8,6 +8,9 @@
 
 #include "VertexData.h"
 
+/**
+* Vertex,Index buffer에 대한 정보 소유
+*/
 struct FMeshResource
 {
     ID3D11Buffer* VertexBuffer = nullptr;
