@@ -6,9 +6,18 @@
 
 class UImGuiManager
 {
+private:
+	UImGuiManager() = default;
+    ~UImGuiManager();
+    UImGuiManager(const UImGuiManager&) = delete;
+    UImGuiManager& operator=(const UImGuiManager&) = delete;
+
 public:
-	UImGuiManager();
-	~UImGuiManager();
+	    static UImGuiManager* Get()
+    {
+        static UImGuiManager Instance;
+        return &Instance;
+    }
 
 	void Init();
 	void Release();
