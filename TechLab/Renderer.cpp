@@ -287,7 +287,6 @@ void URenderer::RenderScene(const Camera* SceneCamera)
 	UpdateConstantBuffer<FViewProjConstant>(VPConstantBuffer, &VPConstant);
 	DeviceContext->VSSetConstantBuffers(1, 1, &VPConstantBuffer);
 
-	
 	for (auto elem : VisualInterfaceList)
 	{
 		elem->Update(SceneCamera->GetEye());

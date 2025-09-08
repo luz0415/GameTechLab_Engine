@@ -122,7 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->CreateShader();
 	// Test
 	USceneComponent* Test = FObjectFactory::Get()->ConstructObject<USphereComp>();
-	FObjectFactory::Get()->ConstructObject<USphereComp>()->Translate(FVector(5.0f, 0.0f, 0.0f));
+	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(2.7f, 0.0f, 0.0f));
 	FObjectFactory::Get()->ConstructObject<UCubeComp>()->Translate(FVector(0.0f, 5.0f, 5.0f));
 
 	IMGUI_CHECKVERSION();

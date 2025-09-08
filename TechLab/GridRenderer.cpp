@@ -42,21 +42,21 @@ void FGridRenderer::RegenerateGrid(const FVector& CameraPos)
     float EndX = AlignedCameraPosX + GridRadius * GridSize;
     float StartZ = AlignedCameraPosZ - GridRadius * GridSize;
     float EndZ = AlignedCameraPosZ + GridRadius * GridSize;
-
+    float GridY = -0.02f;
     // X Lines
     for (int32 i = 0; i <= GridRadius * 2; ++i)
     {
         float X = StartX + i * GridSize;
-        Vertices.push_back({ {X, 0.0f, StartZ}, {0.5f, 0.5f, 0.5f, 1.0f} });
-        Vertices.push_back({ {X, 0.0f, EndZ }, {0.5f, 0.5f, 0.5f, 1.0f} });
+        Vertices.push_back({ {X, GridY, StartZ}, {0.5f, 0.5f, 0.5f, 1.0f} });
+        Vertices.push_back({ {X, GridY, EndZ }, {0.5f, 0.5f, 0.5f, 1.0f} });
     }
 
     // Z Lines
     for (int32 i = 0; i <= GridRadius * 2; ++i)
     {
         float Z = StartZ + i * GridSize;
-        Vertices.push_back({ {StartX, 0.0f, Z}, {0.5f, 0.5f, 0.5f, 1.0f} });
-        Vertices.push_back({ {EndX, 0.0f, Z }, {0.5f, 0.5f, 0.5f, 1.0f} });
+        Vertices.push_back({ {StartX, GridY, Z}, {0.5f, 0.5f, 0.5f, 1.0f} });
+        Vertices.push_back({ {EndX, GridY, Z }, {0.5f, 0.5f, 0.5f, 1.0f} });
     }
 
     if (URenderer::Get()->GetMeshResource(FString(Name)) == nullptr)
