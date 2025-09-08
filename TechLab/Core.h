@@ -6,12 +6,13 @@
 #include <map>
 
 #include <memory>
-
 #include "ImGuiAppConsole.h"
 #include "Vector.h"
 //#include "ImGuiManager.h"
 
 //#include "ObjectPicker.h"
+
+class UImGuiManager;
 
 class UImGuiManager;
 

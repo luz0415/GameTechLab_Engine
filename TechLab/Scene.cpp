@@ -1,4 +1,7 @@
 #include "Scene.h"
+#include "SphereComp.h"
+#include "CubeComp.h"
+#include "Camera.h"
 #include "ObjectFactory.h"
 #include "SceneManager.h"
 #include "Math.h"

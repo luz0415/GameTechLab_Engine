@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Core.h"
 #include "ImGuiConsole.h"
 #include "ImGuiPropertyWindow.h"
 #include "ImGuiControlPanel.h"

@@ -159,9 +159,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	USceneManager::Get()->SetHWND(hWnd);
 	USceneManager::Get()->GetCurrentScene()->InitCamera();
-
 	USceneManager::Get()->SetObjectPickerCamera();
-	// Test
 
 
 	IMGUI_CHECKVERSION();
@@ -228,6 +226,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+
+		UE_LOG("Hit");
 
 		UImGuiManager::Get()->Render();
 
