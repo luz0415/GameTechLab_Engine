@@ -188,8 +188,6 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="RenderProxy.h" />
-
-    <ClInclude Include="SceneFileManager.h" />
     <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
