@@ -318,7 +318,6 @@ void URenderer::RenderScene(const Camera* SceneCamera)
 	}
 
 	RenderProxyList.clear();
-
 }
 
 void URenderer::ReleaseConstantBuffer(ID3D11Buffer* ConstantBuffer)

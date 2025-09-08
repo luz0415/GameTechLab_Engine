@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include <algorithm>
+#include "Math.h"
 
 Camera::Camera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
@@ -60,7 +60,7 @@ void Camera::HandleInput(const FInput& Input, float DeltaTime)
 			Yaw += static_cast<float>(Input.MouseX) * RotationSpeed;
 			Pitch += static_cast<float>(Input.MouseY) * RotationSpeed;
 			// Clamp pitch
-			Pitch = std::max(-3.1415926535f / 2.0f, std::min(3.1415926535f / 2.0f, Pitch));
+			Pitch = Max(-PI / 2.0f, Min(PI / 2.0f, Pitch));
 		}
 	}
 }
