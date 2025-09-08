@@ -12,7 +12,6 @@ void URenderer::Create(HWND hWindow)
 	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
 	MeshManager = new FMeshManager(Device);
 	GridRenderer = new FGridRenderer();
-	GridRenderer->Init();
 }
 
 void URenderer::CreateDeviceAndSwapChain(HWND hWindow)

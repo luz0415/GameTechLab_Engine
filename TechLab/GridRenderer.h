@@ -10,7 +10,6 @@ class FGridRenderer
 {
 public:
     FGridRenderer();
-    void Init();
     void Update(const FVector& CameraPos);
     void Render();
 
@@ -23,6 +22,5 @@ private:
     FVector LastCameraPos = FVector();
 
     TArray<FVertex> Vertices;
-    TArray<uint32> Indices;
 };
 
