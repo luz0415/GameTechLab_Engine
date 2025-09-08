@@ -22,6 +22,7 @@ public:
 	void Render();
 
 	UImGuiConsole* GetConsole() { return Console; }
+	std::vector<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
 
 private:
 	TArray<IImGuiWindow*> ImGuiArray;
