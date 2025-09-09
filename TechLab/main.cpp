@@ -88,7 +88,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
 			{
 				POINT currentMousePos;
-								GetCursorPos(&currentMousePos);
+				GetCursorPos(&currentMousePos);
 				ScreenToClient(hWnd, &currentMousePos);
 				GMouseX = currentMousePos.x;
 				GMouseY = currentMousePos.y;

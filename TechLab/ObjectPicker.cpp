@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Ray.h"
 #include "Vector4.h"
+#include "Matrix.h"
 #include "Core.h"
 #include "ObjectFactory.h"
 #include "SceneComponent.h"
@@ -34,9 +35,9 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
 	GRayOrigin = Ray.GetOrigin();
 	GRayDirection = Ray.GetDirection();
+
 	/*UE_LOG("[%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
 	UE_LOG("[%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);*/
-
 
 	// TODO: check Gizmo interaction
 
@@ -53,8 +54,11 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 
 		if (auto* RayTarget = Cast<USceneComponent>(Object))
 		{
+			FMatrix WorldTransform = RayTarget->GetWorldMatrix();
+			FRay LocalRay = TransformRayToLocalSpace(Ray, WorldTransform);
+
 			FHitRecord Hit;
-			if (RayTarget->Raycast(Ray, BestT, Hit) && Hit.Time < BestT) {
+			if (RayTarget->Raycast(LocalRay, BestT, Hit) && Hit.Time < BestT) {
 				GSuccessfulCastCount++;
 				BestT = Hit.Time;
 				NewSelection = RayTarget;
@@ -107,8 +111,6 @@ FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 
 	FVector4 pNearVS = InvProj * pNearNDC;
 	FVector4 pFarVS = InvProj * pFarNDC;
-	//FVector4 pNearVS = pNearNDC * InvProj;
-	//FVector4 pFarVS = pFarNDC * InvProj;
 
 	// Perspective division for view space points
 	pNearVS.X /= pNearVS.W; pNearVS.Y /= pNearVS.W; pNearVS.Z /= pNearVS.W; pNearVS.W = 1.0f;
@@ -122,15 +124,29 @@ FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 
 	// No perspective divide needed here as View matrix is affine and W should remain 1.0
 
-	const FVector originWS(pNearH.X, pNearH.Y, pNearH.Z);
+	const FVector OriginWS(pNearH.X, pNearH.Y, pNearH.Z);
 
+	FVector DirWS = FVector(pFarH.X - pNearH.X, pFarH.Y - pNearH.Y, pFarH.Z - pNearH.Z);
+	DirWS.Normalize();
+	UE_LOG("(%f %f %f)", DirWS.X, DirWS.Y, DirWS.Z);
 
-	FVector dirWS = FVector(pFarH.X - pNearH.X, pFarH.Y - pNearH.Y, pFarH.Z - pNearH.Z);
-	dirWS.Normalize();
-	UE_LOG("(%f %f %f)", dirWS.X, dirWS.Y, dirWS.Z);
+	return FRay(OriginWS, DirWS);
+}
 
+FRay UObjectPicker::TransformRayToLocalSpace(const FRay& WorldRay, const FMatrix& WorldTransform) const
+{
+    FMatrix InvWorld = WorldTransform.Inverse();
 
-	return FRay(originWS, dirWS);
+    // Ray origin
+    FVector4 OriginLS4 = InvWorld * FVector4(WorldRay.GetOrigin(), 1.0f);
+    FVector OriginLS(OriginLS4.X, OriginLS4.Y, OriginLS4.Z);
+
+    // Ray direction
+    FVector4 LocalDirection4 = InvWorld * FVector4(WorldRay.GetDirection(), 0.0f);
+    FVector DirLS(LocalDirection4.X, LocalDirection4.Y, LocalDirection4.Z);
+	DirLS.Normalize();
+
+    return FRay(OriginLS, DirLS);
 }
 
 void UObjectPicker::UpdateSelection(IPickable* NewSelection)
@@ -162,6 +178,7 @@ void UObjectPicker::ClearSelection()
 		if (Selected)
 		{
 			Selected->OnDeselected();
+	
 		}
 	}
 	CurrentSelections.clear();

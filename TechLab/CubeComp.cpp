@@ -13,16 +13,11 @@ UCubeComp::UCubeComp() : UPrimitiveComponent()
 
 bool UCubeComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 {
-    FVector Center = GetWorldLocation();
-    //FVector HalfSize = GetWorldScale() * 0.5f;
-    FVector HalfSize = GetWorldScale();
+    //FVector Center = GetWorldLocation();
+    FVector Center = FVector(0.0f, 0.0f, 0.0f);
+    FVector HalfSize = 1.0f * GetWorldScale();
     FVector MinBounds = Center - HalfSize;
     FVector MaxBounds = Center + HalfSize;
-
-    UE_LOG("    %f %f %f", Center.X, Center.Y, Center.Z);
-    UE_LOG("    %f %f %f", HalfSize.X, HalfSize.Y, HalfSize.Z);
-    UE_LOG("    %f %f %f", MinBounds.X, MinBounds.Y, MinBounds.Z);
-    UE_LOG("    %f %f %f", MaxBounds.X, MaxBounds.Y, MaxBounds.Z);
 
     // Slab Method
     float Tmin = 0.001f; // Preventing self-intersection
@@ -61,6 +56,11 @@ bool UCubeComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
             }
         }
     }
+
+    UE_LOG("  L %f %f %f", Center.X, Center.Y, Center.Z);
+    UE_LOG("  L %f %f %f", HalfSize.X, HalfSize.Y, HalfSize.Z);
+    UE_LOG("  L %f %f %f", MinBounds.X, MinBounds.Y, MinBounds.Z);
+    UE_LOG("  L %f %f %f", MaxBounds.X, MaxBounds.Y, MaxBounds.Z);
 
     // Hit confirmed ~!~!
     OutHit.Time = Tmin;     // closest hit

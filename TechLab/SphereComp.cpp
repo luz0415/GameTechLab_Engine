@@ -11,8 +11,9 @@ USphereComp::USphereComp() : UPrimitiveComponent()
 
 bool USphereComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 {
-	FVector Center = GetWorldLocation();
-	float Radius = GetWorldScale().X;	// Assume uniform scale
+	//FVector Center = GetWorldLocation();
+	FVector Center = FVector(0.0f, 0.0f, 0.0f);
+	float Radius = 1.0f * GetWorldScale().X;	// Assume uniform scale
 
 	FVector OC = Ray.GetOrigin() - Center;
 
