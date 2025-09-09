@@ -88,8 +88,17 @@ void USceneComponent::SetAttachment(USceneComponent* ParentComponent)
 {
 	if (Attachment != ParentComponent)
 	{
+		FVector WorldLocation = GetWorldLocation();
+		FVector WorldRotation = GetWorldRotation();
+		FVector WorldScale = GetWorldScale();
+
 		Attachment = ParentComponent;
 		Attachment->AddAttachedChild(this);
+
+		SetWorldLocation(WorldLocation);
+		SetWorldRotation(WorldRotation);
+		SetWorldScale(WorldScale);
+
 		SetDirty();
 	}
 }
