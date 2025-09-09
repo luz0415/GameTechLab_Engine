@@ -247,10 +247,14 @@ void USceneManager::SaveSceneByName(const string& path)
 void USceneManager::LoadNewScene()
 {
     UScene* newScene = new UScene();
-
+    delete ObjectPicker;
     FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
+
+    ObjectPicker = new UObjectPicker;
+    GetCurrentScene()->InitCamera();
     newScene->InitCamera();
+    SetObjectPickerCamera();
 }
 
 void USceneManager::SetObjectPickerCamera()
