@@ -7,8 +7,8 @@
 
 struct FSpawnObjectProperty
 {
-	EPrimitiveType Type;
-	int SpawnNum;
+	string Type = "Sphere";
+	int SpawnNum = 1;
 };
 
 struct FCameraProperty
@@ -29,6 +29,6 @@ private:
 	FCameraProperty CameraProperty;
 	char SceneNameBuffer[128] = "";
 	string SceneNameStr = "";
-	//bool bOrthogonal = true;
+	bool bOrthogonal = true;
 };
 

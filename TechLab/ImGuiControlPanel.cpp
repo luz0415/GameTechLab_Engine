@@ -32,19 +32,39 @@ void UImGuiControlPanel::Render()
 		{
 			bool isSelected = (currentItem == n);
 			if (ImGui::Selectable(items[n], isSelected))
+			{
 				currentItem = n;
+				SpawnProperty.Type = items[n];
+			}
 
 			if (isSelected)
+			{
 				ImGui::SetItemDefaultFocus();
+			}
 		}
 		ImGui::EndCombo();
 	}
+
+
 	
-	ImGui::Button("Spawn", ImVec2(100, 0));
+	if (ImGui::Button("Spawn", ImVec2(100, 0)))
+	{
+		UPrimitiveComponent* SpawnedActor = USceneManager::Get()->GetCurrentScene()->SpawnActor(SpawnProperty.Type);
+		SpawnedActor->SetWorldLocation({ 0.f, 0.f, 0.f });
+		SpawnedActor->SetWorldRotation({ 0.f, 0.f, 0.f });
+		SpawnedActor->SetWorldScale({ 1.f, 1.f, 1.f });
+	}
+
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(218);
-	ImGui::InputScalar("Number of spawn", ImGuiDataType_S32, &(SpawnProperty.SpawnNum));
+	if (ImGui::InputScalar("Number of spawn", ImGuiDataType_S32, &(SpawnProperty.SpawnNum)))
+	{
+		if (SpawnProperty.SpawnNum < 1)
+		{
+			SpawnProperty.SpawnNum = 1;
+		}
+	}
 
 	ImGui::Separator(); // ------------------
 
@@ -84,9 +104,10 @@ void UImGuiControlPanel::Render()
 		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 	}
 
-	bool isp = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+	//is
+	bool& bIsOrthogonal = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
 
-	if (ImGui::Checkbox("Orthogonal", &isp))
+	if (ImGui::Checkbox("Orthogonal", &bIsOrthogonal))
 	{
 		CURRENT_CAMERA->UpdateEventByImGui();
 	}
@@ -163,9 +184,3 @@ void UImGuiControlPanel::Render()
 
 	ImGui::End();
 }
-
-
-void UImGuiControlPanel::SpawnActor()
-{
-}
-
