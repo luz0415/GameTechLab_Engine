@@ -25,7 +25,6 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-UCamera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
 
@@ -128,7 +127,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		UINT Height = HIWORD(lParam);
 		float AspectRatio = (float)Width / (float)Height;
 
-		if (MainCamera) { MainCamera->UpdateAspectRatio(AspectRatio); }
+		UCamera* CurrentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+		if (CurrentCamera!=nullptr) { CurrentCamera->UpdateAspectRatio(AspectRatio); }
 
 		break;
 	}
@@ -157,6 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 
+	USceneManager::Get()->Init();
 	USceneManager::Get()->SetHWND(hWnd);
 	USceneManager::Get()->GetCurrentScene()->InitCamera();
 	USceneManager::Get()->SetObjectPickerCamera();
@@ -172,7 +173,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	
 	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
-	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+	//MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;
@@ -196,12 +197,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		// Calculate DeltaTime
 		QueryPerformanceCounter(&currentTime);
+		UCamera* currentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 		float DeltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
 		lastTime = currentTime;
-
 		// Update Camera
-		MainCamera->HandleInput(GInput, DeltaTime);
-		MainCamera->Update();
+		currentCamera->HandleInput(GInput, DeltaTime);
+		currentCamera->Update();
 		// Reset mouse delta after processing
 		GInput.MouseX = 0;
 		GInput.MouseY = 0;
@@ -216,7 +217,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 		USceneManager::Get()->GetObjectPicker()->SubmitProxy();
-		Renderer->RenderScene(MainCamera);
+		Renderer->RenderScene(currentCamera);
 
 		UImGuiManager::Get()->Render();
 		Renderer->SwapBuffer();
@@ -225,7 +226,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Release();
 	
 	delete App;
-	delete MainCamera;
 
 	return 0;
 }

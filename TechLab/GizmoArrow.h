@@ -27,8 +27,8 @@ public:
     UGizmoArrow();
     ~UGizmoArrow() override;
     void SubmitProxy() override;
-    void SetName(const FString& InName) { Name = InName; }
-    const FString& GetName() {return Name;}
+    void SetName(const FString& InName);
+    const FString& GetName() { return Name; }
     void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
     virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
 

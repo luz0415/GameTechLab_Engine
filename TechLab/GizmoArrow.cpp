@@ -20,3 +20,8 @@ void UGizmoArrow::SubmitProxy()
     FRenderProxy RenderProxy(GetWorldMatrix(), Renderer->GetMeshResource(FString(Name)));
     Renderer->SubmitProxy(RenderProxy);
 }
+
+void UGizmoArrow::SetName(const FString& InName)
+{
+    Name = InName;
+}

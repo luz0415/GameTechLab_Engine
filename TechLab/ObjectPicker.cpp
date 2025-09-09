@@ -36,8 +36,8 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	GRayOrigin = Ray.GetOrigin();
 	GRayDirection = Ray.GetDirection();
 
-	/*UE_LOG("[%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
-	UE_LOG("[%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);*/
+	UE_LOG("RayOrigin : [%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
+	UE_LOG("RayDir : [%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
 
 	// TODO: check Gizmo interaction
 
