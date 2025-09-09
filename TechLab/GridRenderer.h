@@ -6,14 +6,14 @@
 #include "MeshResource.h"
 #include "VisualInterface.h"
 
-class FGridRenderer : public VisualInterface 
+class FGridRenderer : public FVisualInterface 
 {
 public:
     FGridRenderer();
     ~FGridRenderer() override;
     void Init() override;
     void Update(const FVector& CameraPos) override;
-    void Render() override;
+    void SubmitProxy(const FMatrix& WorldMatrix = FMatrix::Identity()) override;
 
 private:
     void RegenerateGrid(const FVector& CameraPos);

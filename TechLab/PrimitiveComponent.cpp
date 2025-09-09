@@ -5,7 +5,7 @@ UPrimitiveComponent::UPrimitiveComponent() : USceneComponent()
 {
 }
 
-void UPrimitiveComponent::Render()
+void UPrimitiveComponent::SubmitProxy()
 {
 	if (MeshResource != nullptr)
 	{

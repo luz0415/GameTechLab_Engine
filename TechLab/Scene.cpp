@@ -22,7 +22,7 @@ UScene::UScene()
 	UCubeComp* Cube1 = FObjectFactory::Get()->ConstructObject<UCubeComp>();
 	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));
 
-	Objects.push_back(Sph1);
+	//Objects.push_back(Sph1);
 	Objects.push_back(Cube1);
 }
 
@@ -87,8 +87,9 @@ void UScene::Render()
 {
 	for (const auto& elem : Objects)
 	{
-		elem->Render();
+		elem->SubmitProxy();
 	}
+	
 }
 
 void UScene::InitCamera()

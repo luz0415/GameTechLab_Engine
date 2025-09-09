@@ -5,7 +5,7 @@ class IPickable;
 class UCamera;
 struct FRay;
 struct FHitResult;
-
+class FGizmoRenderer;
 class UObjectPicker
 {
 public:
@@ -17,6 +17,8 @@ public:
     const std::vector<IPickable*>& GetCurrentSelection() const;
 
     void SetCamera(UCamera* camera);
+
+    void SubmitProxy();
 
 private:
     FRay CreateRayFromScreen(float ScreenX, float ScreenY) const;
@@ -30,4 +32,5 @@ private:
     int ViewportHeight = 1;
 
     std::vector<IPickable*> CurrentSelections;
+    FGizmoRenderer* GizmoRenderer = nullptr;
 };

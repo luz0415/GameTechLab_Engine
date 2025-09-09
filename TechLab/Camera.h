@@ -40,7 +40,7 @@ public:
 	void Update();
 
 	void UpdateEventByImGui();
-
+	bool& IsOrthogonal() { return bIsOrthogonal; }
 private:
 	void UpdateViewMatrix() noexcept;
 	void UpdateProjectionMatrix() noexcept;
@@ -68,6 +68,7 @@ private:
 
 	float MovementSpeed;
 	float RotationSpeed;
+	bool bIsOrthogonal = false;
 
 	FVector CameraForward;
 	FVector CameraRight;
@@ -83,6 +84,7 @@ struct FInput
 	bool bUp = false;
 	bool bDown = false;
 	bool bMouseRightClick = false;
+	bool bMouseLeftClick = false;
 	long MouseX = 0;
 	long MouseY = 0;
 };
