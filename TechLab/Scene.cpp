@@ -45,6 +45,7 @@ UScene::~UScene()
 		delete sceneComp;
 		sceneComp = nullptr;
 	}
+	delete CurrentCamera;
 }
 
 UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
