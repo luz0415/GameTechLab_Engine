@@ -29,11 +29,11 @@ public:
     void ReleaseObject(UObject* InObject);
 
     const TArray<UObject*>& GetObjectArray() const { return GUObjectArray; }
-    void ReleaseAllObjects();
 
     void TickObjects(float DeltaTimes);
 
 private:
+    void ReleaseAllObjects();
 
     TArray<UObject*> GUObjectArray;
 };

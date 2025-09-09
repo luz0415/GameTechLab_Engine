@@ -42,8 +42,7 @@ UScene::~UScene()
 {
 	for (auto& sceneComp : Objects)
 	{
-		delete sceneComp;
-		sceneComp = nullptr;
+		FObjectFactory::Get()->ReleaseObject(sceneComp);
 	}
 	delete CurrentCamera;
 }

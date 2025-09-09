@@ -230,11 +230,14 @@ void USceneManager::LoadSceneByExplorer()
 {
     json::JSON sceneJSON = LoadJSONByExplorer();
 
-    FObjectFactory::Get()->ReleaseAllObjects();
 
     USceneData sceneData = JSONToUSceneData(sceneJSON);
 
     UScene* scene = new UScene(sceneData);
+    if (CurrentScene)
+    {
+        delete CurrentScene;
+    }
     CurrentScene = scene;
     ResetResources();
 
@@ -247,9 +250,11 @@ void USceneManager::SaveSceneByName(const string& path)
 
 void USceneManager::LoadNewScene()
 {
-    delete CurrentScene;
+    if (CurrentScene)
+    {
+        delete CurrentScene;
+    }
     UScene* newScene = new UScene();
-    FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
     ResetResources();
 }
