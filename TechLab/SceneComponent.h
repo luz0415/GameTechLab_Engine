@@ -3,6 +3,8 @@
 #include "Transform.h"
 #include "Pickable.h"
 #include "BoundingVolume.h"
+#include "TriangleMeshCollider.h"
+#include "VertexData.h"
 
 class USceneComponent : public UObject, public IPickable
 {
@@ -97,4 +99,9 @@ public:
 
 private:
     IBoundingVolume* BoundingVolume = nullptr;
+    bool bNeedsPreciseRaycast = false;
+    FTriangleMeshCollider* MeshBoundingVolume = nullptr;
+
+public:
+    void SetMeshForPreciseRaycast(const FMeshData& InMeshData);
 };
