@@ -157,6 +157,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	Renderer->Create(hWnd);
 	Renderer->CreateShader();
 
+	USceneManager::Get()->Init();
 	USceneManager::Get()->SetHWND(hWnd);
 	USceneManager::Get()->GetCurrentScene()->InitCamera();
 	USceneManager::Get()->SetObjectPickerCamera();

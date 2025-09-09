@@ -7,15 +7,19 @@ using namespace json;
 
 USceneManager::USceneManager()
 {
-    CurrentScene = new UScene();
-    //CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker();
 
    
 }
 
 USceneManager::~USceneManager()
 {
+}
+
+void USceneManager::Init()
+{
+    CurrentScene = new UScene();
+    //CurrentScene->InitCamera();
+    ObjectPicker = new UObjectPicker();
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환

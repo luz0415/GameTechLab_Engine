@@ -30,6 +30,8 @@ public:
         return &Instance;
     }
 
+    void Init();
+
     json::JSON LoadScene(const std::string& path);
     void SaveScene(const std::string& path, const json::JSON& sceneJson);
     std::wstring OpenFileDialog();

@@ -6,6 +6,7 @@ USceneComponent::USceneComponent() : UObject()
 
 USceneComponent::~USceneComponent()
 {
+	Detach();
 	for (auto* Child : Children)
 	{
 		if (Child)
@@ -13,6 +14,7 @@ USceneComponent::~USceneComponent()
 			Child->Detach();
 		}
 	}
+	Children.clear();
 }
 
 void USceneComponent::Destroy()
@@ -25,6 +27,7 @@ void USceneComponent::Destroy()
 			Child->Detach();
 		}
 	}
+	Children.clear();
 }
 
 void USceneComponent::SetRelativeLocation(const FVector& InLocation)
