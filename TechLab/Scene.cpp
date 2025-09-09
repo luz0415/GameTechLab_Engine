@@ -34,7 +34,7 @@ UScene::UScene(const USceneData& sceneData)
 
 UScene::UScene(const std::string& path)
 {
-	USceneData sceneData = USceneManager::LoadUSceneData(path);
+	USceneData sceneData = USceneManager::Get()->LoadUSceneData(path);
 	CopyPrimComp(sceneData);
 }
 

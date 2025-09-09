@@ -30,20 +30,22 @@ public:
         return &Instance;
     }
 
-    static json::JSON LoadScene(const std::string& path);
-    static void SaveScene(const std::string& path, const json::JSON& sceneJson);
-    static std::wstring OpenFileDialog();
-    static USceneData LoadUSceneData(const std::string& path);
-    static Primitive ParsePrimitive(const json::JSON& j);
+    json::JSON LoadScene(const std::string& path);
+    void SaveScene(const std::string& path, const json::JSON& sceneJson);
+    std::wstring OpenFileDialog();
+    USceneData LoadUSceneData(const std::string& path);
+    Primitive ParsePrimitive(const json::JSON& j);
 
-    static json::JSON LoadJSONByExplorer();
-    static USceneData LoadUSceneDataByExplorer();
-    static USceneData JSONToUSceneData(json::JSON& j);
-    static json::JSON USceneDataToJSON(const USceneData& sceneData);
+    json::JSON LoadJSONByExplorer();
+    USceneData LoadUSceneDataByExplorer();
+    USceneData JSONToUSceneData(json::JSON& j);
+    json::JSON USceneDataToJSON(const USceneData& sceneData);
 
-    static void LoadSceneByExplorer();
-    static void SaveSceneByName(const string& path);
+    void LoadSceneByExplorer();
+    void SaveSceneByName(const string& path);
     void LoadNewScene();
+
+    void ResetResources();
 
     void SetHWND(HWND hWnd) { g_hWnd = hWnd; }
     HWND GetHWND() { return g_hWnd; }

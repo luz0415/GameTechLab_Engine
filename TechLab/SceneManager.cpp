@@ -235,8 +235,9 @@ void USceneManager::LoadSceneByExplorer()
     USceneData sceneData = JSONToUSceneData(sceneJSON);
 
     UScene* scene = new UScene(sceneData);
+    CurrentScene = scene;
+    ResetResources();
 
-    Get()->CurrentScene = scene;
 }
 
 void USceneManager::SaveSceneByName(const string& path)
@@ -246,14 +247,18 @@ void USceneManager::SaveSceneByName(const string& path)
 
 void USceneManager::LoadNewScene()
 {
+    delete CurrentScene;
     UScene* newScene = new UScene();
-    delete ObjectPicker;
     FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
+    ResetResources();
+}
 
+void USceneManager::ResetResources()
+{
+    delete ObjectPicker;
+    CurrentScene->InitCamera();
     ObjectPicker = new UObjectPicker;
-    GetCurrentScene()->InitCamera();
-    newScene->InitCamera();
     SetObjectPickerCamera();
 }
 
