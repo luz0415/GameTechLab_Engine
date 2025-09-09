@@ -28,7 +28,6 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam
 UCamera* MainCamera;
 FInput GInput;
 POINT GLastMousePosition;
-USceneComponent* Test;
 
 // Object Picker (TEMP)
 UObjectPicker* GObjectPicker = nullptr;
@@ -105,9 +104,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		 case 'D': GInput.bRight = true; break;
 		 case 'E': GInput.bUp = true; break;
 		 case 'Q': GInput.bDown = true; break;
-		 case 'R': Test->AddRelativeRotationX(10); break;
-		 case 'T': Test->AddRelativeRotationY(10); break;
-		 case 'Y': Test->AddRelativeRotationZ(10); break;
 		default: break;
 		}
 		break;
