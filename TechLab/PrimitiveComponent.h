@@ -24,7 +24,7 @@ public:
 
 public:
 	UPrimitiveComponent();
-	virtual void Render();
+	virtual void SubmitProxy();
     void SetMesh(class FMeshResource* InMeshResource);
     EPrimitiveType GetPrimitiveType() const { return Type; }
     void SetPrimitiveType(EPrimitiveType InType);

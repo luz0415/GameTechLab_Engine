@@ -13,7 +13,7 @@
 #include "Matrix.h"
 #include "RenderProxy.h"
 #include "PrimitiveType.h"
-
+#include "GizmoRenderer.h"
 class URenderer
 {
 public:
@@ -73,6 +73,9 @@ public:
 
 	ID3D11Device* Device = nullptr;
 	ID3D11DeviceContext* DeviceContext = nullptr;
+//Gizmo Renderer
+public:
+	//FGizmoRenderer* GetGizmoRenderer() { return GizmoRenderer; }
 
 // Mesh Manager
 public:
@@ -116,6 +119,7 @@ private:
 	ID3D11InputLayout* SimpleInputLayout;
 
 	class FMeshManager* MeshManager = nullptr;
-	TArray<class VisualInterface*> VisualInterfaceList;
+
+	TArray<class FVisualInterface*> VisualInterfaceList;
 	TArray<FRenderProxy> RenderProxyList;
 };

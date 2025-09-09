@@ -66,7 +66,16 @@ void UImGuiControlPanel::Render()
 
 	ImGui::Separator(); // ------------------
 
-	ImGui::Checkbox("Orthogonal", &bOrthogonal);
+	{
+		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+	}
+	bool& isp = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+	if (ImGui::Checkbox("Orthogonal", &isp))
+	{
+		CURRENT_CAMERA->UpdateEventByImGui();
+		//isp = !isp;
+	}
+
 
 	ImGui::SetNextItemWidth(286);
 	ImGui::InputFloat("FOV", &(CameraProperty.FOV), 0, 0, "%.3f");
