@@ -38,8 +38,11 @@ public:
     void Render();
 
     void InitCamera();
+    UPrimitiveComponent* SpawnActor(const string Type);
 
     UCamera* GetCurrentCamera() { return CurrentCamera; }
+
+    USceneData MakeSceneData();
 
 private:
 	TArray<UPrimitiveComponent*> Objects;

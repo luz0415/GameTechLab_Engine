@@ -28,6 +28,7 @@ private:
 	FSpawnObjectProperty SpawnProperty;
 	FCameraProperty CameraProperty;
 	char SceneNameBuffer[128] = "";
+	string SceneNameStr = "";
 	//bool bOrthogonal = true;
 };
 

@@ -48,20 +48,34 @@ void UImGuiControlPanel::Render()
 
 	ImGui::Separator(); // ------------------
 
-	if (ImGui::InputText("Scene Name", SceneNameBuffer, IM_ARRAYSIZE(SceneNameBuffer)));
+	strncpy(SceneNameBuffer, SceneNameStr.c_str(), sizeof(SceneNameBuffer));
+	SceneNameBuffer[sizeof(SceneNameBuffer) - 1] = '\0';
+
+	if (ImGui::InputText("Scene Name", SceneNameBuffer, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
+		SceneNameStr = SceneNameBuffer;
+	}
+
+	if (ImGui::IsItemDeactivatedAfterEdit())
+	{
+		SceneNameStr = SceneNameBuffer;
 	}
 
 	if (ImGui::Button("New Scene"))
 	{
+		USceneManager::Get()->LoadNewScene();
 	}
 
 	if (ImGui::Button("Save Scene"))
 	{
+		//USceneManager::SaveScene(SceneNameBuffer);
+		USceneManager::Get()->SaveSceneByName(SceneNameStr + ".Scene");
 	}
 
 	if (ImGui::Button("Load Scene"))
 	{
+		USceneManager::LoadSceneByExplorer();
+		USceneManager::Get()->GetCurrentScene()->InitCamera();
 	}
 
 	ImGui::Separator(); // ------------------
@@ -69,11 +83,12 @@ void UImGuiControlPanel::Render()
 	{
 		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
 	}
-	bool& isp = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+
+	bool isp = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+
 	if (ImGui::Checkbox("Orthogonal", &isp))
 	{
 		CURRENT_CAMERA->UpdateEventByImGui();
-		//isp = !isp;
 	}
 
 

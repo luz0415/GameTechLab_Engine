@@ -39,8 +39,11 @@ public:
     static json::JSON LoadJSONByExplorer();
     static USceneData LoadUSceneDataByExplorer();
     static USceneData JSONToUSceneData(json::JSON& j);
+    static json::JSON USceneDataToJSON(const USceneData& sceneData);
 
     static void LoadSceneByExplorer();
+    static void SaveSceneByName(const string& path);
+    void LoadNewScene();
 
     void SetHWND(HWND hWnd) { g_hWnd = hWnd; }
     HWND GetHWND() { return g_hWnd; }
@@ -57,9 +60,7 @@ public:
 
     void SetObjectPickerCamera();
     UObjectPicker* GetObjectPicker() const { return ObjectPicker; }
-    
 
-	
 private:
     UObjectPicker* ObjectPicker = nullptr;
     UScene* CurrentScene = nullptr;

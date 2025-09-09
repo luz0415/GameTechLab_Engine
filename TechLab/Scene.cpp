@@ -5,6 +5,7 @@
 #include "ObjectFactory.h"
 #include "SceneManager.h"
 #include "Math.h"
+#include "EngineStatics.h"
 
 UScene::UScene()
 {
@@ -16,15 +17,14 @@ UScene::UScene()
 	//	Objects.push_back(obj);
 	//}
 
-	USphereComp* Sph1 = FObjectFactory::Get()->ConstructObject<USphereComp>();
-	Sph1->SetWorldLocation(FVector(0.f, 5.f, 0.f));
+	
 
-	UCubeComp* Cube1 = FObjectFactory::Get()->ConstructObject<UCubeComp>();
-	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));	
-	Cube1->SetWorldRotation(FVector(0.f, 40.f, 40.f));
-
-	Objects.push_back(Sph1);
-	Objects.push_back(Cube1);
+	//UPrimitiveComponent* Sph1 = SpawnActor("Sphere");
+	//Sph1->SetWorldLocation(FVector(0.f, 5.f, 0.f));
+	//
+	//UPrimitiveComponent* Cube1 = SpawnActor("Cube");
+	//Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));	
+	//Cube1->SetWorldRotation(FVector(0.f, 40.f, 40.f));
 }
 
 UScene::UScene(const USceneData& sceneData)
@@ -49,7 +49,7 @@ UScene::~UScene()
 
 UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
 {
-	UPrimitiveComponent* pPrimComp = FObjectFactory::Get()->ConstructObject<UPrimitiveComponent>();
+	UPrimitiveComponent* pPrimComp = SpawnActor(primitive.Type);
 
 	if (primitive.Type == "Sphere")
 	{
@@ -77,10 +77,9 @@ UPrimitiveComponent* UScene::PrimToPrimComp(const Primitive& primitive)
 
 void UScene::CopyPrimComp(const USceneData& sceneData)
 {
-	for (auto& primitive : sceneData.PrimArray)
+	for (auto primitive : sceneData.PrimArray)
 	{
-		UPrimitiveComponent* obj;
-		Objects.push_back(obj);
+		 PrimToPrimComp(primitive);
 	}
 }
 
@@ -90,7 +89,6 @@ void UScene::Render()
 	{
 		elem->SubmitProxy();
 	}
-	
 }
 
 void UScene::InitCamera()
@@ -107,4 +105,57 @@ void UScene::InitCamera()
 	const float RadAngle = DegreeToRadians(Angle);
 
 	CurrentCamera = new UCamera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
+}
+
+UPrimitiveComponent* UScene::SpawnActor(const string Type)
+{
+	if (Type == "Sphere")
+	{
+		USphereComp* SphComp = FObjectFactory::Get()->ConstructObject<USphereComp>();
+		Objects.push_back(SphComp);
+		return SphComp;
+	}
+	else if (Type == "Cube")
+	{
+		UCubeComp* CubeComp = FObjectFactory::Get()->ConstructObject<UCubeComp>();
+		Objects.push_back(CubeComp);
+		return CubeComp;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+USceneData UScene::MakeSceneData()
+{
+	USceneData sceneData;
+
+	sceneData.Version = 1;
+	sceneData.NextUUID = UEngineStatics::NextUUID;
+
+	for (auto& primComp : Objects)
+	{
+		Primitive prim;
+		prim.UUID = primComp->UUID;
+		prim.Location = primComp->GetWorldLocation();
+		prim.Rotation = primComp->GetWorldRotation();
+		prim.Scale = primComp->GetWorldScale();
+
+		switch (primComp->GetPrimitiveType())
+		{
+		case EPrimitiveType::Sphere :
+			prim.Type = "Sphere";
+			break;
+		case EPrimitiveType::Cube:
+			prim.Type = "Cube";
+			break;
+		default:
+			prim.Type = "What?";
+		}
+
+		sceneData.PrimArray.push_back(prim);
+	}
+
+	return sceneData;
 }
