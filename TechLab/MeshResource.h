@@ -16,11 +16,11 @@ struct FMeshResource
     ID3D11Buffer* VertexBuffer = nullptr;
     ID3D11Buffer* IndexBuffer = nullptr;
 
-    UINT     VertexCount = 0;
-    UINT     Stride = 0;
-    UINT     Offset = 0;
+    uint32     VertexCount = 0;
+    uint32     Stride = 0;
+    uint32     Offset = 0;
 
-    UINT IndexCount = 0;
+    uint32 IndexCount = 0;
 
     // ·»´õ¸µ ¼³Á¤
     D3D_PRIMITIVE_TOPOLOGY Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;

@@ -1,8 +1,7 @@
 ﻿#pragma once
-
-#pragma once
-
+#ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
+#endif
 // ㄴ 프로젝트 - 속성 - c/c++ - 전처리기 - 정의 -원래 있던 글 뒤에 ;(구분자) 뒤에 _CRT_SECURE_NO_WARNINGS를 넣어주고 ; 까지
 
 #include "ImGui/imgui.h"

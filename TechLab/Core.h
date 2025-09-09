@@ -30,10 +30,10 @@ struct MemoryHeader
     char _padding[8];
 };
 
-void* operator new(size_t Size) noexcept;
+void* operator new(size_t Size);
 void operator delete(void* Ptr) noexcept;
 
-void* operator new[](size_t Size) noexcept;
+void* operator new[](size_t Size);
 void operator delete[](void* Ptr) noexcept;
 
 // UClass

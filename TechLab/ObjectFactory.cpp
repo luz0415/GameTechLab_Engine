@@ -12,7 +12,7 @@ UObject* FObjectFactory::ConstructObject(UClass* ClassToConstruct)
     UObject* NewObject = ClassToConstruct->GetConstructor()();
     if (NewObject)
     {
-        NewObject->InternalIndex = GUObjectArray.size();
+        NewObject->InternalIndex = static_cast<uint32>(GUObjectArray.size());
         GUObjectArray.push_back(NewObject);
     }
     return NewObject;

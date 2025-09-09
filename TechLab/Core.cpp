@@ -16,16 +16,17 @@ uint32& GetTotalAllocationCount()
 }
 
 
-void* operator new(size_t Size) noexcept {
-    constexpr size_t alignment = 16;
+void* operator new(size_t Size) 
+{
+    constexpr size_t Alignment = 16;
     size_t TotalSize = Size + sizeof(MemoryHeader);
-    void* Ptr = _aligned_malloc(TotalSize,alignment);
-    if (Ptr == nullptr) { return nullptr; }
+    void* Ptr = _aligned_malloc(TotalSize, Alignment);
+    if (Ptr == nullptr) { throw std::bad_alloc(); }
 
     MemoryHeader* Header = static_cast<MemoryHeader*>(Ptr);
     Header->Size = Size;
     GetTotalAllocationCount()++;
-    GetTotalAllocationBytes() += TotalSize;
+    GetTotalAllocationBytes() += static_cast<uint32>(TotalSize);
     return static_cast<void*>(reinterpret_cast<char*>(Ptr) + sizeof(MemoryHeader));
 }
 
@@ -37,22 +38,22 @@ void operator delete(void* Ptr) noexcept {
     size_t OriginalSize = Header->Size;
     size_t TotalSize = OriginalSize + sizeof(MemoryHeader);
     GetTotalAllocationCount()--;
-    GetTotalAllocationBytes() -= TotalSize;
+    GetTotalAllocationBytes() -= static_cast<uint32>(TotalSize);
     _aligned_free(HeaderPtr);
 }
 
-void* operator new[](size_t Size) noexcept
+void* operator new[](size_t Size)
 {
-    constexpr size_t alignment = 16;
-    size_t totalSize = Size + sizeof(MemoryHeader);
-    void* Ptr = _aligned_malloc(totalSize,alignment);
-    if (Ptr == nullptr) { return nullptr; }
+    constexpr size_t Alignment = 16;
+    size_t TotalSize = Size + sizeof(MemoryHeader);
+    void* Ptr = _aligned_malloc(TotalSize, Alignment);
+    if (Ptr == nullptr) { throw std::bad_alloc(); }
 
-    MemoryHeader* header = static_cast<MemoryHeader*>(Ptr);
-    header->Size = Size;
+    MemoryHeader* Header = static_cast<MemoryHeader*>(Ptr);
+    Header->Size = Size;
 
     GetTotalAllocationCount()++;
-    GetTotalAllocationBytes() += totalSize;
+    GetTotalAllocationBytes() += static_cast<uint32>(TotalSize);
 
     return static_cast<void*>(reinterpret_cast<char*>(Ptr) + sizeof(MemoryHeader));
 }
@@ -68,7 +69,7 @@ void operator delete[](void* Ptr) noexcept
     size_t TotalSize = OriginalSize + sizeof(MemoryHeader);
 
     GetTotalAllocationCount()--;
-    GetTotalAllocationBytes() -= TotalSize;
+    GetTotalAllocationBytes() -= static_cast<uint32>(TotalSize);
 
     _aligned_free(HeaderPtr);
 }

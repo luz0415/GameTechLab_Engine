@@ -1,4 +1,4 @@
-#include "Renderer.h"
+﻿#include "Renderer.h"
 #include "SimpleConstants.h"
 #include "Camera.h"
 #include "WorldAxisRenderer.h"
@@ -203,7 +203,7 @@ void URenderer::Release()
 	ReleaseRasterizerState();
 	ReleaseConstantBuffer(VPConstantBuffer);
 	ReleaseConstantBuffer(MConstantBuffer);
-	ReleaseShader(); // �߰�
+	ReleaseShader();
 	ReleaseFrameBuffer();
 	ReleaseDeviceAndSwapChain();
 	ReleaseDepthStencilResources();

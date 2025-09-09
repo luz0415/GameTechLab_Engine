@@ -45,7 +45,7 @@ public:
 	{
 		ID3D11Buffer* constbuffer;
 		D3D11_BUFFER_DESC constantbufferdesc = {};
-		constantbufferdesc.ByteWidth = sizeof(T) + 0xf & 0xfffffff0; // 16����Ʈ ����� ����
+		constantbufferdesc.ByteWidth = sizeof(T) + 0xf & 0xfffffff0;
 		constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC;
 		constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
