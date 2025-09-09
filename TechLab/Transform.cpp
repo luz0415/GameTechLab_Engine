@@ -2,8 +2,9 @@
 #include "Math.h"
 #include "Quaternion.h"
 FTransform::FTransform(const FVector& InLocation, const FVector& InRotation, const FVector& InScale)
-	: CachedMatrix(FMatrix::Identity()), Location(InLocation), Rotation(InRotation), Scale(InScale), bIsMatrixDirty(false)
+	: CachedMatrix(FMatrix::Identity()), Location(InLocation), Scale(InScale), bIsMatrixDirty(false)
 {
+	SetRotationFromEuler(InRotation);
 }
 
 FTransform::~FTransform()
@@ -20,7 +21,7 @@ FTransform FTransform::operator*(FTransform& Other)
 
 	// 예를 들어, FMatrix에 이러한 정보를 추출하는 메서드가 있다고 가정합니다.
 	Result.SetScale(ResultMatrix.GetScale());
-	Result.SetRotation(ResultMatrix.GetRotation());
+	Result.SetRotationFromEuler(ResultMatrix.GetRotation());
 	Result.SetLocation(ResultMatrix.GetTranslation());
 
 	return Result;
@@ -52,33 +53,36 @@ void FTransform::SetScale(const FVector& InScale)
 	MarkAsDirty();
 }
 
-void FTransform::SetRotation(float X, float Y, float Z)
+
+void FTransform::SetRotationFromEuler(const FVector& InEulerRotation)
 {
-	Rotation = FVector(X, Y, Z);
+	Rotation = FQuaternion::FromYawPitchRollLH(InEulerRotation.Y, InEulerRotation.X, InEulerRotation.Z);
 	MarkAsDirty();
 }
 
-void FTransform::SetRotation(const FVector& InDegree)
+void FTransform::SetRotation(const FQuaternion& InQuat)
 {
-	Rotation = InDegree;
+	Rotation = InQuat;
+	Rotation.Normalize();
 	MarkAsDirty();
 }
+
 
 void FTransform::AddRotationX(float Degree)
 {
-	Rotation.X += Degree;
+	//Rotation.X += Degree;
 	MarkAsDirty();
 }
 
 void FTransform::AddRotationY(float Degree)
 {
-	Rotation.Y += Degree;
+	//Rotation.Y += Degree;
 	MarkAsDirty();
 }
 
 void FTransform::AddRotationZ(float Degree)
 {
-	Rotation.Z += Degree;
+	//Rotation.Z += Degree;
 	MarkAsDirty();
 }
 
@@ -108,7 +112,7 @@ void FTransform::Translate(const FVector& InTranslation)
 
 FVector FTransform::GetRotationRadians() const
 {
-	FVector Radian(DegreeToRadians(Rotation.X), DegreeToRadians(Rotation.Y), DegreeToRadians(Rotation.Z));
+	FVector Radian(DegreeToRadians(Rotation.x), DegreeToRadians(Rotation.y), DegreeToRadians(Rotation.z));
 	return Radian;
 }
 
@@ -128,8 +132,7 @@ void FTransform::UpdateMatrix()
 	FVector Radian = GetRotationRadians();
 	// Z > X > Y (Roll > Pitch > Yaw)
 	//FMatrix R = FMatrix::RotateMatrixZ(Radian.Z) * FMatrix::RotateMatrixX(Radian.X) * FMatrix::RotateMatrixY(Radian.Y);
-	FQuaternion Q = FQuaternion::FromYawPitchRollLH(Radian.Y, Radian.X, Radian.Z);
-	FMatrix R = Q.ToMatrix4x4_RowMajor_LH();
+	FMatrix R = Rotation.ToMatrix4x4_RowMajor_LH();
 	FMatrix T = FMatrix::TranslateMatrix(Location);
 
 	CachedMatrix = S * R * T;

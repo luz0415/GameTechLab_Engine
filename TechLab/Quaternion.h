@@ -1,5 +1,5 @@
 #pragma once
-#include <cmath>
+#include "Math.h"
 #include "Vector.h"
 #include "Matrix.h"
 struct FQuaternion
@@ -37,4 +37,5 @@ struct FQuaternion
 	static FQuaternion FromYawPitchRollLH(float yawY, float pitchX, float rollZ);
 	FVector RotateVector(const FVector& v) const;
 	FMatrix ToMatrix4x4_RowMajor_LH() const;
+	FVector ToYawPitchRoll() const;
 };

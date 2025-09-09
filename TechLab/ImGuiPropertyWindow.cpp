@@ -2,6 +2,8 @@
 #include "SceneManager.h"
 #include "Core.h"
 #include "Object.h"
+#include "Math.h"
+#include "Quaternion.h"
 
 #define INPUT_BOX_WIDTH 70
 
@@ -49,13 +51,17 @@ void UImGuiPropertyWindow::Render()
 	ImGui::Text("Translation");
 
 	// Rotation
+	static FVector lastRotationEuler = { 0,0,0 };
+
+	//FVector currentRotationEuler = RadiansToDegree(TargetComp->GetWorldRotation());
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
 	ImGui::InputFloat("##RX", &TargetProp.Rotation.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
 		if (TargetComp)
 		{
-			TargetComp->SetWorldRotation(TargetProp.Rotation);
+			FVector Radians = DegreeToRadians(TargetProp.Rotation);
+			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -64,8 +70,10 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##RY", &TargetProp.Rotation.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
+		if (TargetComp)
 		{
-			TargetComp->SetWorldRotation(TargetProp.Rotation);
+			FVector Radians = DegreeToRadians(TargetProp.Rotation);
+			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -74,8 +82,10 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##RZ", &TargetProp.Rotation.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
+		if (TargetComp)
 		{
-			TargetComp->SetWorldRotation(TargetProp.Rotation);
+			FVector Radians = DegreeToRadians(TargetProp.Rotation);
+			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -128,7 +138,7 @@ void UImGuiPropertyWindow::Render()
 			TargetProp =
 			{
 				TargetComp->GetWorldLocation(),
-				TargetComp->GetWorldRotation(),
+				RadiansToDegree(TargetComp->GetWorldRotationAsEuler()),
 				TargetComp->GetWorldScale()
 			};
 		}

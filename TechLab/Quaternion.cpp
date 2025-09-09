@@ -55,3 +55,26 @@ FMatrix FQuaternion::ToMatrix4x4_RowMajor_LH() const {
     return R;
 }
 
+FVector FQuaternion::ToYawPitchRoll() const
+{
+    FVector eulerAngles;
+
+    // Pitch (X-axis rotation)
+    float sinp = 2.0f * (w * x - y * z);
+    if (std::abs(sinp) >= 1.0f)
+        eulerAngles.X = std::copysign((float)PI / 2, sinp); // 짐벌락 방지
+    else
+        eulerAngles.X = std::asin(sinp);
+
+    // Yaw (Y-axis rotation)
+    float siny_cosp = 2.0f * (w * y + z * x);
+    float cosy_cosp = 1.0f - 2.0f * (x * x + y * y);
+    eulerAngles.Y = std::atan2(siny_cosp, cosy_cosp);
+
+    // Roll (Z-axis rotation)
+    float sinr_cosp = 2.0f * (w * z + x * y);
+    float cosr_cosp = 1.0f - 2.0f * (z * z + x * x);
+    eulerAngles.Z = std::atan2(sinr_cosp, cosr_cosp);
+
+    return eulerAngles;
+}
