@@ -36,10 +36,12 @@ void USceneComponent::SetWorldLocation(const FVector& InLocation)
 		LocalLocation = InverseParentMatrix.TransformVector(LocalLocation);
 
 		RelativeTransform.SetLocation(LocalLocation);
+		CachedWorldTransform.SetLocation(InLocation);
 	}
 	else
 	{
 		RelativeTransform.SetLocation(InLocation);
+		CachedWorldTransform.SetLocation(InLocation);
 	}
 	bIsDirty = true;
 }
@@ -51,10 +53,12 @@ void USceneComponent::SetWorldRotation(const FVector& InRotation)
 		FVector ParentWorldRotation = Attachment->GetWorldRotation();
 		FVector LocalRotation = InRotation - ParentWorldRotation;
 		RelativeTransform.SetRotation(LocalRotation);
+		CachedWorldTransform.SetLocation(InRotation);
 	}
 	else
 	{
 		RelativeTransform.SetRotation(InRotation);
+		CachedWorldTransform.SetRotation(InRotation);
 	}
 	bIsDirty = true;
 }
@@ -69,11 +73,13 @@ void USceneComponent::SetWorldScale(const FVector& InScale)
 			ParentWorldScale.Y != 0 ? InScale.Y / ParentWorldScale.Y : InScale.Y,
 			ParentWorldScale.Z != 0 ? InScale.Z / ParentWorldScale.Z : InScale.Z
 		);
+		CachedWorldTransform.SetLocation(InScale);
 		RelativeTransform.SetScale(LocalScale);
 	}
 	else
 	{
 		RelativeTransform.SetScale(InScale);
+		CachedWorldTransform.SetScale(InScale);
 	}
 	bIsDirty = true;
 }

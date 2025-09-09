@@ -49,9 +49,9 @@ private:
 // World Transform
 public:
     FMatrix& GetWorldMatrix();
-    FVector GetWorldLocation() { return GetWorldMatrix().GetTranslation(); }
-    FVector GetWorldRotation() { return GetWorldMatrix().GetRotation(); }
-    FVector GetWorldScale() { return GetWorldMatrix().GetScale(); }
+    FVector GetWorldLocation() { return CachedWorldTransform.GetLocation(); }
+    FVector GetWorldRotation() { return CachedWorldTransform.GetRotation(); }
+    FVector GetWorldScale() { return CachedWorldTransform.GetScale(); }
 
     void SetWorldLocation(const FVector& InLocation);
     void SetWorldRotation(const FVector& InRotation);
