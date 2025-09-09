@@ -1,6 +1,6 @@
 #include "Transform.h"
 #include "Math.h"
-
+#include "Quaternion.h"
 FTransform::FTransform(const FVector& InLocation, const FVector& InRotation, const FVector& InScale)
 	: CachedMatrix(FMatrix::Identity()), Location(InLocation), Rotation(InRotation), Scale(InScale), bIsMatrixDirty(false)
 {
@@ -127,7 +127,9 @@ void FTransform::UpdateMatrix()
 	FMatrix S = FMatrix::ScaleMatrix(Scale);
 	FVector Radian = GetRotationRadians();
 	// Z > X > Y (Roll > Pitch > Yaw)
-	FMatrix R = FMatrix::RotateMatrixZ(Radian.Z) * FMatrix::RotateMatrixX(Radian.X) * FMatrix::RotateMatrixY(Radian.Y);
+	//FMatrix R = FMatrix::RotateMatrixZ(Radian.Z) * FMatrix::RotateMatrixX(Radian.X) * FMatrix::RotateMatrixY(Radian.Y);
+	FQuaternion Q = FQuaternion::FromYawPitchRollLH(Radian.Y, Radian.X, Radian.Z);
+	FMatrix R = Q.ToMatrix4x4_RowMajor_LH();
 	FMatrix T = FMatrix::TranslateMatrix(Location);
 
 	CachedMatrix = S * R * T;
