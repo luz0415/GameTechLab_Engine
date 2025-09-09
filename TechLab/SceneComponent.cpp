@@ -43,7 +43,7 @@ void USceneComponent::SetWorldLocation(const FVector& InLocation)
 		RelativeTransform.SetLocation(InLocation);
 		CachedWorldTransform.SetLocation(InLocation);
 	}
-	bIsDirty = true;
+	SetDirty();
 }
 
 void USceneComponent::SetWorldRotation(const FVector& InRotation)
@@ -60,7 +60,7 @@ void USceneComponent::SetWorldRotation(const FVector& InRotation)
 		RelativeTransform.SetRotation(InRotation);
 		CachedWorldTransform.SetRotation(InRotation);
 	}
-	bIsDirty = true;
+	SetDirty();
 }
 
 void USceneComponent::SetWorldScale(const FVector& InScale)
@@ -81,7 +81,7 @@ void USceneComponent::SetWorldScale(const FVector& InScale)
 		RelativeTransform.SetScale(InScale);
 		CachedWorldTransform.SetScale(InScale);
 	}
-	bIsDirty = true;
+	SetDirty();
 }
 
 void USceneComponent::SetAttachment(USceneComponent* ParentComponent)
