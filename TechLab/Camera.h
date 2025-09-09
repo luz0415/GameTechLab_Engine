@@ -40,7 +40,7 @@ public:
 	void Update();
 
 	void UpdateEventByImGui();
-	bool& IsOrthogonal() { return bIsOrthogonal; }
+	bool* IsOrthogonal() { return &bIsOrthogonal; }
 private:
 	void UpdateViewMatrix() noexcept;
 	void UpdateProjectionMatrix() noexcept;

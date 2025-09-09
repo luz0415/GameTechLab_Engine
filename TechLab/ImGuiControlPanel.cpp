@@ -94,8 +94,8 @@ void UImGuiControlPanel::Render()
 
 	if (ImGui::Button("Load Scene"))
 	{
-		USceneManager::LoadSceneByExplorer();
-		USceneManager::Get()->GetCurrentScene()->InitCamera();
+		USceneManager::Get()->LoadSceneByExplorer();
+		//USceneManager::Get()->GetCurrentScene()->InitCamera();
 	}
 
 	ImGui::Separator(); // ------------------
@@ -105,11 +105,15 @@ void UImGuiControlPanel::Render()
 	}
 
 	//is
-	bool& bIsOrthogonal = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
-
-	if (ImGui::Checkbox("Orthogonal", &bIsOrthogonal))
+	bool* bIsOrthogonal;
+	UScene* CurrentScene = USceneManager::Get()->GetCurrentScene();
+	if (CurrentScene != nullptr)
 	{
-		CURRENT_CAMERA->UpdateEventByImGui();
+		bIsOrthogonal = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+		if (ImGui::Checkbox("Orthogonal", (bIsOrthogonal)))
+		{
+			CURRENT_CAMERA->UpdateEventByImGui();
+		}
 	}
 
 

@@ -151,3 +151,10 @@ void UImGuiPropertyWindow::Render()
 
 	ImGui::End();
 }
+//void USceneManager::LoadNewScene()
+//{
+//	UScene* newScene = new UScene();
+//	FObjectFactory::Get()->ReleaseAllObjects();
+//	CurrentScene = newScene;
+//	ResetResources();
+//}
