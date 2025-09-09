@@ -127,8 +127,8 @@ FMeshResource* FMeshManager::CreateMeshResource(const FMeshData& MeshData, D3D_P
         IndexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
         IndexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-        D3D11_SUBRESOURCE_DATA indexBufferSRD = { MeshData.Indices.data() };
-        hr = Device->CreateBuffer(&IndexBufferDesc, &indexBufferSRD, &NewMeshResource->IndexBuffer);
+        D3D11_SUBRESOURCE_DATA IndexBufferSRD = { MeshData.Indices.data() };
+        hr = Device->CreateBuffer(&IndexBufferDesc, &IndexBufferSRD, &NewMeshResource->IndexBuffer);
         if (FAILED(hr))
         {
             NewMeshResource->IndexBuffer->Release();

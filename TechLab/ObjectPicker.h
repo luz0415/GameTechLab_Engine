@@ -5,7 +5,7 @@ class IPickable;
 class UCamera;
 struct FRay;
 struct FHitResult;
-class FGizmoRenderer;
+class UGizmoRenderer;
 struct FMatrix;
 
 class UObjectPicker
@@ -35,5 +35,5 @@ private:
     int ViewportHeight = 1;
 
     std::vector<IPickable*> CurrentSelections;
-    FGizmoRenderer* GizmoRenderer = nullptr;
+    UGizmoRenderer* GizmoRenderer = nullptr;
 };

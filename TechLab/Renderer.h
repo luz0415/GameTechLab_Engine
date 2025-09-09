@@ -75,7 +75,7 @@ public:
 	ID3D11DeviceContext* DeviceContext = nullptr;
 //Gizmo Renderer
 public:
-	//FGizmoRenderer* GetGizmoRenderer() { return GizmoRenderer; }
+	//UGizmoRenderer* GetGizmoRenderer() { return GizmoRenderer; }
 
 // Mesh Manager
 public:

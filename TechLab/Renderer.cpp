@@ -23,7 +23,7 @@ void URenderer::CreateVisualInterfaces()
 	GridRenderer->Init();
 	FWorldAxisRenderer* WorldAxisRenderer = new FWorldAxisRenderer();
 	WorldAxisRenderer->Init();
-	//GizmoRenderer = new FGizmoRenderer();
+	//GizmoRenderer = new UGizmoRenderer();
 	//GizmoRenderer->Init();
 
 	VisualInterfaceList.push_back(GridRenderer);

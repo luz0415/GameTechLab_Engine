@@ -1,15 +1,16 @@
-#include "FGizmoArrow.h"
+#include "GizmoArrow.h"
 #include "Renderer.h"
-FGizmoArrow::FGizmoArrow()
+
+UGizmoArrow::UGizmoArrow()
 {
 }
 
-FGizmoArrow::~FGizmoArrow()
+UGizmoArrow::~UGizmoArrow()
 {
 }
 
 
-void FGizmoArrow::SubmitProxy()
+void UGizmoArrow::SubmitProxy()
 {
     URenderer* Renderer = URenderer::Get();
     FRenderProxy RenderProxy(FMatrix::ScaleMatrix(FVector(3.f,3.f,3.f))*GetAttachment()->GetWorldMatrix(), Renderer->GetMeshResource(FString(Name)));

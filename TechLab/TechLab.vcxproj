@@ -131,7 +131,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CubeComp.cpp" />
-    <ClCompile Include="FGizmoArrow.cpp" />
+    <ClCompile Include="GizmoArrow.cpp" />
     <ClCompile Include="GizmoRenderer.cpp" />
     <ClCompile Include="GridRenderer.cpp" />
     <ClCompile Include="ImGuiControlPanel.cpp" />
@@ -183,7 +183,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeComp.h" />
-    <ClInclude Include="FGizmoArrow.h" />
+    <ClInclude Include="GizmoArrow.h" />
     <ClInclude Include="GizmoRenderer.h" />
     <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="ImGuiControlPanel.h" />

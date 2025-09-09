@@ -186,6 +186,12 @@
     <ClCompile Include="ObjectPicker.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="GizmoArrow.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GizmoRenderer.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader.hlsl">
@@ -353,6 +359,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Raycastable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GizmoArrow.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GizmoRenderer.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

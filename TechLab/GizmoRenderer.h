@@ -1,21 +1,21 @@
 #pragma once
-#include "FGizmoArrow.h"
+#include "GizmoArrow.h"
 #include "Core.h"
 #include "MeshResource.h"
 #include <functional>
 #include "PrimitiveComponent.h"
 
-class FGizmoRenderer : public UPrimitiveComponent
+class UGizmoRenderer : public UPrimitiveComponent
 {
 public:
     static UObject* StaticUObjectFactory()
     {
-        return new FGizmoRenderer();
+        return new UGizmoRenderer();
     }
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("FGizmoRenderer"), StaticUObjectFactory, USceneComponent::StaticClass());
+        static UClass Class(FString("UGizmoRenderer"), StaticUObjectFactory, UPrimitiveComponent::StaticClass());
         return &Class;
     }
 
@@ -24,12 +24,12 @@ public:
         return StaticClass();
     }
 
-    FGizmoRenderer();
-    ~FGizmoRenderer() override;
+    UGizmoRenderer();
+    ~UGizmoRenderer() override;
     virtual void SubmitProxy() override;
     void SetPickedItem(UObject* Item);
     const USceneComponent* GetPickedItem() const { return GetAttachment(); }
     
 private:
-    TArray<FGizmoArrow> Arrows;
+    TArray<UGizmoArrow*> Arrows;
 };

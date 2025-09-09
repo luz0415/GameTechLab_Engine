@@ -12,7 +12,7 @@
 #include "Renderer.h"
 #include "GizmoRenderer.h"
 UObjectPicker::UObjectPicker() {
-	GizmoRenderer = new FGizmoRenderer;
+	GizmoRenderer = new UGizmoRenderer;
 }
 
 // Debug Info (TEMP)
