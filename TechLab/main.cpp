@@ -213,12 +213,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		UImGuiManager::Get()->Render();
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 		USceneManager::Get()->GetObjectPicker()->SubmitProxy();
-
 		Renderer->RenderScene(MainCamera);
+
+		UImGuiManager::Get()->Render();
 		Renderer->SwapBuffer();
 	}
 	Renderer->ReleaseShader();
