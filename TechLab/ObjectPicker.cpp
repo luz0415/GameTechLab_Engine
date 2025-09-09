@@ -9,8 +9,11 @@
 #include "SceneComponent.h"
 #include "ImGuiManager.h"
 #include "ImGuiAppConsole.h"
-
-UObjectPicker::UObjectPicker() {}
+#include "Renderer.h"
+#include "GizmoRenderer.h"
+UObjectPicker::UObjectPicker() {
+	GizmoRenderer = new FGizmoRenderer;
+}
 
 // Debug Info (TEMP)
 extern FVector GRayOrigin;
@@ -85,6 +88,11 @@ void UObjectPicker::SetCamera(UCamera* camera)
 	Camera = camera;
 }
 
+void UObjectPicker::SubmitProxy()
+{
+	GizmoRenderer->SubmitProxy();
+}
+
 FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 {
 	const float NDCx = (2.0f * ScreenX) / static_cast<float>(ViewportWidth) - 1.0f;
@@ -157,8 +165,10 @@ void UObjectPicker::UpdateSelection(IPickable* NewSelection)
 		{
 			extern uint32_t GPickedObjectID;
 			GPickedObjectID = SelectedObject->UUID;
+			GizmoRenderer->SetPickedItem(SelectedObject);
 		}
 	}
+	
 }
 
 void UObjectPicker::ClearSelection()

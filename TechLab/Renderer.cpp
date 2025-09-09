@@ -4,7 +4,7 @@
 #include "WorldAxisRenderer.h"
 #include "GridRenderer.h"
 #include "MeshManager.h"
-
+#include "GizmoRenderer.h"
 void URenderer::Create(HWND hWindow)
 {
 	CreateDeviceAndSwapChain(hWindow);
@@ -23,6 +23,8 @@ void URenderer::CreateVisualInterfaces()
 	GridRenderer->Init();
 	FWorldAxisRenderer* WorldAxisRenderer = new FWorldAxisRenderer();
 	WorldAxisRenderer->Init();
+	//GizmoRenderer = new FGizmoRenderer();
+	//GizmoRenderer->Init();
 
 	VisualInterfaceList.push_back(GridRenderer);
 	VisualInterfaceList.push_back(WorldAxisRenderer);
@@ -291,8 +293,10 @@ void URenderer::RenderScene(const UCamera* SceneCamera)
 	for (auto elem : VisualInterfaceList)
 	{
 		elem->Update(SceneCamera->GetEye());
-		elem->Render();
+		elem->SubmitProxy();
 	}
+
+	//GizmoRenderer->SubmitProxy();
 
 	for (const auto& RenderProxy : RenderProxyList)
 	{

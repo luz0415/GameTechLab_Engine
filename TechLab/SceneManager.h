@@ -57,6 +57,7 @@ public:
 
     void SetObjectPickerCamera();
     UObjectPicker* GetObjectPicker() const { return ObjectPicker; }
+    
 
 	
 private:

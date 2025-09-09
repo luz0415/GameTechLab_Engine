@@ -73,11 +73,11 @@ private:
     USceneComponent* Attachment = nullptr;
     TArray<USceneComponent*> Children;
     bool bIsDirty = true;
-
+    bool bIsSelected = false;
 // Picking
 public:
-    void OnSelected() override {};
-    void OnDeselected() override {};
-    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
+    virtual void OnSelected() override { bIsSelected = true; };
+    virtual void OnDeselected() override { bIsSelected = false; };
+    virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
     bool RaycastLocal(const FRay& LocalRay, float TMax, FHitRecord& OutHit) override { return false; };
 };

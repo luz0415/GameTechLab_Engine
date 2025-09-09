@@ -62,8 +62,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		GInput.bMouseRightClick = false;
 		break;
+	case WM_LBUTTONUP:
+		GInput.bMouseLeftClick = false;
+		break;
 	case WM_MOUSEMOVE:
-		if (GInput.bMouseRightClick)
+		if (GInput.bMouseRightClick||GInput.bMouseLeftClick)
 		{
 			POINT currentMousePos;
 			GetCursorPos(&currentMousePos);
@@ -78,8 +81,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GInput.MouseY = 0;
 		}
 		break;
-		case WM_LBUTTONDOWN:
+	case WM_LBUTTONDOWN:
 		{
+			GInput.bMouseLeftClick = true;
 			ImGuiIO& io = ImGui::GetIO();
 			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
 			{
@@ -170,16 +174,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	ImGuiAppConsole* App = new ImGuiAppConsole();
 
-	RECT Rect;
-	GetClientRect(hWnd, &Rect);
-	const int Width = Rect.right - Rect.left;
-	const int Height = Rect.bottom - Rect.top;
-	const FVector Eye = FVector(0, 0, -5);
-	const FVector At = FVector(0, 0, 0);
-	const FVector Up = FVector(0, 1, 0);
-	const float Angle = 90.f;
-	const float RadAngle = DegreeToRadians(Angle);
-
 	
 	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
@@ -223,11 +217,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		//UE_LOG("Hit");
-
 		UImGuiManager::Get()->Render();
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
+		USceneManager::Get()->GetObjectPicker()->SubmitProxy();
 
 		Renderer->RenderScene(MainCamera);
 		Renderer->SwapBuffer();

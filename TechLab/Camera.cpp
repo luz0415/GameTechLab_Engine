@@ -1,7 +1,8 @@
 #include "Camera.h"
 #include "Math.h"
 #include "SceneManager.h"
-
+#include "ImGuiManager.h"
+#include "Core.h"
 UCamera::UCamera(
 	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
 	float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ) noexcept
@@ -119,6 +120,12 @@ void UCamera::UpdateViewMatrix() noexcept
 
 void UCamera::UpdateProjectionMatrix() noexcept
 {
-	ProjectionMatrix = FMatrix::PrespectiveProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
-	//ProjectionMatrix = FMatrix::OrthographicProjectionMatrix(-10.f, 10.f, -10.f, 10.f, NearZ, FarZ);
+	if (!bIsOrthogonal)
+	{
+		UE_LOG("Perspective! %d", bIsOrthogonal);
+		ProjectionMatrix = FMatrix::PrespectiveProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
+		return;
+	}
+	UE_LOG("NoPerspective! %d", bIsOrthogonal);
+	ProjectionMatrix = FMatrix::OrthographicProjectionMatrix(-10.f, 10.f, -10.f, 10.f, NearZ, FarZ);
 }

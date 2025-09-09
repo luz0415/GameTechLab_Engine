@@ -46,13 +46,3 @@ bool USphereComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 	}
 	return false;
 }
-
-void USphereComp::OnSelected()
-{
-	bSelected = true;
-}
-
-void USphereComp::OnDeselected()
-{
-	bSelected = false;
-}
