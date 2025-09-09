@@ -14,10 +14,13 @@ UGizmoRenderer::UGizmoRenderer()
 
 	UGizmoArrow* ArrowZ = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowZ->SetName(FString("ArrowZ"));
+	ArrowZ->SetAABB(EGizmoArrowAxis::Z);
 	UGizmoArrow* ArrowY = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowY->SetName(FString("ArrowY"));
+	ArrowY->SetAABB(EGizmoArrowAxis::Y);
 	UGizmoArrow* ArrowX = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowX->SetName(FString("ArrowX"));
+	ArrowX->SetAABB(EGizmoArrowAxis::X);
 
 	Arrows.push_back(ArrowZ);
 	Arrows.push_back(ArrowY);
@@ -27,7 +30,6 @@ UGizmoRenderer::UGizmoRenderer()
 UGizmoRenderer::~UGizmoRenderer()
 {
 }
-
 
 void UGizmoRenderer::SubmitProxy()
 {
