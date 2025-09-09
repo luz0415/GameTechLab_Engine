@@ -58,7 +58,7 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 			FRay LocalRay = TransformRayToLocalSpace(Ray, WorldTransform);
 
 			FHitRecord Hit;
-			if (RayTarget->Raycast(LocalRay, BestT, Hit) && Hit.Time < BestT) {
+			if (RayTarget->CanPickable() && RayTarget->Raycast(LocalRay, BestT, Hit) && Hit.Time < BestT) {
 				GSuccessfulCastCount++;
 				BestT = Hit.Time;
 				NewSelection = RayTarget;
@@ -78,9 +78,9 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	UpdateSelection(NewSelection);
 }
 
-const std::vector<IPickable*>& UObjectPicker::GetCurrentSelection() const
+IPickable* UObjectPicker::GetCurrentSelection() const
 {
-	return CurrentSelections;
+	return CurrentSelection;
 }
 
 void UObjectPicker::SetCamera(UCamera* camera)
@@ -151,35 +151,43 @@ FRay UObjectPicker::TransformRayToLocalSpace(const FRay& WorldRay, const FMatrix
 
 void UObjectPicker::UpdateSelection(IPickable* NewSelection)
 {
-	// TODO: enable multiple selection (bool bIsCtrlPressed)
-	// Current: single ~
+    // Deselect current selection if any
+    if (CurrentSelection)
+    {
+        CurrentSelection->OnDeselected();
+    }
 
-	ClearSelection();
+    // Set new selection
+    CurrentSelection = NewSelection;
 
-	if (NewSelection)
-	{
-		CurrentSelections.push_back(NewSelection);
-		NewSelection->OnSelected();
+    if (CurrentSelection)
+    {
+        CurrentSelection->OnSelected();
 
-		if (auto* SelectedObject = dynamic_cast<UObject*>(NewSelection))
-		{
-			extern uint32_t GPickedObjectID;
-			GPickedObjectID = SelectedObject->UUID;
-			GizmoRenderer->SetPickedItem(SelectedObject);
-		}
-	}
-	
+        if (auto* SelectedObject = dynamic_cast<UObject*>(CurrentSelection))
+        {
+            extern uint32_t GPickedObjectID;
+            GPickedObjectID = SelectedObject->UUID;
+            GizmoRenderer->SetPickedItem(SelectedObject);
+        }
+    }
+    else
+    {
+        extern uint32_t GPickedObjectID;
+        GPickedObjectID = 0;
+        GizmoRenderer->SetPickedItem(nullptr);
+    }
 }
 
 void UObjectPicker::ClearSelection()
 {
-	for (IPickable* Selected : CurrentSelections)
-	{
-		if (Selected)
-		{
-			Selected->OnDeselected();
-	
-		}
-	}
-	CurrentSelections.clear();
+    if (CurrentSelection)
+    {
+        CurrentSelection->OnDeselected();
+        CurrentSelection = nullptr;
+    }
+    
+    extern uint32_t GPickedObjectID;
+    GPickedObjectID = 0;
+    GizmoRenderer->SetPickedItem(nullptr);
 }

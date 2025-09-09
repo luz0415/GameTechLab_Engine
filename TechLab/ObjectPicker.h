@@ -16,7 +16,7 @@ public:
 
     void HandleMouseClick(float ScreenX, float ScreenY);
     void SetViewportSize(int Width, int Height) { ViewportWidth = Width; ViewportHeight = Height; }
-    const std::vector<IPickable*>& GetCurrentSelection() const;
+    IPickable* GetCurrentSelection() const;
 
     void SetCamera(UCamera* camera);
 
@@ -34,6 +34,6 @@ private:
     int ViewportWidth = 1;
     int ViewportHeight = 1;
 
-    std::vector<IPickable*> CurrentSelections;
+    IPickable* CurrentSelection = nullptr;
     UGizmoRenderer* GizmoRenderer = nullptr;
 };

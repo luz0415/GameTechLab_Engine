@@ -129,11 +129,11 @@ void UImGuiPropertyWindow::Render()
 
 	ImGui::Text("Scale");
 
-	if (!USceneManager::Get()->GetObjectPicker()->GetCurrentSelection().empty())
+	if (!USceneManager::Get()->GetObjectPicker()->GetCurrentSelection())
 	{
-		if (TargetObject != dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]))
+		if (TargetObject != dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()))
 		{
-			TargetObject = dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]);
+			TargetObject = dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection());
 			TargetComp = dynamic_cast<USceneComponent*>(TargetObject);
 			TargetProp =
 			{

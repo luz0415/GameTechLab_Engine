@@ -30,7 +30,7 @@ public:
     void SetName(const FString& InName) { Name = InName; }
     const FString& GetName() {return Name;}
     void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
-
+    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
 
 private:
     FString Name;

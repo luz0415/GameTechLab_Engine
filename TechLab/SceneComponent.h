@@ -87,6 +87,7 @@ private:
 public:
     virtual void OnSelected() override { bIsSelected = true; };
     virtual void OnDeselected() override { bIsSelected = false; };
+    virtual bool CanPickable() override { return true; }
 
     bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit);
     void SetBoundingVolume(IBoundingVolume* InBoundingVolume);

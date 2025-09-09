@@ -43,6 +43,7 @@ void UGizmoRenderer::SubmitProxy()
 
 void UGizmoRenderer::SetPickedItem(UObject* Item)
 {
+	if (Item && Item->GetClass() == UGizmoArrow::StaticClass()) { return; }
 	USceneComponent* Comp = Cast<USceneComponent>(Item);
 	if (Comp == nullptr)
 	{
