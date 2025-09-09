@@ -1,6 +1,7 @@
-#include "SceneManager.h"
+ï»¿#include "SceneManager.h"
 #include "json.hpp"
 #include "ObjectPicker.h"
+#include "ObjectFactory.h"
 
 using namespace json;
 
@@ -17,12 +18,12 @@ USceneManager::~USceneManager()
 {
 }
 
-// Path¿¡¼­ °æ·Î ¹Ş¾Æ¿Í¼­ JSON °´Ã¼·Î ¹İÈ¯
+// Pathì—ì„œ ê²½ë¡œ ë°›ì•„ì™€ì„œ JSON ê°ì²´ë¡œ ë°˜í™˜
 JSON USceneManager::LoadScene(const std::string& path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
-        throw std::runtime_error("ÆÄÀÏ ¿­±â ½ÇÆĞ: " + path);
+        throw std::runtime_error("íŒŒì¼ ì—´ê¸° ì‹¤íŒ¨: " + path);
     }
 
     std::string content((std::istreambuf_iterator<char>(file)),
@@ -31,18 +32,18 @@ JSON USceneManager::LoadScene(const std::string& path)
     return JSON::Load(content);
 }
 
-// JSON °´Ã¼¸¦ Path¿¡ ÀúÀå
+// JSON ê°ì²´ë¥¼ Pathì— ì €ì¥
 void USceneManager::SaveScene(const std::string& path, const JSON& sceneJson)
 {
     std::ofstream file(path);
     if (!file.is_open()) {
-        throw std::runtime_error("ÆÄÀÏ ¾²±â ½ÇÆĞ: " + path);
+        throw std::runtime_error("íŒŒì¼ ì“°ê¸° ì‹¤íŒ¨: " + path);
     }
 
-    file << sceneJson.dump(1, "  "); // depth=1, tab="  " ¡æ º¸±â ÁÁÀº Æ÷¸Ë
+    file << sceneJson.dump(1, "  "); // depth=1, tab="  " â†’ ë³´ê¸° ì¢‹ì€ í¬ë§·
 }
 
-// Path¿¡¼­ Scene ÆÄÀÏÀ» ¿­¾î¼­ USceneData·Î ¹İÈ¯
+// Pathì—ì„œ Scene íŒŒì¼ì„ ì—´ì–´ì„œ USceneDataë¡œ ë°˜í™˜
 USceneData USceneManager::LoadUSceneData(const std::string& path)
 {
     JSON root = LoadScene(path);
@@ -67,7 +68,7 @@ USceneData USceneManager::LoadUSceneData(const std::string& path)
     return scene;
 }
 
-// ÆÄÀÏ Å½»ö±â¸¦ ¿°
+// íŒŒì¼ íƒìƒ‰ê¸°ë¥¼ ì—¼
 std::wstring USceneManager::OpenFileDialog()
 {
     wchar_t filename[MAX_PATH] = { 0 };
@@ -75,7 +76,7 @@ std::wstring USceneManager::OpenFileDialog()
     OPENFILENAMEW ofn;
     ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
-    ofn.hwndOwner = nullptr; // ºÎ¸ğ À©µµ¿ì ÇÚµé (¾øÀ¸¸é nullptr)
+    ofn.hwndOwner = nullptr; // ë¶€ëª¨ ìœˆë„ìš° í•¸ë“¤ (ì—†ìœ¼ë©´ nullptr)
     ofn.lpstrFilter = L"Scene Files\0*.Scene\0All Files\0*.*\0";
     ofn.lpstrFile = filename;
     ofn.nMaxFile = MAX_PATH;
@@ -84,27 +85,42 @@ std::wstring USceneManager::OpenFileDialog()
 
     if (GetOpenFileNameW(&ofn))
     {
-        return filename; // »ç¿ëÀÚ°¡ ¼±ÅÃÇÑ °æ·Î
+        return filename; // ì‚¬ìš©ìê°€ ì„ íƒí•œ ê²½ë¡œ
     }
-    return L""; // Ãë¼Ò ½Ã
+    return L""; // ì·¨ì†Œ ì‹œ
 }
 
-// JSON °´Ã¼¸¦ Primitive ´ÜÀ§·Î ºĞÇØÇÏ¿© Primitive·Î ¹İÈ¯
+// JSON ê°ì²´ë¥¼ Primitive ë‹¨ìœ„ë¡œ ë¶„í•´í•˜ì—¬ Primitiveë¡œ ë°˜í™˜
 Primitive USceneManager::ParsePrimitive(const JSON& j)
 {
     Primitive p;
     p.Type = j.at("Type").ToString();
 
-    p.Location.X = (float)j.at("Location").at(0).ToFloat();
-    p.Location.Y = (float)j.at("Location").at(1).ToFloat();
-    p.Location.Z = (float)j.at("Location").at(2).ToFloat();
-    p.Rotation.X = (float)j.at("Rotation").at(0).ToFloat();
-    p.Rotation.Y = (float)j.at("Rotation").at(1).ToFloat();
-    p.Rotation.Z = (float)j.at("Rotation").at(2).ToFloat();
-    p.Scale.X = (float)j.at("Scale").at(0).ToFloat();
-    p.Scale.Y = (float)j.at("Scale").at(1).ToFloat();
-    p.Scale.Z = (float)j.at("Scale").at(2).ToFloat();
-    
+    FVector loc =
+    {
+        (float)j.at("Location").at(0).ToFloat(),
+        (float)j.at("Location").at(1).ToFloat(),
+        (float)j.at("Location").at(2).ToFloat()
+    };
+
+    FVector rot =
+    {
+        (float)j.at("Rotation").at(0).ToFloat(),
+        (float)j.at("Rotation").at(1).ToFloat(),
+        (float)j.at("Rotation").at(2).ToFloat()
+    };
+
+    FVector sca =
+    {
+        (float)j.at("Scale").at(0).ToFloat(),
+        (float)j.at("Scale").at(1).ToFloat(),
+        (float)j.at("Scale").at(2).ToFloat()
+    };
+
+    p.Location = loc;
+    p.Rotation = rot;
+    p.Scale = sca;
+
     return p;
 }
 
@@ -114,7 +130,7 @@ JSON USceneManager::LoadJSONByExplorer()
 
     std::wstring filepath = OpenFileDialog();
     if (!filepath.empty()) {
-        // wstring ¡æ string º¯È¯ (UTF-8 ´Ü¼ø º¯È¯)
+        // wstring â†’ string ë³€í™˜ (UTF-8 ë‹¨ìˆœ ë³€í™˜)
         std::string path(filepath.begin(), filepath.end());
 
         try {
@@ -123,11 +139,11 @@ JSON USceneManager::LoadJSONByExplorer()
             std::cout << tempjson << std::endl;
         }
         catch (const std::exception& e) {
-            std::cerr << "·Îµå ½ÇÆĞ: " << e.what() << "\n";
+            std::cerr << "ë¡œë“œ ì‹¤íŒ¨: " << e.what() << "\n";
         }
     }
     else {
-        std::cout << "ÆÄÀÏ ¼±ÅÃ Ãë¼ÒµÊ\n";
+        std::cout << "íŒŒì¼ ì„ íƒ ì·¨ì†Œë¨\n";
     }
     return tempjson;
 }
@@ -161,12 +177,80 @@ USceneData USceneManager::JSONToUSceneData(JSON& j)
     return scene;
 }
 
+json::JSON USceneManager::USceneDataToJSON(const USceneData& sceneData){
+
+     JSON tempJSON;
+
+     // ê¸°ë³¸ ì •ë³´
+     tempJSON["Version"] = sceneData.Version;
+     tempJSON["NextUUID"] = sceneData.NextUUID;
+
+     JSON prims;
+
+     for (auto& prim : sceneData.PrimArray)
+     {
+         JSON primJSON;
+
+         // Type (í´ë˜ìŠ¤ ì´ë¦„ì´ë‚˜ UPROPERTYë¡œ ì €ì¥ëœ ë¬¸ìì—´ì´ë¼ ê°€ì •)
+         string type = prim.Type;
+
+         primJSON["Type"] = type;
+
+         // Location
+         JSON loc = Array();
+         loc.append(prim.Location.X);
+         loc.append(prim.Location.Y);
+         loc.append(prim.Location.Z);
+         primJSON["Location"] = loc;
+
+         // Rotation
+         JSON rot = Array();
+         rot.append(prim.Rotation.X);
+         rot.append(prim.Rotation.Y);
+         rot.append(prim.Rotation.Z);
+         primJSON["Rotation"] = rot;
+
+         // Scale
+         JSON sca = Array();
+         sca.append(prim.Scale.X);
+         sca.append(prim.Scale.Y);
+         sca.append(prim.Scale.Z);
+         primJSON["Scale"] = sca;
+
+         // UUID (ì»´í¬ë„ŒíŠ¸ì— UUID í•„ë“œê°€ ìˆë‹¤ê³  ê°€ì •)
+         prims[std::to_string(prim.UUID)] = primJSON;
+    }
+
+    tempJSON["Primitives"] = prims;
+
+    return tempJSON;
+}
+
 void USceneManager::LoadSceneByExplorer()
 {
     json::JSON sceneJSON = LoadJSONByExplorer();
-    UScene* scene = new UScene(JSONToUSceneData(sceneJSON));
+
+    FObjectFactory::Get()->ReleaseAllObjects();
+
+    USceneData sceneData = JSONToUSceneData(sceneJSON);
+
+    UScene* scene = new UScene(sceneData);
 
     Get()->CurrentScene = scene;
+}
+
+void USceneManager::SaveSceneByName(const string& path)
+{
+    SaveScene(path, USceneDataToJSON(USceneManager::Get()->GetCurrentScene()->MakeSceneData()));
+}
+
+void USceneManager::LoadNewScene()
+{
+    UScene* newScene = new UScene();
+
+    FObjectFactory::Get()->ReleaseAllObjects();
+    CurrentScene = newScene;
+    newScene->InitCamera();
 }
 
 void USceneManager::SetObjectPickerCamera()
