@@ -259,6 +259,9 @@ void USceneManager::LoadNewScene()
         delete CurrentScene;
     }
     UScene* newScene = new UScene();
+    delete ObjectPicker;
+    delete CurrentScene;
+    FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
     ResetResources();
 }

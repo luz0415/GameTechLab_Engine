@@ -7,4 +7,5 @@ public:
 
     virtual void OnSelected() = 0;
     virtual void OnDeselected() = 0;
+    virtual bool CanPickable() = 0;
 };
