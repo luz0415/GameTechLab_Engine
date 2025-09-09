@@ -33,7 +33,7 @@ public:
 public:
     bool IsA(UClass* Class) const;
     virtual void Tick(float DeltaTimes);
-    void Destroy();
+    virtual void Destroy();
 
     bool ShouldBeDestroyed() const { return bShouldBeDestroyed; }
 

@@ -7,15 +7,19 @@ using namespace json;
 
 USceneManager::USceneManager()
 {
-    CurrentScene = new UScene();
-    //CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker();
 
    
 }
 
 USceneManager::~USceneManager()
 {
+}
+
+void USceneManager::Init()
+{
+    CurrentScene = new UScene();
+    //CurrentScene->InitCamera();
+    ObjectPicker = new UObjectPicker();
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
@@ -230,13 +234,17 @@ void USceneManager::LoadSceneByExplorer()
 {
     json::JSON sceneJSON = LoadJSONByExplorer();
 
-    FObjectFactory::Get()->ReleaseAllObjects();
 
     USceneData sceneData = JSONToUSceneData(sceneJSON);
 
     UScene* scene = new UScene(sceneData);
+    if (CurrentScene)
+    {
+        delete CurrentScene;
+    }
+    CurrentScene = scene;
+    ResetResources();
 
-    Get()->CurrentScene = scene;
 }
 
 void USceneManager::SaveSceneByName(const string& path)
@@ -246,15 +254,23 @@ void USceneManager::SaveSceneByName(const string& path)
 
 void USceneManager::LoadNewScene()
 {
+    if (CurrentScene)
+    {
+        delete CurrentScene;
+    }
     UScene* newScene = new UScene();
     delete ObjectPicker;
     delete CurrentScene;
     FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
+    ResetResources();
+}
 
+void USceneManager::ResetResources()
+{
+    delete ObjectPicker;
+    CurrentScene->InitCamera();
     ObjectPicker = new UObjectPicker;
-    GetCurrentScene()->InitCamera();
-    newScene->InitCamera();
     SetObjectPickerCamera();
 }
 

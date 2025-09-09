@@ -27,6 +27,7 @@ public:
     USceneComponent();
     ~USceneComponent();
 
+    virtual void Destroy() override;
 
 // Local
 public:   
@@ -74,9 +75,11 @@ public:
 public:
     void SetAttachment(USceneComponent* ParentComponent);
     USceneComponent* GetAttachment() const { return Attachment; }
+    void Detach();
 
 private:
     void AddAttachedChild(USceneComponent* Child);
+    void RemoveAttachedChild(USceneComponent* Child);
     void SetDirty();
 
     USceneComponent* Attachment = nullptr;

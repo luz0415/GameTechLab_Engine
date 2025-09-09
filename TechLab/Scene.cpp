@@ -34,7 +34,7 @@ UScene::UScene(const USceneData& sceneData)
 
 UScene::UScene(const std::string& path)
 {
-	USceneData sceneData = USceneManager::LoadUSceneData(path);
+	USceneData sceneData = USceneManager::Get()->LoadUSceneData(path);
 	CopyPrimComp(sceneData);
 }
 
@@ -42,8 +42,7 @@ UScene::~UScene()
 {
 	for (auto& sceneComp : Objects)
 	{
-		delete sceneComp;
-		sceneComp = nullptr;
+		FObjectFactory::Get()->ReleaseObject(sceneComp);
 	}
 	delete CurrentCamera;
 }

@@ -6,6 +6,33 @@ USceneComponent::USceneComponent() : UObject()
 
 USceneComponent::~USceneComponent()
 {
+	Detach();
+	for (auto* Child : Children)
+	{
+		if (Child)
+		{
+			Child->Detach();
+		}
+	}
+	Children.clear();
+
+	if (BoundingVolume)
+	{
+		delete BoundingVolume;
+	}
+}
+
+void USceneComponent::Destroy()
+{
+	UObject::Destroy();
+	for (auto* Child : Children)
+	{
+		if (Child)
+		{
+			Child->Detach();
+		}
+	}
+	Children.clear();
 }
 
 void USceneComponent::SetRelativeLocation(const FVector& InLocation)
@@ -164,9 +191,34 @@ void USceneComponent::SetAttachment(USceneComponent* ParentComponent)
 	}
 }
 
+void USceneComponent::Detach()
+{
+	if (Attachment)
+	{
+		FVector WorldLocation = GetWorldLocation();
+		FVector WorldRotation = GetWorldRotation();
+		FVector WorldScale = GetWorldScale();
+
+		Attachment->RemoveAttachedChild(this);
+
+		Attachment = nullptr;
+
+		SetWorldLocation(WorldLocation);
+		SetWorldRotation(WorldRotation);
+		SetWorldScale(WorldScale);
+
+		SetDirty();
+	}
+}
+
 void USceneComponent::AddAttachedChild(USceneComponent* Child)
 {
 	Children.push_back(Child);
+}
+
+void USceneComponent::RemoveAttachedChild(USceneComponent* Child)
+{
+	Children.erase(std::remove(Children.begin(), Children.end(), Child), Children.end());
 }
 
 void USceneComponent::SetDirty()

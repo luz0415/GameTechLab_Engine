@@ -34,3 +34,8 @@ void UGizmoArrow::SetAABB(EGizmoArrowAxis InAxis)
         break;
     }
 }
+
+void UGizmoArrow::SetName(const FString& InName)
+{
+    Name = InName;
+}
