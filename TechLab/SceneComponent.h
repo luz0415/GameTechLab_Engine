@@ -2,9 +2,9 @@
 #include "Object.h"
 #include "Transform.h"
 #include "Pickable.h"
-#include "Raycastable.h"
+#include "BoundingVolume.h"
 
-class USceneComponent : public UObject, public IPickable, public IRaycastable
+class USceneComponent : public UObject, public IPickable
 {
 public:
     static UObject* StaticUObjectFactory()
@@ -87,6 +87,10 @@ private:
 public:
     virtual void OnSelected() override { bIsSelected = true; };
     virtual void OnDeselected() override { bIsSelected = false; };
-    virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
-    bool RaycastLocal(const FRay& LocalRay, float TMax, FHitRecord& OutHit) override { return false; };
+
+    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit);
+    void SetBoundingVolume(IBoundingVolume* InBoundingVolume);
+
+private:
+    IBoundingVolume* BoundingVolume = nullptr;
 };

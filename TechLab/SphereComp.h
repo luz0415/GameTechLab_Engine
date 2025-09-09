@@ -22,9 +22,5 @@ public:
     }
 
 public:
-	USphereComp();
-
-    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override;
-
-private:
+    USphereComp();
 };

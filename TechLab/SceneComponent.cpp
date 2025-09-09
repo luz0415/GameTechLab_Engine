@@ -177,3 +177,21 @@ void USceneComponent::SetDirty()
 		Child->SetDirty();
 	}
 }
+
+bool USceneComponent::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
+{
+	if (BoundingVolume)
+	{
+		return BoundingVolume->RaycastHit(Ray, TMax, OutHit);
+	}
+	return false;
+}
+
+void USceneComponent::SetBoundingVolume(IBoundingVolume* InBoundingVolume)
+{
+	if (BoundingVolume)
+	{
+		delete BoundingVolume;
+	}
+	BoundingVolume = InBoundingVolume;
+}

@@ -1,6 +1,13 @@
 #pragma once
 #include "Vector.h"
 
+struct FHitRecord
+{
+	FVector Point;
+	FVector normal;
+	float Time;
+};
+
 struct FRay
 {
 public:
@@ -9,7 +16,7 @@ public:
 	FVector GetOrigin() const { return Origin; }
 	FVector GetDirection() const { return Direction; }
 	float GetTime() const { return Time; }
-	
+
 	// Same as function P(t)
 	FVector At(float t) const { return Origin + t * Direction; }
 
