@@ -46,6 +46,12 @@
     <Filter Include="헤더 파일\SceneFileManager">
       <UniqueIdentifier>{66dbb9eb-9f02-4051-af2c-2bf884a24d43}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\BoundingVolume">
+      <UniqueIdentifier>{8f29bebf-3efc-4566-bce7-3cf69e0f2ce7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\BoundingVolume">
+      <UniqueIdentifier>{bdefb9c0-827c-4f95-a822-1750465639bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -191,6 +197,18 @@
     </ClCompile>
     <ClCompile Include="GizmoRenderer.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.h">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>소스 파일\BoundingVolume</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingSphere.cpp">
+      <Filter>소스 파일\BoundingVolume</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,14 +376,20 @@
     <ClInclude Include="ObjectPicker.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Raycastable.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GizmoArrow.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GizmoRenderer.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>헤더 파일\BoundingVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingSphere.h">
+      <Filter>헤더 파일\BoundingVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingVolume.h">
+      <Filter>헤더 파일\BoundingVolume</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

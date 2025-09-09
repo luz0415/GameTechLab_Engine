@@ -23,9 +23,4 @@ public:
 
 public:
     UCubeComp();
-
-    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override;
-
-
-private:
 };

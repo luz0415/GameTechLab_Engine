@@ -128,6 +128,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="BoundingSphere.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="CubeComp.cpp" />
@@ -183,6 +185,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
+    <ClInclude Include="BoundingSphere.h" />
+    <ClInclude Include="BoundingVolume.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeComp.h" />
     <ClInclude Include="GizmoArrow.h" />
@@ -198,7 +203,6 @@
     <ClInclude Include="MeshManager.h" />
     <ClInclude Include="PrimitiveComponent.h" />
     <ClInclude Include="Ray.h" />
-    <ClInclude Include="Raycastable.h" />
     <ClInclude Include="RenderProxy.h" />
     <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="Scene.h" />
