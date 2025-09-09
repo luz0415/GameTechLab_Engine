@@ -23,7 +23,7 @@ UScene::UScene()
 	Cube1->SetWorldLocation(FVector(0.f, 0.f, 5.f));	
 	Cube1->SetWorldRotation(FVector(0.f, 40.f, 40.f));
 
-	//Objects.push_back(Sph1);
+	Objects.push_back(Sph1);
 	Objects.push_back(Cube1);
 }
 
