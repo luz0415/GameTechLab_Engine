@@ -1,6 +1,6 @@
 #include "SceneComponent.h"
 #include "Quaternion.h"
-USceneComponent::USceneComponent() : UObject()
+USceneComponent::USceneComponent() : UObject(), bNeedsPreciseRaycast(false), MeshBoundingVolume(nullptr)
 {
 }
 
@@ -19,6 +19,10 @@ USceneComponent::~USceneComponent()
 	if (BoundingVolume)
 	{
 		delete BoundingVolume;
+	}
+	if (MeshBoundingVolume)
+	{
+		delete MeshBoundingVolume;
 	}
 }
 
@@ -67,13 +71,13 @@ void USceneComponent::AddLocalRotation(const FVector& InRotationDelta)
 		InRotationDelta.Z  // Roll
 	);
 
-	// 2. ÇöÀç '»ó´ë È¸Àü ÄõÅÍ´Ï¾ð'¿¡ 'º¯È­·® ÄõÅÍ´Ï¾ð'À» °öÇÏ¿© È¸ÀüÀ» ´©Àû½ÃÅµ´Ï´Ù.
-	//    ÀÌ°ÍÀÌ ¹Ù·Î Áü¹ú¶ô ¾ø´Â È¸Àü ´©ÀûÀÇ ÇÙ½ÉÀÔ´Ï´Ù.
-	//    ¼ø¼­°¡ ¸Å¿ì Áß¿äÇÕ´Ï´Ù! (ÇöÀç »óÅÂ * º¯È­·®) ÀÌ¾î¾ß ·ÎÄÃ Ãà ±âÁØÀ¸·Î È¸ÀüÇÕ´Ï´Ù.
+	// 2. í˜„ìž¬ 'ìƒëŒ€ íšŒì „ ì¿¼í„°ë‹ˆì–¸'ì— 'ë³€í™”ëŸ‰ ì¿¼í„°ë‹ˆì–¸'ì„ ê³±í•˜ì—¬ íšŒì „ì„ ëˆ„ì ì‹œí‚µë‹ˆë‹¤.
+	//    ì´ê²ƒì´ ë°”ë¡œ ì§ë²Œë½ ì—†ëŠ” íšŒì „ ëˆ„ì ì˜ í•µì‹¬ìž…ë‹ˆë‹¤.
+	//    ìˆœì„œê°€ ë§¤ìš° ì¤‘ìš”í•©ë‹ˆë‹¤! (í˜„ìž¬ ìƒíƒœ * ë³€í™”ëŸ‰) ì´ì–´ì•¼ ë¡œì»¬ ì¶• ê¸°ì¤€ìœ¼ë¡œ íšŒì „í•©ë‹ˆë‹¤.
 	CachedRelativeTransform.SetRotation(CachedRelativeTransform.GetRotation() * DeltaQuat);
 
-	// 3. º¯È¯ Á¤º¸°¡ º¯°æµÇ¾úÀ½À» ½Ã½ºÅÛ¿¡ ¾Ë¸³´Ï´Ù.
-	//    ÀÌ°ÍÀ¸·Î ´ÙÀ½ GetWorldMatrix() È£Ãâ ½Ã ¿ùµå Çà·ÄÀÌ »õ·Î °è»êµË´Ï´Ù.
+	// 3. ë³€í™˜ ì •ë³´ê°€ ë³€ê²½ë˜ì—ˆìŒì„ ì‹œìŠ¤í…œì— ì•Œë¦½ë‹ˆë‹¤.
+	//    ì´ê²ƒìœ¼ë¡œ ë‹¤ìŒ GetWorldMatrix() í˜¸ì¶œ ì‹œ ì›”ë“œ í–‰ë ¬ì´ ìƒˆë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.
 	SetDirty();
 }
 
@@ -124,7 +128,7 @@ void USceneComponent::SetWorldRotation(const FVector& InRotation)
 
 		FQuaternion TargetWorldQuat = FQuaternion::FromYawPitchRollLH(InRotation.Y, InRotation.X, InRotation.Z);
 
-		// »ó´ë È¸Àü = ºÎ¸ðÀÇ ¿ªÈ¸Àü * ¸ñÇ¥ ¿ùµå È¸Àü
+		// ìƒëŒ€ íšŒì „ = ë¶€ëª¨ì˜ ì—­íšŒì „ * ëª©í‘œ ì›”ë“œ íšŒì „
 		FQuaternion RelativeQuat = ParentWorldQuat.Inverse() * TargetWorldQuat;
 
 		CachedRelativeTransform.SetRotation(RelativeQuat);
@@ -232,11 +236,35 @@ void USceneComponent::SetDirty()
 
 bool USceneComponent::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
 {
-	if (BoundingVolume)
+    FHitRecord BroadPhaseHit;
+	if (BoundingVolume && BoundingVolume->RaycastHit(Ray, TMax, BroadPhaseHit))
 	{
-		return BoundingVolume->RaycastHit(Ray, TMax, OutHit);
+        // If broad-phase hit and precise raycast is needed
+        if (bNeedsPreciseRaycast && MeshBoundingVolume)
+        {
+            FHitRecord NarrowPhaseHit;
+            if (MeshBoundingVolume->RaycastHit(Ray, TMax, NarrowPhaseHit))
+            {
+                OutHit = NarrowPhaseHit;
+                return true;
+            }
+			return false;
+        }
+        // If no precise raycast or precise raycast didn't hit, use broad-phase hit
+        OutHit = BroadPhaseHit;
+        return true;
 	}
 	return false;
+}
+
+void USceneComponent::SetMeshForPreciseRaycast(const FMeshData& InMeshData)
+{
+    if (MeshBoundingVolume)
+    {
+        delete MeshBoundingVolume;
+    }
+    MeshBoundingVolume = new FTriangleMeshCollider(InMeshData);
+    bNeedsPreciseRaycast = true;
 }
 
 void USceneComponent::SetBoundingVolume(IBoundingVolume* InBoundingVolume)

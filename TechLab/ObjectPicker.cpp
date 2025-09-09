@@ -69,14 +69,14 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	GLastBestT = BestT;
 	if (NewSelection)
 	{
-		if (auto* SelectedObject = dynamic_cast<UObject*>(NewSelection))
-		{
-			GNewSelectionID = SelectedObject->UUID;
-		}
-
 		if (auto* GizmoArrow = dynamic_cast<UGizmoArrow*>(NewSelection))
 		{
 			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
+		}
+		else if (auto* SelectedObject = dynamic_cast<UObject*>(NewSelection))
+		{
+			GNewSelectionID = SelectedObject->UUID;
+			UE_LOG(("+-+-+Selected Object: %d"), GNewSelectionID);
 		}
 	}
 

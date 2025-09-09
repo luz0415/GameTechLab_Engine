@@ -210,6 +210,9 @@
     <ClCompile Include="BoundingSphere.cpp">
       <Filter>소스 파일\BoundingVolume</Filter>
     </ClCompile>
+    <ClCompile Include="TriangleMeshCollider.cpp">
+      <Filter>소스 파일\BoundingVolume</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader.hlsl">
@@ -389,6 +392,9 @@
       <Filter>헤더 파일\BoundingVolume</Filter>
     </ClInclude>
     <ClInclude Include="BoundingVolume.h">
+      <Filter>헤더 파일\BoundingVolume</Filter>
+    </ClInclude>
+    <ClInclude Include="TriangleMeshCollider.h">
       <Filter>헤더 파일\BoundingVolume</Filter>
     </ClInclude>
   </ItemGroup>

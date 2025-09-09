@@ -25,12 +25,15 @@ void UGizmoArrow::SetAABB(EGizmoArrowAxis InAxis)
     {
     case EGizmoArrowAxis::X:
         SetBoundingVolume(new FAABB(Shapes::ArrowX_MeshData));
+        SetMeshForPreciseRaycast(Shapes::ArrowX_MeshData);
         break;
     case EGizmoArrowAxis::Y:
         SetBoundingVolume(new FAABB(Shapes::ArrowY_MeshData));
+        SetMeshForPreciseRaycast(Shapes::ArrowY_MeshData);
         break;
     case EGizmoArrowAxis::Z:
         SetBoundingVolume(new FAABB(Shapes::ArrowZ_MeshData));
+        SetMeshForPreciseRaycast(Shapes::ArrowZ_MeshData);
         break;
     }
 }
