@@ -87,12 +87,3 @@ bool UCubeComp::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
     return true;
 }
 
-void UCubeComp::OnSelected()
-{
-	bSelected = true;
-}
-
-void UCubeComp::OnDeselected()
-{
-	bSelected = false;
-}

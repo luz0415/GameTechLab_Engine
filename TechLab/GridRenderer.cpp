@@ -27,9 +27,9 @@ void FGridRenderer::Update(const FVector& CameraPos)
     }
 }
 
-void FGridRenderer::Render()
+void FGridRenderer::SubmitProxy(const FMatrix& WorldMatrix)
 {
-    VisualInterface::Render();
+    FVisualInterface::SubmitProxy();
 }
 void FGridRenderer::RegenerateGrid(const FVector& CameraPos)
 {

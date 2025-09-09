@@ -28,7 +28,7 @@ void FWorldAxisRenderer::Update(const FVector& CameraPos)
 {
 }
 
-void FWorldAxisRenderer::Render()
+void FWorldAxisRenderer::SubmitProxy(const FMatrix& WorldMatrix)
 {
-	VisualInterface::Render();
+	FVisualInterface::SubmitProxy();
 }

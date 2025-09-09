@@ -26,9 +26,5 @@ public:
 
     bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override;
 
-    void OnSelected() override;
-    void OnDeselected() override;
-
 private:
-    bool bSelected = false;
 };

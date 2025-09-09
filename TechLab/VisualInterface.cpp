@@ -1,16 +1,16 @@
 #include "VisualInterface.h"
 #include "Renderer.h"
-VisualInterface::VisualInterface()
+FVisualInterface::FVisualInterface()
 {
 }
 
-VisualInterface::~VisualInterface()
+FVisualInterface::~FVisualInterface()
 {
 }
 
-void VisualInterface::Render()
+void FVisualInterface::SubmitProxy(const FMatrix& WorldMatrix)
 {
     URenderer* Renderer = URenderer::Get();
-    FRenderProxy RenderProxy(FMatrix::Identity(), Renderer->GetMeshResource(FString(Name)));
+    FRenderProxy RenderProxy(WorldMatrix, Renderer->GetMeshResource(FString(Name)));
     Renderer->SubmitProxy(RenderProxy);
 }
