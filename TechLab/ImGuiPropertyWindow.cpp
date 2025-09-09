@@ -14,26 +14,35 @@ void UImGuiPropertyWindow::Render()
 
 	// Translation
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##TX", &Translation.X, 0, 0, "%.3f");
+	ImGui::InputFloat("##TX", &TargetProp.Translation.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldLocation(TargetProp.Translation);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##TY", &Translation.Y, 0, 0, "%.3f");
+	ImGui::InputFloat("##TY", &TargetProp.Translation.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeY(Translation.Y);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldLocation(TargetProp.Translation);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##TZ", &Translation.Z, 0, 0, "%.3f");
+	ImGui::InputFloat("##TZ", &TargetProp.Translation.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeZ(Translation.Z);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldLocation(TargetProp.Translation);
+		}
 	}
 	ImGui::SameLine();
 
@@ -41,26 +50,33 @@ void UImGuiPropertyWindow::Render()
 
 	// Rotation
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##RX", &Rotation.X, 0, 0, "%.3f");
+	ImGui::InputFloat("##RX", &TargetProp.Rotation.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldRotation(TargetProp.Rotation);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##RY", &Rotation.Y, 0, 0, "%.3f");
+	ImGui::InputFloat("##RY", &TargetProp.Rotation.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		{
+			TargetComp->SetWorldRotation(TargetProp.Rotation);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##RZ", &Rotation.Z, 0, 0, "%.3f");
+	ImGui::InputFloat("##RZ", &TargetProp.Rotation.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		{
+			TargetComp->SetWorldRotation(TargetProp.Rotation);
+		}
 	}
 	ImGui::SameLine();
 
@@ -68,38 +84,60 @@ void UImGuiPropertyWindow::Render()
 
 	// Scale
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##SX", &Scale.X, 0, 0, "%.3f");
+	ImGui::InputFloat("##SX", &TargetProp.Scale.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldScale(TargetProp.Scale);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##SY", &Scale.Y, 0, 0, "%.3f");
+	ImGui::InputFloat("##SY", &TargetProp.Scale.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldScale(TargetProp.Scale);
+		}
 	}
 	ImGui::SameLine();
 
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
-	ImGui::InputFloat("##SZ", &Scale.Z, 0, 0, "%.3f");
+	ImGui::InputFloat("##SZ", &TargetProp.Scale.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->SetEyeX(Translation.X);
+		if (TargetComp)
+		{
+			TargetComp->SetWorldScale(TargetProp.Scale);
+		}
 	}
+
 	ImGui::SameLine();
 
 	ImGui::Text("Scale");
 
 	if (!USceneManager::Get()->GetObjectPicker()->GetCurrentSelection().empty())
 	{
-		TargetObject = dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]);
-		a = (dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]))->UUID;
+		if (TargetObject != dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]))
+		{
+			TargetObject = dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()[0]);
+			TargetComp = dynamic_cast<USceneComponent*>(TargetObject);
+			TargetProp =
+			{
+				TargetComp->GetWorldLocation(),
+				TargetComp->GetWorldRotation(),
+				TargetComp->GetWorldScale()
+			};
+		}
 	}
-
-	ImGui::Text("%d", a);
+	
+	if (TargetObject)
+	{
+		ImGui::Text("%d", TargetObject->UUID);
+	}
 
 	ImGui::End();
 }

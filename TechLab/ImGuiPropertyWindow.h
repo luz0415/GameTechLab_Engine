@@ -4,22 +4,28 @@
 #include "ImGui/imgui.h"
 #include "Vector.h"
 
+struct ObjectProperty
+{
+	FVector Translation;
+	FVector Rotation;
+	FVector Scale;
+};
+
 class UImGuiPropertyWindow : public IImGuiWindow
 {
 public:
 	virtual void Render() override;
 
-	FVector GetTranslation() const { return Translation; }
-	FVector GetRotation() const { return Rotation; }
-	FVector GetScale() const { return Scale; }
+	FVector GetTranslation() const { return TargetProp.Translation; }
+	FVector GetRotation() const { return TargetProp.Rotation; }
+	FVector GetScale() const { return TargetProp.Scale; }
 
-	void SetTranslation(const FVector& translation) { Translation = translation; }
-	void SetRotation(const FVector& rotation) { Rotation = rotation; }
-	void SetScale(const FVector& scale) { Scale = scale; }
+	void SetTranslation(const FVector& translation) { TargetProp.Translation = translation; }
+	void SetRotation(const FVector& rotation) { TargetProp.Rotation = rotation; }
+	void SetScale(const FVector& scale) { TargetProp.Scale = scale; }
 
 private:
-	UObject* TargetObject = { };
-	FVector Translation;
-	FVector Rotation;
-	FVector Scale;
+	class UObject* TargetObject = nullptr;
+	class USceneComponent* TargetComp = nullptr;
+	ObjectProperty TargetProp = {};
 };
