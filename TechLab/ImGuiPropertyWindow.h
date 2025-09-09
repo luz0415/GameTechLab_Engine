@@ -18,6 +18,7 @@ public:
 	void SetScale(const FVector& scale) { Scale = scale; }
 
 private:
+	UObject* TargetObject = { };
 	FVector Translation;
 	FVector Rotation;
 	FVector Scale;
