@@ -247,6 +247,7 @@ void USceneManager::SaveSceneByName(const string& path)
 
 void USceneManager::LoadNewScene()
 {
+    delete CurrentScene;
     UScene* newScene = new UScene();
     FObjectFactory::Get()->ReleaseAllObjects();
     CurrentScene = newScene;
