@@ -73,6 +73,11 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 		{
 			GNewSelectionID = SelectedObject->UUID;
 		}
+
+		if (auto* GizmoArrow = dynamic_cast<UGizmoArrow*>(NewSelection))
+		{
+			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
+		}
 	}
 
 	UpdateSelection(NewSelection);

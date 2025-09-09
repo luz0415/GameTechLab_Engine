@@ -10,12 +10,15 @@ UGizmoRenderer::UGizmoRenderer()
 	//Init();
 	UGizmoArrow* ArrowZ = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowZ->SetName(FString("ArrowZ"));
+	ArrowZ->SetAABB(EGizmoArrowAxis::Z);
 	URenderer::Get()->RegisterMesh(ArrowZ->GetName(), Shapes::ArrowZ_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	UGizmoArrow* ArrowY = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowY->SetName(FString("ArrowY"));
+	ArrowY->SetAABB(EGizmoArrowAxis::Y);
 	URenderer::Get()->RegisterMesh(ArrowY->GetName(), Shapes::ArrowY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	UGizmoArrow* ArrowX = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowX->SetName(FString("ArrowX"));
+	ArrowX->SetAABB(EGizmoArrowAxis::X);
 	URenderer::Get()->RegisterMesh(ArrowX->GetName(), Shapes::ArrowX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	Arrows.push_back(ArrowZ);
@@ -26,7 +29,6 @@ UGizmoRenderer::UGizmoRenderer()
 UGizmoRenderer::~UGizmoRenderer()
 {
 }
-
 
 void UGizmoRenderer::SubmitProxy()
 {

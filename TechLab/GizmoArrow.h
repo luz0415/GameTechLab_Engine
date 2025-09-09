@@ -4,6 +4,9 @@
 #include "MeshResource.h"
 #include "SceneComponent.h"
 #include "PrimitiveComponent.h"
+
+enum class EGizmoArrowAxis { X, Y, Z };
+
 class UGizmoArrow : public UPrimitiveComponent
 {
 public:
@@ -28,9 +31,10 @@ public:
     ~UGizmoArrow() override;
     void SubmitProxy() override;
     void SetName(const FString& InName) { Name = InName; }
-    const FString& GetName() {return Name;}
+    const FString& GetName() { return Name; }
     void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
     virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
+    void SetAABB(EGizmoArrowAxis InAxis);
 
 private:
     FString Name;
