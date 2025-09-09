@@ -4,7 +4,7 @@
 class IPickable;
 class UCamera;
 struct FRay;
-struct FHitResult;
+struct FMatrix;
 
 class UObjectPicker
 {
@@ -20,6 +20,7 @@ public:
 
 private:
     FRay CreateRayFromScreen(float ScreenX, float ScreenY) const;
+    FRay TransformRayToLocalSpace(const FRay& WorldRay, const FMatrix& WorldTransform) const;
 
     void UpdateSelection(IPickable* NewSelection);
     void ClearSelection();

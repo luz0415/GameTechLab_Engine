@@ -62,7 +62,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		GInput.bMouseRightClick = false;
 		break;
-			case WM_MOUSEMOVE:
+	case WM_MOUSEMOVE:
 		if (GInput.bMouseRightClick)
 		{
 			POINT currentMousePos;
@@ -84,7 +84,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
 			{
 				POINT currentMousePos;
-								GetCursorPos(&currentMousePos);
+				GetCursorPos(&currentMousePos);
 				ScreenToClient(hWnd, &currentMousePos);
 				GMouseX = currentMousePos.x;
 				GMouseY = currentMousePos.y;
@@ -183,10 +183,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	
 	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
 	MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
-
-	// Object Picker (TEMP)
-	/*GObjectPicker = new UObjectPicker(MainCamera);
-	GObjectPicker->SetViewportSize(Width, Height);*/
 
 	// DeltaTime Calculation
 	LARGE_INTEGER lastTime, currentTime, frequency;

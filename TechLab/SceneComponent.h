@@ -76,7 +76,8 @@ private:
 
 // Picking
 public:
-    virtual void OnSelected() override {};
-    virtual void OnDeselected() override {};
-    virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
+    void OnSelected() override {};
+    void OnDeselected() override {};
+    bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) override { return false; };
+    bool RaycastLocal(const FRay& LocalRay, float TMax, FHitRecord& OutHit) override { return false; };
 };

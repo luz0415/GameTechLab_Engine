@@ -8,4 +8,5 @@ public:
     virtual ~IRaycastable() = default;
 
     virtual bool Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit) = 0;
+    virtual bool RaycastLocal(const FRay& LocalRay, float TMax, FHitRecord& OutHit) = 0;
 };
