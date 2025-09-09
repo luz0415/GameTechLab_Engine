@@ -140,6 +140,8 @@
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="MeshManager.cpp" />
     <ClCompile Include="PrimitiveComponent.cpp" />
+    <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Quaternion.h" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Shapes.cpp" />

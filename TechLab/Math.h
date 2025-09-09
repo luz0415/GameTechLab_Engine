@@ -1,9 +1,11 @@
 #pragma once
-
+#include "Vector.h"
 static constexpr float PI = 3.1415926f;
 
 __forceinline float DegreeToRadians(float Degree) { return Degree * (PI / 180.0f); }
+FVector DegreeToRadians(const FVector& Degree);
 float RadiansToDegree(float Radians);
+FVector RadiansToDegree(const FVector& Radians);
 
 #include <algorithm>
 template<typename T>

@@ -1,7 +1,7 @@
 #pragma once
 #include "Vector.h"
 #include "Matrix.h"
-
+#include "Quaternion.h"
 class FTransform
 {
 public:
@@ -14,8 +14,8 @@ public:
 	void SetScale(float X, float Y, float Z);
 	void SetScale(const FVector& InScale);
 
-	void SetRotation(float X, float Y, float Z);
-	void SetRotation(const FVector& InDegree);
+	void SetRotationFromEuler(const FVector& InEulerRotation);
+	void SetRotation(const FQuaternion& InQuat);
 
 	void AddRotationX(float Degree);
 	void AddRotationY(float Degree);
@@ -28,7 +28,8 @@ public:
 	void Translate(const FVector&);
 
 	const FVector& GetScale() const { return Scale; }
-	const FVector& GetRotation() const { return Rotation; }
+	const FVector GetRotationAsEuler() const { return Rotation.ToYawPitchRoll(); }
+	const FQuaternion& GetRotation() const { return Rotation; }
 	FVector GetRotationRadians() const;
 	const FVector& GetLocation() const { return Location; }
 
@@ -40,9 +41,9 @@ private:
 
 	FMatrix CachedMatrix;
 
-	FVector Location;
-	FVector Rotation;
-	FVector Scale;
+	FVector Location{ 0,0,0 };
+	FQuaternion Rotation;
+	FVector Scale{ 1,1,1 };
 
 	bool bIsMatrixDirty;
 };

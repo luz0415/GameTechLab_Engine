@@ -28,39 +28,48 @@ public:
     ~USceneComponent();
 
 
-// Relative Transform
-public:    
-    FVector GetRelativeLocation() const { return RelativeTransform.GetLocation(); }
-    FVector GetRelativeRotation() const { return RelativeTransform.GetRotation(); }
-    FVector GetRelativeRotationRadians() const { return RelativeTransform.GetRotationRadians(); }
-    FVector GetRelativeScale() const { return RelativeTransform.GetScale(); }
+// Local
+public:   
+    FVector GetRelativeLocation() const { return CachedRelativeTransform.GetLocation(); }
+    FVector GetRelativeRotation() const { return CachedRelativeTransform.GetRotationAsEuler(); }
+    FVector GetRelativeRotationRadians() const { return CachedRelativeTransform.GetRotationRadians(); }
+    FVector GetRelativeScale() const { return CachedRelativeTransform.GetScale(); }
 
-    void Translate(const FVector& InTranslation) { SetDirty();  RelativeTransform.Translate(InTranslation); }
-    void SetRelativeLocation(const FVector& InLocation) { SetDirty(); RelativeTransform.SetLocation(InLocation); }
-    void SetRelativeRotation(const FVector& InRotation) { SetDirty(); RelativeTransform.SetRotation(InRotation); }
-    void AddRelativeRotationX(const float& Degree) { SetDirty(); RelativeTransform.AddRotationX(Degree); }
-    void AddRelativeRotationY(const float& Degree) { SetDirty(); RelativeTransform.AddRotationY(Degree); }
-    void AddRelativeRotationZ(const float& Degree) { SetDirty(); RelativeTransform.AddRotationZ(Degree); }
-    void SetRelativeScale(const FVector& InScale) { SetDirty(); RelativeTransform.SetScale(InScale); }
+    void Translate(const FVector& InTranslation) { SetDirty();  CachedRelativeTransform.Translate(InTranslation); }
+    void SetRelativeLocation(const FVector& InLocation);
+    void SetRelativeRotation(const FVector& InRotation);
+    void SetRelativeRotation(const FQuaternion& InRotation);
+    void SetRelativeScale(const FVector& InScale);
+    void AddLocalRotation(const FVector& InRotationDelta);
+    void AddRelativeRotationX(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationX(Degree); }
+    void AddRelativeRotationY(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationY(Degree); }
+    void AddRelativeRotationZ(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationZ(Degree); }
 
 private:
-    FTransform RelativeTransform;
+    FMatrix CachedLocalMatrix;
+    FTransform CachedRelativeTransform;
 
 // World Transform
 public:
     FMatrix& GetWorldMatrix();
     FVector GetWorldLocation() { return CachedWorldTransform.GetLocation(); }
-    FVector GetWorldRotation() { return CachedWorldTransform.GetRotation(); }
+    FVector GetWorldRotation() { return CachedWorldTransform.GetRotationAsEuler(); }
+    FVector GetWorldRotationAsEuler() { return CachedWorldTransform.GetRotationAsEuler(); }
     FVector GetWorldScale() { return CachedWorldTransform.GetScale(); }
 
     void SetWorldLocation(const FVector& InLocation);
     void SetWorldRotation(const FVector& InRotation);
+    void SetWorldRotation(const FQuaternion& InRotation);
     void SetWorldScale(const FVector& InScale);
 
 private:
     FMatrix CachedWorldMatrix;
     FTransform CachedWorldTransform;
 
+
+// World*v*Local
+public:
+    FMatrix GetFinalMatrix();
 // Attachment
 public:
     void SetAttachment(USceneComponent* ParentComponent);

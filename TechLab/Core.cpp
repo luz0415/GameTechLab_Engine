@@ -1,22 +1,22 @@
-#include "Core.h"
+ï»¿#include "Core.h"
 #include <malloc.h>
 //uint32 TotalAllocationBytes = 0;
 //uint32 TotalAllocationCount = 0;
 
 uint32& GetTotalAllocationBytes()
 {
-    static uint32 Instance = 0; // ÇÔ¼ö°¡ Ã³À½ È£ÃâµÉ ¶§ ´Ü ÇÑ ¹ø 0À¸·Î ÃÊ±âÈ­µË´Ï´Ù.
+    static uint32 Instance = 0; // ï¿½Ô¼ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ È£ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½Ë´Ï´ï¿½.
     return Instance;
 }
 
 uint32& GetTotalAllocationCount()
 {
-    static uint32 Instance = 0; // À§¿Í µ¿ÀÏ
+    static uint32 Instance = 0; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     return Instance;
 }
 
 
-void* operator new(size_t Size) 
+void* operator new(size_t Size)
 {
     constexpr size_t Alignment = 16;
     size_t TotalSize = Size + sizeof(MemoryHeader);
