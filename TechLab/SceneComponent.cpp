@@ -15,6 +15,11 @@ USceneComponent::~USceneComponent()
 		}
 	}
 	Children.clear();
+
+	if (BoundingVolume)
+	{
+		delete BoundingVolume;
+	}
 }
 
 void USceneComponent::Destroy()
