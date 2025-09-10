@@ -1,6 +1,6 @@
 #include "MeshManager.h"
 #include "Shapes.h"
-
+#include "Math.h"
 void FMeshManager::RegisterMesh(const FString& MeshKey, const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology)
 {
     auto iter = MeshResourceMap.find(MeshKey);

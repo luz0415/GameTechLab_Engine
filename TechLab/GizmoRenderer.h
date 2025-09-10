@@ -5,6 +5,13 @@
 #include <functional>
 #include "PrimitiveComponent.h"
 
+enum class GizmoType
+{
+    Arrow,
+    Scale,
+    Torus
+};
+
 class UGizmoRenderer : public UPrimitiveComponent
 {
 public:
@@ -28,8 +35,10 @@ public:
     ~UGizmoRenderer() override;
     virtual void SubmitProxy() override;
     void SetPickedItem(UObject* Item);
+    FMeshData MakeTorus(EGizmoAxis InAxis);
     const USceneComponent* GetPickedItem() const { return GetAttachment(); }
     
 private:
-    TArray<UGizmo*> Gizmos;
+    TArray<TArray<UGizmo*>> Gizmos;
+    GizmoType Type = GizmoType::Arrow;
 };
