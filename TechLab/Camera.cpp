@@ -126,6 +126,6 @@ void UCamera::UpdateProjectionMatrix() noexcept
 		ProjectionMatrix = FMatrix::PrespectiveProjectionMatrix(FovYRad, AspectRatio, NearZ, FarZ);
 		return;
 	}
-	UE_LOG("NoPerspective! %d", bIsOrthogonal);
-	ProjectionMatrix = FMatrix::OrthographicProjectionMatrix(-10.f, 10.f, -10.f, 10.f, NearZ, FarZ);
+	float OrthoHeight = 20.0f;
+	ProjectionMatrix = FMatrix::OrthographicProjectionMatrix(OrthoHeight, AspectRatio, NearZ, FarZ);
 }

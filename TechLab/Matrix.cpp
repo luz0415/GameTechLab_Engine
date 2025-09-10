@@ -251,19 +251,24 @@ FMatrix FMatrix::PrespectiveProjectionMatrix(float FovYRad, float AspectRatio, f
 	return P;
 }
 
-FMatrix FMatrix::OrthographicProjectionMatrix(float Left, float Right, float Bottom, float Top, float NearZ, float FarZ) noexcept
+FMatrix FMatrix::OrthographicProjectionMatrix(float Height, float AspectRatio, float NearZ, float FarZ) noexcept
 {
-	FMatrix P{};
+	float HalfHeight = Height / 2.0f;
+	float HalfWidth = HalfHeight * AspectRatio;
 
+	float Left = -HalfWidth;
+	float Right = HalfWidth;
+	float Bottom = -HalfHeight;
+	float Top = HalfHeight;
+
+	FMatrix P{};
 	P[0][0] = 2.0f / (Right - Left);
 	P[1][1] = 2.0f / (Top - Bottom);
 	P[2][2] = 1.0f / (FarZ - NearZ);
-
-	P[3][0] = -(Right + Left) / (Right - Left);
-	P[3][1] = -(Top + Bottom) / (Top - Bottom);
+	P[3][0] = -(Right + Left) / (Right - Left);  // 0이 됨
+	P[3][1] = -(Top + Bottom) / (Top - Bottom);  // 0이 됨
 	P[3][2] = -NearZ / (FarZ - NearZ);
 	P[3][3] = 1.0f;
-
 	return P;
 }
 

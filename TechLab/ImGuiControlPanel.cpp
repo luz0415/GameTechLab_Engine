@@ -1,6 +1,7 @@
 #include "ImGuiControlPanel.h"
 #include "SceneManager.h"
 #include "Core.h"
+#include "TimeManager.h"
 
 #define CURRENT_CAMERA USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()
 
@@ -13,7 +14,7 @@ void UImGuiControlPanel::Render()
 	const char* items[] = { "Sphere", "Cube" };
 
 	CameraProperty.CameraLocation = CURRENT_CAMERA->GetEye();
-	CameraProperty.CameraRotation = { CURRENT_CAMERA->GetRoll(), CURRENT_CAMERA->GetYaw(),CURRENT_CAMERA->GetPitch() };
+	CameraProperty.CameraRotation = RadiansToDegree({ CURRENT_CAMERA->GetRoll(), CURRENT_CAMERA->GetYaw(),CURRENT_CAMERA->GetPitch() });
 	CameraProperty.FOV = CURRENT_CAMERA->GetFOVInAngle();
 
 	//ImGuiStyle& style = ImGui::GetStyle();
@@ -23,7 +24,7 @@ void UImGuiControlPanel::Render()
 	
 	ImGui::Text("Hello Jungle World!");
 
-	ImGui::Text("FPS = %d (0 ms)");
+	ImGui::Text("FPS = %d (%f ms)", FTimeManager::Get()->GetCurrentFPS(), FTimeManager::Get()->GetRealDeltaTime());
 
 	ImGui::Separator(); // ------------------
 
@@ -107,11 +108,10 @@ void UImGuiControlPanel::Render()
 	}
 
 	//is
-	bool* bIsOrthogonal;
 	UScene* CurrentScene = USceneManager::Get()->GetCurrentScene();
 	if (CurrentScene != nullptr)
 	{
-		bIsOrthogonal = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
+		bool* bIsOrthogonal = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()->IsOrthogonal();
 		if (ImGui::Checkbox("Orthogonal", (bIsOrthogonal)))
 		{
 			CURRENT_CAMERA->UpdateEventByImGui();
@@ -159,7 +159,7 @@ void UImGuiControlPanel::Render()
 	ImGui::InputFloat("##CRX", &(CameraProperty.CameraRotation.X), 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		CURRENT_CAMERA->SetRoll(CameraProperty.CameraRotation.X);
+		CURRENT_CAMERA->SetRoll(DegreeToRadians(CameraProperty.CameraRotation.X));
 	}
 	ImGui::SameLine();
 
@@ -167,7 +167,7 @@ void UImGuiControlPanel::Render()
 	ImGui::InputFloat("##CRY", &(CameraProperty.CameraRotation.Y), 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		CURRENT_CAMERA->SetYaw(CameraProperty.CameraRotation.Y);
+		CURRENT_CAMERA->SetYaw(DegreeToRadians(CameraProperty.CameraRotation.Y));
 	}
 	ImGui::SameLine();
 
@@ -175,7 +175,7 @@ void UImGuiControlPanel::Render()
 	ImGui::InputFloat("##CRZ", &(CameraProperty.CameraRotation.Z), 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		CURRENT_CAMERA->SetPitch(CameraProperty.CameraRotation.Z);
+		CURRENT_CAMERA->SetPitch(DegreeToRadians(CameraProperty.CameraRotation.Z));
 	}
 	ImGui::SameLine();
 	ImGui::Text("Camera Rotation");

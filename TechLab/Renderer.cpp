@@ -234,7 +234,8 @@ void URenderer::Release()
 
 void URenderer::SwapBuffer()
 {
-	SwapChain->Present(1, 0);
+	// SwapChain->Present(1, 0); // VSync On
+	SwapChain->Present(0, 0); // VSync Off
 }
 
 void URenderer::CreateShader()

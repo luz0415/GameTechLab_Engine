@@ -22,6 +22,7 @@
 #include "SphereComp.h"
 #include "CubeComp.h"
 #include "ObjectPicker.h"
+#include "TimeManager.h"
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -163,25 +164,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	USceneManager::Get()->GetCurrentScene()->InitCamera();
 	USceneManager::Get()->SetObjectPickerCamera();
 
-
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
 	ImGui_ImplWin32_Init((void*)hWnd);
 	ImGui_ImplDX11_Init(Renderer->Device, Renderer->DeviceContext);
 
 	ImGuiAppConsole* App = new ImGuiAppConsole();
-
-	
-	//MainCamera = new Camera(Eye, At, Up, RadAngle, (float)Width / (float)Height, 0.1f, 100.f);
-	//MainCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
-
-	// DeltaTime Calculation
-	LARGE_INTEGER lastTime, currentTime, frequency;
-	QueryPerformanceFrequency(&frequency);
-	QueryPerformanceCounter(&lastTime);
-	int count = 0;
 	bool bIsExit = false;
+
+	FTimeManager::Get()->Init();
 	while (bIsExit == false)
 	{
 		MSG msg;
@@ -195,20 +186,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				break;
 			}
 		}
+		
+		// Time Update
+		FTimeManager::Get()->Update();
+		float DeltaTime = FTimeManager::Get()->GetDeltaTime();
 
-		// Calculate DeltaTime
-		QueryPerformanceCounter(&currentTime);
-		UCamera* currentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
-		float DeltaTime = static_cast<float>(currentTime.QuadPart - lastTime.QuadPart) / frequency.QuadPart;
-		lastTime = currentTime;
-		// Update Camera
-		currentCamera->HandleInput(GInput, DeltaTime);
-		currentCamera->Update();
-		// Reset mouse delta after processing
-		GInput.MouseX = 0;
-		GInput.MouseY = 0;
+		// Camera Update
+		UCamera* CurrentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+		CurrentCamera->HandleInput(GInput, DeltaTime);
+		CurrentCamera->Update();
+		GInput.MouseX = 0; GInput.MouseY = 0;
 
-		// 1. Clear Screen
+		// Render
 		Renderer->Prepare();
 
 		ImGui_ImplDX11_NewFrame();
@@ -218,7 +207,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		FObjectFactory::Get()->TickObjects(DeltaTime);
 		USceneManager::Get()->GetCurrentScene()->Render();
 		USceneManager::Get()->GetObjectPicker()->SubmitProxy();
-		Renderer->RenderScene(currentCamera);
+		Renderer->RenderScene(CurrentCamera);
 
 		UImGuiManager::Get()->Render();
 		Renderer->SwapBuffer();
