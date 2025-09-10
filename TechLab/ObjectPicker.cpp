@@ -11,6 +11,7 @@
 #include "ImGuiAppConsole.h"
 #include "Renderer.h"
 #include "GizmoRenderer.h"
+#include "GizmoArrow.h"
 
 UObjectPicker::UObjectPicker() 
 {
@@ -91,64 +92,26 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	}
 
 	UpdateSelection(NewSelection);
+	DraggedObject = NewSelection;
 }
 
 void UObjectPicker::HandleMouseDrag(float ScreenX, float ScreenY)
 {
-	GSuccessfulCastCount = 0;
-	GLastBestT = 0.0f;
-	GNewSelectionID = 0;
-
-	//UE_LOG("(%f %f)", ScreenX, ScreenY);
-
-	FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
-	GRayOrigin = Ray.GetOrigin();
-	GRayDirection = Ray.GetDirection();
-
-	UE_LOG("RayOrigin : [%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
-	UE_LOG("RayDir : [%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
-
-
-	IPickable* NewSelection = nullptr;
-	float BestT = std::numeric_limits<float>::infinity();
-
-	// Ray casting !!
-	const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
-	GTotalObjectCount = Objects.size();
-
-	for (UObject* Object : Objects)
+	if (DraggedObject)
 	{
-		if (!Object)	continue;
-
-		if (auto* RayTarget = Cast<USceneComponent>(Object))
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(DraggedObject))
 		{
-			FMatrix WorldTransform = RayTarget->GetWorldMatrix();
-			FRay LocalRay = TransformRayToLocalSpace(Ray, WorldTransform);
-
-			FHitRecord Hit;
-			if (RayTarget->CanPickable() && RayTarget->Raycast(LocalRay, BestT, Hit) && Hit.Time < BestT) {
-				GSuccessfulCastCount++;
-				BestT = Hit.Time;
-				NewSelection = RayTarget;
+			FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
+			GRayOrigin = Ray.GetOrigin();
+			GRayDirection = Ray.GetDirection();
+			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
+			if (bIsDragging)
+			{
+				GizmoArrow->OnDragStart(Camera, GRayDirection, GRayDirection);
+				bIsDragging = false;
 			}
 		}
 	}
-
-	GLastBestT = BestT;
-	if (NewSelection)
-	{
-		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(NewSelection))
-		{
-			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
-			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
-		}
-		else if (auto* SelectedObject = dynamic_cast<UObject*>(NewSelection))
-		{
-			GNewSelectionID = SelectedObject->UUID;
-			UE_LOG(("+-+-+Selected Object: %d"), GNewSelectionID);
-		}
-	}
-
 }
 
 IPickable* UObjectPicker::GetCurrentSelection() const
@@ -246,6 +209,11 @@ void UObjectPicker::UpdateSelection(IPickable* NewSelection)
     {
         GizmoRenderer->SetPickedItem(nullptr);
     }
+}
+
+void UObjectPicker::HandleMouseRelease()
+{
+    DraggedObject = nullptr;
 }
 
 void UObjectPicker::ClearSelection()

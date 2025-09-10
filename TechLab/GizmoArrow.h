@@ -31,8 +31,11 @@ public:
     virtual void SubmitProxy() override;
 //    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
     virtual void SetAxis(EGizmoAxis InAxis) override;
-    virtual void HandleDrag(UCamera* Camera,const FVector& RayOrigin, const FVector& RayDirection);
+    virtual void HandleDrag(UCamera* Camera,const FVector& RayOrigin, const FVector& RayDirection) override;
+//    virtual FVector GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection) override;
 
-    FVector GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection);
 
+private:
+    //FVector LastIntersectionPoint;
+    float DragSensitivity = 0.1f;
 };

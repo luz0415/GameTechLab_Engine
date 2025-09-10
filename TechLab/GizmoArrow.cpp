@@ -47,36 +47,19 @@ void UGizmoArrow::SetAxis(EGizmoAxis InAxis)
 void UGizmoArrow::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection)
 {
     USceneComponent* Attach = GetAttachment();
-    if (Attach != nullptr)
+    if (Attach)
     {
-        if (Name == "ArrowX")
-        {
-            Attach->AddRelativeLocationX(Direction.Dot(GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection)));
-        }
-        else if (Name == "ArrowY")
-        {
-            Attach->AddRelativeLocationY(Direction.Dot(GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection)));
-        }
-        else if (Name == "ArrowZ")
-        {
-            Attach->AddRelativeLocationZ(Direction.Dot(GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection)));
-        }
+        // 1. 현재 마우스 위치의 교차점을 구함
+        FVector currentHitPoint = GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection);
+
+        // 2. 시작점과의 차이를 통해 '이동 벡터'를 계산
+        FVector movementVector = currentHitPoint - InitialHitPoint;
+
+        // 3. 이동 벡터를 해당 축으로 투영하여 최종 이동 거리를 구함
+        float distance = movementVector.Dot(Direction);
+
+        // 4. 시작 위치에서 최종 이동 거리만큼 떨어진 곳으로 위치를 '설정'
+        FVector newPosition = InitialObjectPosition + (Direction * distance);
+        Attach->SetWorldLocation(newPosition);
     }
-}
-
-FVector UGizmoArrow::GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin,FVector RayDirection)
-{
-
-    USceneComponent* Attach = GetAttachment();
-    FVector PlaneOrigin = Attach->GetWorldLocation();
-    FVector AttachToCamera = RayOrigin - PlaneOrigin;
-    FVector TempVec = AttachToCamera.Cross(Direction);
-    FVector PlaneNormal = TempVec.Cross(Direction);
-    float numerator = ((PlaneOrigin - RayOrigin).Dot(PlaneNormal));//����
-    float denominator = (RayDirection.Dot(PlaneNormal));
-    //denom�� 0�� ������ ����ó��
-    float DistanceToPlane = numerator / denominator;
-
-    FVector IntersectionPoint = RayOrigin + (RayDirection * DistanceToPlane);
-    return IntersectionPoint;
 }

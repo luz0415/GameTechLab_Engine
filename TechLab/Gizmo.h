@@ -36,8 +36,12 @@ public:
     virtual void SubmitProxy() override;
     virtual void SetAxis(EGizmoAxis InAxis);
     virtual void HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection);
-
+    virtual FVector GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection);
+    virtual void OnDragStart(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection);
 protected:
+    bool bIsDragging = false;
+    FVector InitialHitPoint;
+    FVector InitialObjectPosition;
     FString Name;
     FVector Direction;
 };

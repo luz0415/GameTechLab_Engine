@@ -84,6 +84,7 @@ public:
     void SetObjectPickerCamera();
     UObjectPicker* GetObjectPicker() const { return ObjectPicker; }
 
+
 private:
     UObjectPicker* ObjectPicker = nullptr;
     UScene* CurrentScene = nullptr;

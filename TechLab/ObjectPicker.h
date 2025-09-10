@@ -22,6 +22,10 @@ public:
     void SetCamera(UCamera* camera);
 
     void SubmitProxy();
+    void HandleMouseRelease();
+
+    void SetIsDragging(bool b) { bIsDragging = b; }
+    bool GetIsDragging() { return bIsDragging; }
 
 private:
     FRay CreateRayFromScreen(float ScreenX, float ScreenY) const;
@@ -34,7 +38,8 @@ private:
 
     int ViewportWidth = 1;
     int ViewportHeight = 1;
-
+    bool bIsDragging = false;
     IPickable* CurrentSelection = nullptr;
+    IPickable* DraggedObject = nullptr;
     UGizmoRenderer* GizmoRenderer = nullptr;
 };
