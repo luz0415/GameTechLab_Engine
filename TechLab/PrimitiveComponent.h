@@ -33,4 +33,3 @@ private:
     EPrimitiveType Type = EPrimitiveType::Custom;
     FMeshResource* MeshResource = nullptr;
 };
-

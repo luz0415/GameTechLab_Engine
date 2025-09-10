@@ -5,10 +5,8 @@
 
 using namespace json;
 
-USceneManager::USceneManager()
+USceneManager::USceneManager() : UObject()
 {
-
-   
 }
 
 USceneManager::~USceneManager()
@@ -17,27 +15,27 @@ USceneManager::~USceneManager()
 
 void USceneManager::Init()
 {
-    CurrentScene = new UScene();
+    CurrentScene = FObjectFactory::Get()->ConstructObject<UScene>();
     //CurrentScene->InitCamera();
     ObjectPicker = new UObjectPicker();
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
-JSON USceneManager::LoadScene(const std::string& path)
+JSON USceneManager::LoadScene(const FString& path)
 {
     std::ifstream file(path);
     if (!file.is_open()) {
         throw std::runtime_error("파일 열기 실패: " + path);
     }
 
-    std::string content((std::istreambuf_iterator<char>(file)),
+    FString content((std::istreambuf_iterator<char>(file)),
         std::istreambuf_iterator<char>());
 
     return JSON::Load(content);
 }
 
 // JSON 객체를 Path에 저장
-void USceneManager::SaveScene(const std::string& path, const JSON& sceneJson)
+void USceneManager::SaveScene(const FString& path, const JSON& sceneJson)
 {
     std::ofstream file(path);
     if (!file.is_open()) {
@@ -48,11 +46,11 @@ void USceneManager::SaveScene(const std::string& path, const JSON& sceneJson)
 }
 
 // Path에서 Scene 파일을 열어서 USceneData로 반환
-USceneData USceneManager::LoadUSceneData(const std::string& path)
+FSceneData USceneManager::LoadUSceneData(const FString& path)
 {
     JSON root = LoadScene(path);
 
-    USceneData scene;
+    FSceneData scene;
 
     scene.Version = (int)root["Version"].ToInt();
     scene.NextUUID = (int)root["NextUUID"].ToInt();
@@ -62,11 +60,11 @@ USceneData USceneManager::LoadUSceneData(const std::string& path)
     {
         int id = std::stoi(kv.first);
 
-        Primitive p = ParsePrimitive(kv.second);
+        FPrimitiveData p = ParsePrimitive(kv.second);
 
         p.UUID = id;
 
-        scene.PrimArray.push_back(p);
+        scene.PrimDatas.push_back(p);
     }
 
     return scene;
@@ -95,9 +93,9 @@ std::wstring USceneManager::OpenFileDialog()
 }
 
 // JSON 객체를 Primitive 단위로 분해하여 Primitive로 반환
-Primitive USceneManager::ParsePrimitive(const JSON& j)
+FPrimitiveData USceneManager::ParsePrimitive(const JSON& j)
 {
-    Primitive p;
+    FPrimitiveData p;
     p.Type = j.at("Type").ToString();
 
     FVector loc =
@@ -135,7 +133,7 @@ JSON USceneManager::LoadJSONByExplorer()
     std::wstring filepath = OpenFileDialog();
     if (!filepath.empty()) {
         // wstring → string 변환 (UTF-8 단순 변환)
-        std::string path(filepath.begin(), filepath.end());
+        FString path(filepath.begin(), filepath.end());
 
         try {
             tempjson = LoadScene(path);
@@ -152,17 +150,17 @@ JSON USceneManager::LoadJSONByExplorer()
     return tempjson;
 }
 
-USceneData USceneManager::LoadUSceneDataByExplorer()
+FSceneData USceneManager::LoadUSceneDataByExplorer()
 {
     JSON tempjson = LoadJSONByExplorer();
-    USceneData USceneData = JSONToUSceneData(tempjson);
+    FSceneData FSceneData = JSONToUSceneData(tempjson);
 
-    return USceneData;
+    return FSceneData;
 }
 
-USceneData USceneManager::JSONToUSceneData(JSON& j)
+FSceneData USceneManager::JSONToUSceneData(JSON& j)
 {
-    USceneData scene;
+    FSceneData scene;
 
     scene.Version = (int)j["Version"].ToInt();
     scene.NextUUID = (int)j["NextUUID"].ToInt();
@@ -172,16 +170,16 @@ USceneData USceneManager::JSONToUSceneData(JSON& j)
     {
         int id = std::stoi(kv.first);
 
-        Primitive p = ParsePrimitive(kv.second);
+        FPrimitiveData p = ParsePrimitive(kv.second);
 
         p.UUID = id;
 
-        scene.PrimArray.push_back(p);
+        scene.PrimDatas.push_back(p);
     }
     return scene;
 }
 
-json::JSON USceneManager::USceneDataToJSON(const USceneData& sceneData){
+json::JSON USceneManager::USceneDataToJSON(const FSceneData& sceneData){
 
      JSON tempJSON;
 
@@ -191,7 +189,7 @@ json::JSON USceneManager::USceneDataToJSON(const USceneData& sceneData){
 
      JSON prims;
 
-     for (auto& prim : sceneData.PrimArray)
+     for (auto& prim : sceneData.PrimDatas)
      {
          JSON primJSON;
 
@@ -232,19 +230,16 @@ json::JSON USceneManager::USceneDataToJSON(const USceneData& sceneData){
 
 void USceneManager::LoadSceneByExplorer()
 {
-    json::JSON sceneJSON = LoadJSONByExplorer();
-
-
-    USceneData sceneData = JSONToUSceneData(sceneJSON);
-
-    UScene* scene = new UScene(sceneData);
+    json::JSON SceneJson = LoadJSONByExplorer();
+    FSceneData SceneData = JSONToUSceneData(SceneJson);
+    UScene* Scene = FObjectFactory::Get()->ConstructObject<UScene>();
+    Scene->CopyPrimComp(SceneData);
     if (CurrentScene)
     {
-        delete CurrentScene;
+        CurrentScene->Destroy();
     }
-    CurrentScene = scene;
+    CurrentScene = Scene;
     ResetResources();
-
 }
 
 void USceneManager::SaveSceneByName(const string& path)
@@ -256,10 +251,10 @@ void USceneManager::LoadNewScene()
 {
     if (CurrentScene)
     {
-        delete CurrentScene;
+        CurrentScene->Destroy();
     }
-    UScene* newScene = new UScene();
-    CurrentScene = newScene;
+
+    CurrentScene = FObjectFactory::Get()->ConstructObject<UScene>();
     ResetResources();
 }
 

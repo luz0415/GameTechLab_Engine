@@ -6,16 +6,6 @@ USceneComponent::USceneComponent() : UObject(), bNeedsPreciseRaycast(false), Mes
 
 USceneComponent::~USceneComponent()
 {
-	Detach();
-	for (auto* Child : Children)
-	{
-		if (Child)
-		{
-			Child->Detach();
-		}
-	}
-	Children.clear();
-
 	if (BoundingVolume)
 	{
 		delete BoundingVolume;

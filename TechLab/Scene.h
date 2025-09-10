@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Core.h"
 #include "Vector.h"
-
 #include "SphereComp.h"
 #include "CubeComp.h"
 #include "Camera.h"
 
-struct Primitive
+struct FPrimitiveData
 {
     int UUID;
 
@@ -17,34 +17,52 @@ struct Primitive
     string Type;
 };
 
-struct USceneData
+struct FSceneData
 {
     int Version;
     int NextUUID;
 
-    TArray<Primitive> PrimArray;
+    TArray<FPrimitiveData> PrimDatas;
 };
 
-class UScene
+class UScene : public UObject
 {
+    // UObject Derived Class Must Declaration
+public:
+    static UObject* StaticUObjectFactory()
+    {
+        return new UScene();
+    }
+
+    static UClass* StaticClass()
+    {
+        static UClass Class(FString("UScene"), StaticUObjectFactory, UObject::StaticClass());
+        return &Class;
+    }
+
+    virtual UClass* GetClass() const
+    {
+        return StaticClass();
+    }
+
 public:
 	UScene();
-    UScene(const USceneData& sceneData);
-    UScene(const std::string&);
 	~UScene();
 
-    UPrimitiveComponent* PrimToPrimComp(const Primitive& primitive);
-    void CopyPrimComp(const USceneData& sceneData);
+
+
+    UPrimitiveComponent* PrimToPrimComp(const FPrimitiveData& primitive);
+    void CopyPrimComp(const FSceneData& sceneData);
     void Render();
 
     void InitCamera();
-    UPrimitiveComponent* SpawnActor(const string Type);
+    UPrimitiveComponent* SpawnActor(const FString Type);
 
     UCamera* GetCurrentCamera() { return CurrentCamera; }
 
-    USceneData MakeSceneData();
+    FSceneData MakeSceneData();
 
 private:
-	TArray<UPrimitiveComponent*> Objects;
+	TArray<UPrimitiveComponent*> Primitives;
     UCamera* CurrentCamera = nullptr;
 };

@@ -56,13 +56,30 @@ void FObjectFactory::TickObjects(float DeltaTimes)
     }
 }
 
+bool FObjectFactory::IsObjectValid(UObject* InObject)
+{
+    if (InObject == nullptr)
+    {
+        return false;
+    }
+
+    for (UObject* Object : GUObjectArray)
+    {
+        if (Object == InObject)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void FObjectFactory::ReleaseAllObjects()
 {
     for (UObject* Object : GUObjectArray)
     {
         if (Object)
         {
-            delete Object;
+            ReleaseObject(Object);
         }
     }
 

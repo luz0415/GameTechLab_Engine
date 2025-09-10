@@ -11,8 +11,18 @@
 #include "ImGuiAppConsole.h"
 #include "Renderer.h"
 #include "GizmoRenderer.h"
-UObjectPicker::UObjectPicker() {
-	GizmoRenderer = new UGizmoRenderer;
+
+UObjectPicker::UObjectPicker() 
+{
+	GizmoRenderer = FObjectFactory::Get()->ConstructObject<UGizmoRenderer>();
+}
+
+UObjectPicker::~UObjectPicker()
+{
+	if (GizmoRenderer)
+	{
+		GizmoRenderer->Destroy();
+	}
 }
 
 // Debug Info (TEMP)

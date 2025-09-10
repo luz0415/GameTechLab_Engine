@@ -31,6 +31,7 @@ public:
     const TArray<UObject*>& GetObjectArray() const { return GUObjectArray; }
 
     void TickObjects(float DeltaTimes);
+    bool IsObjectValid(UObject* InObject);
 
 private:
     void ReleaseAllObjects();

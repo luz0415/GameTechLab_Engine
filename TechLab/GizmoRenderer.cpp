@@ -29,6 +29,13 @@ UGizmoRenderer::UGizmoRenderer()
 
 UGizmoRenderer::~UGizmoRenderer()
 {
+	for (auto& Arrow : Arrows)
+	{
+		if (FObjectFactory::Get()->IsObjectValid(Arrow))
+		{
+			Arrow->Destroy();
+		}
+	}
 }
 
 void UGizmoRenderer::SubmitProxy()

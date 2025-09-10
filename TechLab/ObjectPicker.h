@@ -12,7 +12,7 @@ class UObjectPicker
 {
 public:
     UObjectPicker();
-    ~UObjectPicker() {};
+    ~UObjectPicker();
 
     void HandleMouseClick(float ScreenX, float ScreenY);
     void SetViewportSize(int Width, int Height) { ViewportWidth = Width; ViewportHeight = Height; }

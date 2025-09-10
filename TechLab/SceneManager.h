@@ -2,11 +2,10 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <string>
 #include <windows.h>
 #include <commdlg.h> 
 
+#include "Core.h"
 #include "Scene.h"
 #include "ObjectPicker.h"
 
@@ -15,36 +14,56 @@ namespace json
     class JSON;
 }
 
-class USceneManager
+class USceneManager : public UObject
 {
+    // UObject Derived Class Must Declaration
+public:
+    static UObject* StaticUObjectFactory()
+    {
+        return new USceneManager();
+    }
+
+    static UClass* StaticClass()
+    {
+        static UClass Class(FString("USceneManager"), StaticUObjectFactory, UObject::StaticClass());
+        return &Class;
+    }
+
+    virtual UClass* GetClass() const
+    {
+        return StaticClass();
+    }
+
 private:
     USceneManager();
-    ~USceneManager();
     USceneManager(const USceneManager&) = delete;
     USceneManager& operator=(const USceneManager&) = delete;
 
 public:
+    ~USceneManager();
     static USceneManager* Get()
     {
-        static USceneManager Instance;
-        return &Instance;
+        static USceneManager* Instance;
+        if (Instance == nullptr) Instance = FObjectFactory::Get()->ConstructObject<USceneManager>();
+
+        return Instance;
     }
 
     void Init();
 
-    json::JSON LoadScene(const std::string& path);
-    void SaveScene(const std::string& path, const json::JSON& sceneJson);
+    json::JSON LoadScene(const FString& path);
+    void SaveScene(const FString& path, const json::JSON& sceneJson);
     std::wstring OpenFileDialog();
-    USceneData LoadUSceneData(const std::string& path);
-    Primitive ParsePrimitive(const json::JSON& j);
+    FSceneData LoadUSceneData(const FString& path);
+    FPrimitiveData ParsePrimitive(const json::JSON& j);
 
     json::JSON LoadJSONByExplorer();
-    USceneData LoadUSceneDataByExplorer();
-    USceneData JSONToUSceneData(json::JSON& j);
-    json::JSON USceneDataToJSON(const USceneData& sceneData);
+    FSceneData LoadUSceneDataByExplorer();
+    FSceneData JSONToUSceneData(json::JSON& j);
+    json::JSON USceneDataToJSON(const FSceneData& sceneData);
 
     void LoadSceneByExplorer();
-    void SaveSceneByName(const string& path);
+    void SaveSceneByName(const FString& path);
     void LoadNewScene();
 
     void ResetResources();
