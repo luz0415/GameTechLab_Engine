@@ -25,6 +25,8 @@
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+//Debug
+
 FInput GInput;
 POINT GLastMousePosition;
 
@@ -221,10 +223,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		UImGuiManager::Get()->Render();
 		Renderer->SwapBuffer();
 	}
-	Renderer->ReleaseShader();
-	Renderer->Release();
-	
 	delete App;
+	UImGuiManager::Get()->Release();
+	Renderer->Release();
 
 	return 0;
 }

@@ -4,6 +4,7 @@
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
+
 #include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -122,4 +123,6 @@ private:
 
 	TArray<class FVisualInterface*> VisualInterfaceList;
 	TArray<FRenderProxy> RenderProxyList;
+
+	ID3D11Debug* pDebug = nullptr;
 };

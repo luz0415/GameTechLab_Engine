@@ -29,29 +29,29 @@ void USceneComponent::Destroy()
 	Children.clear();
 }
 
-void USceneComponent::SetRelativeLocation(const FVector& InLocation)
-{
-	SetDirty(); 
-	CachedRelativeTransform.SetLocation(InLocation);
-}
+//void USceneComponent::SetRelativeLocation(const FVector& InLocation)
+//{
+//	SetDirty(); 
+//	CachedRelativeTransform.SetLocation(InLocation);
+//}
+//
+//void USceneComponent::SetRelativeRotation(const FVector& InRotation)
+//{
+//	SetDirty();
+//	CachedRelativeTransform.SetRotationFromEuler(InRotation);
+//}
+//
+//void USceneComponent::SetRelativeRotation(const FQuaternion& InRotation)
+//{
+//	SetDirty();
+//	CachedRelativeTransform.SetRotation(InRotation);
+//}
 
-void USceneComponent::SetRelativeRotation(const FVector& InRotation)
-{
-	SetDirty();
-	CachedRelativeTransform.SetRotationFromEuler(InRotation);
-}
-
-void USceneComponent::SetRelativeRotation(const FQuaternion& InRotation)
-{
-	SetDirty();
-	CachedRelativeTransform.SetRotation(InRotation);
-}
-
-void USceneComponent::SetRelativeScale(const FVector& InScale)
-{
-	SetDirty(); 
-	CachedRelativeTransform.SetScale(InScale);
-}
+//void USceneComponent::SetRelativeScale(const FVector& InScale)
+//{
+//	SetDirty(); 
+//	CachedRelativeTransform.SetScale(InScale);
+//}
 
 void USceneComponent::AddLocalRotation(const FVector& InRotationDelta)
 {
@@ -61,13 +61,8 @@ void USceneComponent::AddLocalRotation(const FVector& InRotationDelta)
 		InRotationDelta.Z  // Roll
 	);
 
-	// 2. 현재 '상대 회전 쿼터니언'에 '변화량 쿼터니언'을 곱하여 회전을 누적시킵니다.
-	//    이것이 바로 짐벌락 없는 회전 누적의 핵심입니다.
-	//    순서가 매우 중요합니다! (현재 상태 * 변화량) 이어야 로컬 축 기준으로 회전합니다.
 	CachedRelativeTransform.SetRotation(CachedRelativeTransform.GetRotation() * DeltaQuat);
 
-	// 3. 변환 정보가 변경되었음을 시스템에 알립니다.
-	//    이것으로 다음 GetWorldMatrix() 호출 시 월드 행렬이 새로 계산됩니다.
 	SetDirty();
 }
 
@@ -229,7 +224,6 @@ bool USceneComponent::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
     FHitRecord BroadPhaseHit;
 	if (BoundingVolume && BoundingVolume->RaycastHit(Ray, TMax, BroadPhaseHit))
 	{
-        // If broad-phase hit and precise raycast is needed
         if (bNeedsPreciseRaycast && MeshBoundingVolume)
         {
             FHitRecord NarrowPhaseHit;
@@ -240,7 +234,6 @@ bool USceneComponent::Raycast(const FRay& Ray, float TMax, FHitRecord& OutHit)
             }
 			return false;
         }
-        // If no precise raycast or precise raycast didn't hit, use broad-phase hit
         OutHit = BroadPhaseHit;
         return true;
 	}

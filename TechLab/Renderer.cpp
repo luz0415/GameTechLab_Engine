@@ -5,6 +5,7 @@
 #include "GridRenderer.h"
 #include "MeshManager.h"
 #include "GizmoRenderer.h"
+//#include <dxgidebug.h>
 void URenderer::Create(HWND hWindow)
 {
 	CreateDeviceAndSwapChain(hWindow);
@@ -45,10 +46,20 @@ void URenderer::CreateDeviceAndSwapChain(HWND& hWindow)
 	swapchaindesc.Windowed = TRUE;
 	swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;
 
-	D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr,
 		D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,
 		featurelevels, ARRAYSIZE(featurelevels), D3D11_SDK_VERSION,
 		&swapchaindesc, &SwapChain, &Device, nullptr, &DeviceContext);
+	if (SUCCEEDED(hr))
+	{
+		//IDXGIDebug* pDxgiDebug = nullptr;
+		//if (SUCCEEDED(DXGIGetDebugInterface(__uuidof(IDXGIDebug), (void**)&pDxgiDebug)))
+		//{
+		//	// 프로그램 종료 시 살아있는 모든 객체에 대한 상세 정보 출력
+		//	pDxgiDebug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
+		//	pDxgiDebug->Release();
+		//}
+	}
 
 	SwapChain->GetDesc(&swapchaindesc);
 
@@ -66,15 +77,15 @@ void URenderer::ReleaseDeviceAndSwapChain()
 		SwapChain->Release();
 		SwapChain = nullptr;
 	}
-	if (Device)
-	{
-		Device->Release();
-		Device = nullptr;
-	}
 	if (DeviceContext)
 	{
 		DeviceContext->Release();
 		DeviceContext = nullptr;
+	}
+	if (Device)
+	{
+		Device->Release();
+		Device = nullptr;
 	}
 }
 
@@ -198,21 +209,27 @@ void URenderer::CreateDepthStencilResources(HWND& Hwnd)
 
 void URenderer::Release()
 {
-	DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+
+	if (DeviceContext)
+	{
+		DeviceContext->ClearState();
+		DeviceContext->Flush();
+	}
 
 	ReleaseRasterizerState();
 	ReleaseConstantBuffer(VPConstantBuffer);
 	ReleaseConstantBuffer(MConstantBuffer);
 	ReleaseShader();
 	ReleaseFrameBuffer();
-	ReleaseDeviceAndSwapChain();
 	ReleaseDepthStencilResources();
+	ReleaseDeviceAndSwapChain();
 
 	delete(MeshManager);
 	for (auto elem : VisualInterfaceList)
 	{
 		delete elem;
 	}
+	VisualInterfaceList.clear();
 }
 
 void URenderer::SwapBuffer()
