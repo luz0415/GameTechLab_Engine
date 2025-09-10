@@ -13,9 +13,9 @@ UGizmoRenderer::UGizmoRenderer()
 	URenderer::Get()->RegisterMesh(FString("ArrowZ"), Shapes::ArrowZ_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("ArrowY"), Shapes::ArrowY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("ArrowX"), Shapes::ArrowX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    URenderer::Get()->RegisterMesh(FString("ScaleX"), Shapes::ScaleX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    URenderer::Get()->RegisterMesh(FString("ScaleY"), Shapes::ScaleY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     URenderer::Get()->RegisterMesh(FString("ScaleZ"), Shapes::ScaleZ_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    URenderer::Get()->RegisterMesh(FString("ScaleY"), Shapes::ScaleY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    URenderer::Get()->RegisterMesh(FString("ScaleX"), Shapes::ScaleX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("TorusX"), MakeTorus(EGizmoAxis::X), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     URenderer::Get()->RegisterMesh(FString("TorusY"), MakeTorus(EGizmoAxis::Y), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     URenderer::Get()->RegisterMesh(FString("TorusZ"), MakeTorus(EGizmoAxis::Z), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -29,10 +29,10 @@ UGizmoRenderer::UGizmoRenderer()
     
     UGizmoScale* ScaleX = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
     ScaleX->SetAxis(EGizmoAxis::X);
-    UGizmoScale* ScaleY = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
-    ScaleX->SetAxis(EGizmoAxis::Y);
     UGizmoScale* ScaleZ = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
-    ScaleX->SetAxis(EGizmoAxis::Z);
+    ScaleZ->SetAxis(EGizmoAxis::Z);
+    UGizmoScale* ScaleY = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
+    ScaleY->SetAxis(EGizmoAxis::Y);
 
 	UGizmoRotation* RotationZ = FObjectFactory::Get()->ConstructObject<UGizmoRotation>();
 	RotationZ->SetAxis(EGizmoAxis::Z);
@@ -58,7 +58,7 @@ UGizmoRenderer::UGizmoRenderer()
     
     Gizmos.push_back(Arrows);
     Gizmos.push_back(Scales);
-    Gizmos.push_back(Toruses);
+   // Gizmos.push_back(Toruses);
 }
 
 UGizmoRenderer::~UGizmoRenderer()
