@@ -132,7 +132,7 @@ void UImGuiPropertyWindow::Render()
 	if (Pickable)
 	{
 		USceneComponent* PickableSceneComponent = dynamic_cast<USceneComponent*>(Pickable);
-		if (PickableSceneComponent && !PickableSceneComponent->IsA(UGizmoArrow::StaticClass()))
+		if (PickableSceneComponent && !PickableSceneComponent->IsA(UGizmo::StaticClass()))
 		{
 			TargetSceneComponent = PickableSceneComponent;
 		}
