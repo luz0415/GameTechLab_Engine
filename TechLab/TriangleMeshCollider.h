@@ -11,7 +11,7 @@ struct FTriangle
     int V0, V1, V2; // Indices into the vertex array
 };
 
-class FTriangleMeshCollider
+struct FTriangleMeshCollider
 {
 public:
     FTriangleMeshCollider(const FMeshData& InMeshData);
