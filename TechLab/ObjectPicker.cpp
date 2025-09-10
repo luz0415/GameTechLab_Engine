@@ -11,6 +11,7 @@
 #include "ImGuiAppConsole.h"
 #include "Renderer.h"
 #include "GizmoRenderer.h"
+#include "GizmoArrow.h"
 
 UObjectPicker::UObjectPicker() 
 {
@@ -79,7 +80,7 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	GLastBestT = BestT;
 	if (NewSelection)
 	{
-		if (auto* GizmoArrow = dynamic_cast<UGizmoArrow*>(NewSelection))
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(NewSelection))
 		{
 			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
 		}
@@ -91,6 +92,26 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	}
 
 	UpdateSelection(NewSelection);
+	DraggedObject = NewSelection;
+}
+
+void UObjectPicker::HandleMouseDrag(float ScreenX, float ScreenY)
+{
+	if (DraggedObject)
+	{
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(DraggedObject))
+		{
+			FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
+			GRayOrigin = Ray.GetOrigin();
+			GRayDirection = Ray.GetDirection();
+			if (bIsDragging)
+			{
+				GizmoArrow->OnDragStart(Camera, GRayOrigin, GRayDirection);
+				bIsDragging = false;
+			}
+			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
+		}
+	}
 }
 
 IPickable* UObjectPicker::GetCurrentSelection() const
@@ -188,6 +209,19 @@ void UObjectPicker::UpdateSelection(IPickable* NewSelection)
     {
         GizmoRenderer->SetPickedItem(nullptr);
     }
+}
+
+void UObjectPicker::HandleMouseRelease()
+{
+	if (DraggedObject)
+	{
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(DraggedObject))
+		{
+			GizmoArrow->OnDragStart(Camera, GRayOrigin, GRayDirection);
+		}
+	}
+    DraggedObject = nullptr;
+	bIsDragging = false;
 }
 
 void UObjectPicker::ClearSelection()

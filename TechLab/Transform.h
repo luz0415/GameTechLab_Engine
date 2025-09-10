@@ -21,6 +21,10 @@ public:
 	void AddRotationY(float Degree);
 	void AddRotationZ(float Degree);
 
+	void AddLocationX(float X);
+	void AddLocationY(float Y);
+	void AddLocationZ(float Z);
+
 	void SetLocation(float X, float Y, float Z);
 	void SetLocation(const FVector& InLocation);
 

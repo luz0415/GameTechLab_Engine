@@ -47,6 +47,9 @@ public:
     void AddRelativeRotationX(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationX(Degree); }
     void AddRelativeRotationY(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationY(Degree); }
     void AddRelativeRotationZ(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationZ(Degree); }
+    void AddRelativeLocationX(const float& X) { SetDirty(); CachedRelativeTransform.AddLocationX(X); }
+    void AddRelativeLocationY(const float& Y) { SetDirty(); CachedRelativeTransform.AddLocationY(Y); }
+    void AddRelativeLocationZ(const float& Z) { SetDirty(); CachedRelativeTransform.AddLocationZ(Z); }
 
 private:
     FMatrix CachedLocalMatrix;

@@ -3,11 +3,10 @@
 #include "Core.h"
 #include "MeshResource.h"
 #include "SceneComponent.h"
+#include "Gizmo.h"
 #include "PrimitiveComponent.h"
 
-enum class EGizmoArrowAxis { X, Y, Z };
-
-class UGizmoArrow : public UPrimitiveComponent
+class UGizmoArrow : public UGizmo
 {
 public:
     static UObject* StaticUObjectFactory()
@@ -29,13 +28,14 @@ public:
 public:
     UGizmoArrow();
     ~UGizmoArrow() override;
-    void SubmitProxy() override;
-    void SetName(const FString& InName);
-    const FString& GetName() { return Name; }
-    void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
-    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
-    void SetArrowAxis(EGizmoArrowAxis InAxis);
+    virtual void SubmitProxy() override;
+//    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
+    virtual void SetAxis(EGizmoAxis InAxis) override;
+    virtual void HandleDrag(UCamera* Camera,const FVector& RayOrigin, const FVector& RayDirection) override;
+//    virtual FVector GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection) override;
+
 
 private:
-    FString Name;
+    //FVector LastIntersectionPoint;
+    float DragSensitivity = 0.1f;
 };

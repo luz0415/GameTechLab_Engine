@@ -64,9 +64,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_LBUTTONUP:
 		GInput.bMouseLeftClick = false;
+		if (USceneManager::Get()->GetObjectPicker())
+		{
+			USceneManager::Get()->GetObjectPicker()->HandleMouseRelease();
+		}
 		break;
 	case WM_MOUSEMOVE:
-		if (GInput.bMouseRightClick||GInput.bMouseLeftClick)
+		if (GInput.bMouseRightClick)
 		{
 			POINT currentMousePos;
 			GetCursorPos(&currentMousePos);
@@ -74,6 +78,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			GInput.MouseX = currentMousePos.x - GLastMousePosition.x;
 			GInput.MouseY = GLastMousePosition.y - currentMousePos.y;
 			GLastMousePosition = currentMousePos;
+		}
+		else if (GInput.bMouseLeftClick)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			if (!io.WantCaptureMouse && USceneManager::Get()->GetObjectPicker())
+			{
+				POINT currentMousePos;
+				GetCursorPos(&currentMousePos);
+				ScreenToClient(hWnd, &currentMousePos);
+				USceneManager::Get()->GetObjectPicker()->HandleMouseDrag(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
+			}
 		}
 		else
 		{
@@ -93,6 +108,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				GMouseX = currentMousePos.x;
 				GMouseY = currentMousePos.y;
 				USceneManager::Get()->GetObjectPicker()->HandleMouseClick(static_cast<float>(currentMousePos.x), static_cast<float>(currentMousePos.y));
+				USceneManager::Get()->GetObjectPicker()->SetIsDragging(true);
 			}
 			break;
 		}

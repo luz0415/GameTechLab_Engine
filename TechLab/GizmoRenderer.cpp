@@ -4,6 +4,7 @@
 #include "SceneComponent.h"
 #include "Core.h"
 #include "ImGuiManager.h"
+#include "GizmoArrow.h"
 
 UGizmoRenderer::UGizmoRenderer()
 {
@@ -13,20 +14,20 @@ UGizmoRenderer::UGizmoRenderer()
 	URenderer::Get()->RegisterMesh(FString("ArrowX"), Shapes::ArrowX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	UGizmoArrow* ArrowZ = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowZ->SetArrowAxis(EGizmoArrowAxis::Z);
+	ArrowZ->SetAxis(EGizmoAxis::Z);
 	UGizmoArrow* ArrowY = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowY->SetArrowAxis(EGizmoArrowAxis::Y);
+	ArrowY->SetAxis(EGizmoAxis::Y);
 	UGizmoArrow* ArrowX = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowX->SetArrowAxis(EGizmoArrowAxis::X);
+	ArrowX->SetAxis(EGizmoAxis::X);
 
-	Arrows.push_back(ArrowZ);
-	Arrows.push_back(ArrowY);
-	Arrows.push_back(ArrowX);
+	Gizmos.push_back(ArrowZ);
+	Gizmos.push_back(ArrowY);
+	Gizmos.push_back(ArrowX);
 }
 
 UGizmoRenderer::~UGizmoRenderer()
 {
-	for (auto& Arrow : Arrows)
+	for (auto& Arrow : Gizmos)
 	{
 		if (FObjectFactory::Get()->IsObjectValid(Arrow))
 		{
@@ -40,7 +41,7 @@ void UGizmoRenderer::SubmitProxy()
 	if (GetAttachment() != nullptr)
 	{
 		//UE_LOG("PickedItem : [%f , %f , %f]", PickedItem->GetWorldLocation().X, PickedItem->GetWorldLocation().Y, PickedItem->GetWorldLocation().Z);
-		for (auto& Arrow : Arrows)
+		for (auto& Arrow : Gizmos)
 		{
 			Arrow->SubmitProxy();
 			//Arrow.SubmitProxy(FMatrix::ScaleMatrix(FVector(3.0f, 3.0f, 3.0f)));
@@ -50,13 +51,16 @@ void UGizmoRenderer::SubmitProxy()
 
 void UGizmoRenderer::SetPickedItem(UObject* Item)
 {
-	if (Item && Item->IsA(UGizmoArrow::StaticClass())) { return; }
+	if (Item && 
+		(Item->IsA(UGizmoArrow::StaticClass())
+			//(Item->IsA(UGizmoArrow::StaticClass())
+		)) { return; }
 
 	if (USceneComponent* Comp = Cast<USceneComponent>(Item))
 	{
 		UE_LOG("FGIZMORENDERER : PICKED");
 		SetAttachment(Comp);
-		for (auto& Arrow : Arrows)
+		for (auto& Arrow : Gizmos)
 		{
 			Arrow->SetWorldLocation(Comp->GetWorldLocation());
 			Arrow->SetWorldScale(Comp->GetWorldScale() * 3);
@@ -67,7 +71,7 @@ void UGizmoRenderer::SetPickedItem(UObject* Item)
 	{
 		UE_LOG("FGIZMORENDERER : No SceneComponent");
 		Detach();
-		for (auto& Arrow : Arrows)
+		for (auto& Arrow : Gizmos)
 		{
 			Arrow->Detach();
 		}

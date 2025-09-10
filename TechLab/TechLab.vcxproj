@@ -160,6 +160,7 @@
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="ObjectPicker.cpp" />
     <ClCompile Include="TriangleMeshCollider.cpp" />
+    <ClCompile Include="Gizmo.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="VertexData.h" />
     <ClCompile Include="Vector.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="ObjectPicker.h" />
     <ClInclude Include="TriangleMeshCollider.h" />
+    <ClInclude Include="Gizmo.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />

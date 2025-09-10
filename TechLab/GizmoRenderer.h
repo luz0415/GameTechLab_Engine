@@ -1,5 +1,5 @@
 #pragma once
-#include "GizmoArrow.h"
+#include "Gizmo.h"
 #include "Core.h"
 #include "MeshResource.h"
 #include <functional>
@@ -31,5 +31,5 @@ public:
     const USceneComponent* GetPickedItem() const { return GetAttachment(); }
     
 private:
-    TArray<UGizmoArrow*> Arrows;
+    TArray<UGizmo*> Gizmos;
 };
