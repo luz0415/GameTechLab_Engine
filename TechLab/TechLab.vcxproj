@@ -137,6 +137,7 @@
     <ClCompile Include="GizmoRenderer.cpp" />
     <ClCompile Include="GizmoRotation.cpp" />
     <ClCompile Include="GizmoRotation.h" />
+    <ClCompile Include="GizmoScale.cpp" />
     <ClCompile Include="GridRenderer.cpp" />
     <ClCompile Include="ImGuiControlPanel.cpp" />
     <ClCompile Include="ImGuiPropertyWindow.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="GizmoArrow.h" />
     <ClInclude Include="GizmoControlMode.h" />
     <ClInclude Include="GizmoRenderer.h" />
+    <ClInclude Include="GizmoScale.h" />
     <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="ImGuiControlPanel.h" />
     <ClInclude Include="ImGuiPropertyWindow.h" />

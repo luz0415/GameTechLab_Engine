@@ -6,12 +6,16 @@
 #include "ImGuiManager.h"
 #include "GizmoArrow.h"
 #include "GizmoRotation.h"
+#include "GizmoScale.h"
 UGizmoRenderer::UGizmoRenderer()
 {
 	//Init();
 	URenderer::Get()->RegisterMesh(FString("ArrowZ"), Shapes::ArrowZ_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("ArrowY"), Shapes::ArrowY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("ArrowX"), Shapes::ArrowX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    URenderer::Get()->RegisterMesh(FString("ScaleX"), Shapes::ScaleX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    URenderer::Get()->RegisterMesh(FString("ScaleY"), Shapes::ScaleY_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    URenderer::Get()->RegisterMesh(FString("ScaleZ"), Shapes::ScaleZ_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	URenderer::Get()->RegisterMesh(FString("TorusX"), MakeTorus(EGizmoAxis::X), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     URenderer::Get()->RegisterMesh(FString("TorusY"), MakeTorus(EGizmoAxis::Y), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
     URenderer::Get()->RegisterMesh(FString("TorusZ"), MakeTorus(EGizmoAxis::Z), D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -22,6 +26,14 @@ UGizmoRenderer::UGizmoRenderer()
 	ArrowY->SetAxis(EGizmoAxis::Y);
 	UGizmoArrow* ArrowX = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
 	ArrowX->SetAxis(EGizmoAxis::X);
+    
+    UGizmoScale* ScaleX = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
+    ScaleX->SetAxis(EGizmoAxis::X);
+    UGizmoScale* ScaleY = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
+    ScaleX->SetAxis(EGizmoAxis::Y);
+    UGizmoScale* ScaleZ = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
+    ScaleX->SetAxis(EGizmoAxis::Z);
+
 	UGizmoRotation* RotationZ = FObjectFactory::Get()->ConstructObject<UGizmoRotation>();
 	RotationZ->SetAxis(EGizmoAxis::Z);
 	UGizmoRotation* RotationY = FObjectFactory::Get()->ConstructObject<UGizmoRotation>();
@@ -29,17 +41,23 @@ UGizmoRenderer::UGizmoRenderer()
 	UGizmoRotation* RotationX = FObjectFactory::Get()->ConstructObject<UGizmoRotation>();
 	RotationX->SetAxis(EGizmoAxis::X);
 
+
     TArray<UGizmo*> Arrows;
+    TArray<UGizmo*> Scales;
     TArray<UGizmo*> Toruses;
     
     Arrows.push_back(ArrowZ);
     Arrows.push_back(ArrowY);
     Arrows.push_back(ArrowX);
+    Scales.push_back(ScaleX);
+    Scales.push_back(ScaleY);
+    Scales.push_back(ScaleZ);
     Toruses.push_back(RotationZ);
     Toruses.push_back(RotationY);
     Toruses.push_back(RotationX);
     
     Gizmos.push_back(Arrows);
+    Gizmos.push_back(Scales);
     Gizmos.push_back(Toruses);
 }
 
@@ -74,6 +92,7 @@ void UGizmoRenderer::SetPickedItem(UObject* Item)
 	if (Item && 
 		((Item->IsA(UGizmoArrow::StaticClass())
 			||(Item->IsA(UGizmoRotation::StaticClass()))
+            ||(Item->IsA(UGizmoScale::StaticClass()))
 		))) { return; }
 
 	if (USceneComponent* Comp = Cast<USceneComponent>(Item))
