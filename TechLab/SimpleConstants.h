@@ -10,6 +10,7 @@ struct FSimpleConstant
 struct FModelConstant
 {
 	FMatrix Model;
+	int IsHighlighted;
 };
 
 struct FViewProjConstant

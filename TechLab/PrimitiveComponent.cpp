@@ -10,7 +10,7 @@ void UPrimitiveComponent::SubmitProxy()
 	if (MeshResource != nullptr)
 	{
 		URenderer* Renderer = URenderer::Get();
-		FRenderProxy RenderProxy(GetWorldMatrix(), MeshResource);
+		FRenderProxy RenderProxy(GetWorldMatrix(), MeshResource, IsSelected());
 		Renderer->SubmitProxy(RenderProxy);
 	}
 }

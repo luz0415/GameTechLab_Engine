@@ -2,6 +2,7 @@
 cbuffer constants : register(b0)
 {
     row_major matrix Model;
+    int IsHighlighted;
 }
 
 cbuffer constants : register(b1)
@@ -33,16 +34,19 @@ PS_INPUT mainVS(VS_INPUT input)
     float4 viewposition = mul(worldposition, View);
     float4 projposition = mul(viewposition, Projection);
     output.position = projposition;
-    //float4(Radius, 0);
     
-    // Pass the color to the pixel shader
     output.color = input.color;
     
+    // Is Highlighted
+    if (IsHighlighted == 1)
+    {
+        output.color.rgb *= 2.0f;
+    }
     return output;
 }
 
 float4 mainPS(PS_INPUT input) : SV_TARGET
 {
-    // Output the color directly
-    return input.color;
+    float4 finalColor = input.color;
+    return finalColor;
 }

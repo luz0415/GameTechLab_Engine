@@ -87,9 +87,9 @@ private:
     USceneComponent* Attachment = nullptr;
     TArray<USceneComponent*> Children;
     bool bIsDirty = true;
-    bool bIsSelected = false;
 // Picking
 public:
+    bool IsSelected() const { return bIsSelected; }
     virtual void OnSelected() override { bIsSelected = true; };
     virtual void OnDeselected() override { bIsSelected = false; };
     virtual bool CanPickable() override { return true; }
@@ -98,6 +98,7 @@ public:
     void SetBoundingVolume(IBoundingVolume* InBoundingVolume);
 
 private:
+    bool bIsSelected = false;
     IBoundingVolume* BoundingVolume = nullptr;
     bool bNeedsPreciseRaycast = false;
     FTriangleMeshCollider* MeshBoundingVolume = nullptr;

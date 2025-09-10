@@ -323,7 +323,7 @@ void URenderer::RenderScene(const UCamera* SceneCamera)
 
 		DeviceContext->IASetPrimitiveTopology(RenderProxy.MeshResource->Topology);
 
-		FModelConstant MConstant{ RenderProxy.ModelWorldMatrix };
+		FModelConstant MConstant{ RenderProxy.ModelWorldMatrix, RenderProxy.bIsHighlighted };
 		UpdateConstantBuffer<FModelConstant>(MConstantBuffer, &MConstant);
 		DeviceContext->VSSetConstantBuffers(0, 1, &MConstantBuffer);	
 		DeviceContext->IASetVertexBuffers(0, 1, &Res->VertexBuffer, &Res->Stride, &Res->Offset);
