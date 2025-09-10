@@ -61,8 +61,7 @@ void UImGuiPropertyWindow::Render()
 	{
 		if (TargetSceneComponent)
 		{
-			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(TargetProp.Rotation);
 		}
 	}
 	ImGui::SameLine();
@@ -73,8 +72,7 @@ void UImGuiPropertyWindow::Render()
 	{
 		if (TargetSceneComponent)
 		{
-			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(TargetProp.Rotation);
 		}
 	}
 	ImGui::SameLine();
@@ -85,8 +83,7 @@ void UImGuiPropertyWindow::Render()
 	{
 		if (TargetSceneComponent)
 		{
-			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(TargetProp.Rotation);
 		}
 	}
 	ImGui::SameLine();
@@ -137,12 +134,6 @@ void UImGuiPropertyWindow::Render()
 		if (PickableSceneComponent && !PickableSceneComponent->IsA(UGizmoArrow::StaticClass()))
 		{
 			TargetSceneComponent = PickableSceneComponent;
-			TargetProp =
-			{
-				TargetSceneComponent->GetWorldLocation(),
-				RadiansToDegree(TargetSceneComponent->GetWorldRotationAsEuler()),
-				TargetSceneComponent->GetWorldScale()
-			};
 		}
 	}
 	else
@@ -153,6 +144,13 @@ void UImGuiPropertyWindow::Render()
 	
 	if (TargetSceneComponent)
 	{
+		TargetProp =
+		{
+			TargetSceneComponent->GetWorldLocation(),
+			RadiansToDegree(TargetSceneComponent->GetWorldRotationAsEuler()),
+			TargetSceneComponent->GetWorldScale()
+		};			
+
 		ImGui::Text("UUID: %d", TargetSceneComponent->UUID);
 	}
 

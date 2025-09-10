@@ -28,8 +28,8 @@ public:
 	void Translate(const FVector&);
 
 	const FVector& GetScale() const { return Scale; }
-	const FVector GetRotationAsEuler() const { return Rotation.ToYawPitchRoll(); }
-	const FQuaternion& GetRotation() const { return Rotation; }
+	const FVector& GetRotationAsEuler() const { return EulerRotation; }
+	const FQuaternion& GetRotationQuat() const { return Rotation; }
 	FVector GetRotationRadians() const;
 	const FVector& GetLocation() const { return Location; }
 
@@ -42,6 +42,7 @@ private:
 	FMatrix CachedMatrix;
 
 	FVector Location{ 0,0,0 };
+	FVector EulerRotation;
 	FQuaternion Rotation;
 	FVector Scale{ 1,1,1 };
 

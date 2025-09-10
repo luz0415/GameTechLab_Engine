@@ -53,10 +53,11 @@ void FTransform::SetScale(const FVector& InScale)
 	MarkAsDirty();
 }
 
-
 void FTransform::SetRotationFromEuler(const FVector& InEulerRotation)
 {
+	EulerRotation = InEulerRotation;
 	Rotation = FQuaternion::FromYawPitchRollLH(InEulerRotation.Y, InEulerRotation.X, InEulerRotation.Z);
+	Rotation.Normalize();
 	MarkAsDirty();
 }
 
@@ -64,10 +65,9 @@ void FTransform::SetRotation(const FQuaternion& InQuat)
 {
 	Rotation = InQuat;
 	Rotation.Normalize();
+	EulerRotation = Rotation.ToYawPitchRoll();
 	MarkAsDirty();
 }
-
-
 void FTransform::AddRotationX(float Degree)
 {
 	//Rotation.X += Degree;

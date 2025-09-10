@@ -6,13 +6,9 @@
 #include <map>
 
 #include <memory>
-#include "ImGuiAppConsole.h"
 #include "Vector.h"
-//#include "ImGuiManager.h"
-
 //#include "ObjectPicker.h"
 
-class UImGuiManager;
 template<typename T>
 using TArray = std::vector<T>;
 template<typename KeyType, typename ValueType>
@@ -44,8 +40,5 @@ void operator delete[](void* Ptr) noexcept;
 // [ UObject* function(void) ] Ptr
 using StaticUObjectFactory = class UObject* (*)();
 
-#define UE_LOG(fmt, ...) \
-    do \
-    { \
-        if (UImGuiManager::Get() && UImGuiManager::Get()->GetConsole()) UImGuiManager::Get()->GetConsole()->AddLog(fmt, ##__VA_ARGS__); \
-    } while(0)
+void UE_LogImpl(const char* fmt, ...);
+#define UE_LOG(fmt, ...) UE_LogImpl(fmt, ##__VA_ARGS__)

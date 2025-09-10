@@ -1,5 +1,6 @@
 ﻿#include "Core.h"
 #include <malloc.h>
+#include "ImGuiManager.h"
 //uint32 TotalAllocationBytes = 0;
 //uint32 TotalAllocationCount = 0;
 
@@ -71,4 +72,15 @@ void operator delete[](void* Ptr) noexcept
     GetTotalAllocationBytes() -= static_cast<uint32>(TotalSize);
 
     _aligned_free(HeaderPtr);
+}
+
+void UE_LogImpl(const char* fmt, ...)
+{
+    if (UImGuiManager::Get() && UImGuiManager::Get()->GetConsole())
+    {
+        va_list args;
+        va_start(args, fmt);
+        UImGuiManager::Get()->GetConsole()->AddLog(fmt, args);
+        va_end(args);
+    }
 }

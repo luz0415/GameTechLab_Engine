@@ -29,7 +29,7 @@ public:
 	TArray<IImGuiWindow*> GetImGuiArray() { return ImGuiArray; }
 
 private:
-	TArray< IImGuiWindow*> ImGuiArray;
+	TArray<IImGuiWindow*> ImGuiArray;
 	UImGuiConsole* Console = nullptr;
 	UImGuiControlPanel* ControlPanel = nullptr;
 	UImGuiPropertyWindow* PropertyWindow = nullptr;

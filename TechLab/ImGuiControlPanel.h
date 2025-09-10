@@ -7,7 +7,7 @@
 
 struct FSpawnObjectProperty
 {
-	string Type = "Sphere";
+	FString Type = "Sphere";
 	int SpawnNum = 1;
 };
 
@@ -27,7 +27,7 @@ private:
 	FSpawnObjectProperty SpawnProperty;
 	FCameraProperty CameraProperty;
 	char SceneNameBuffer[128] = "";
-	string SceneNameStr = "";
+	FString SceneNameStr = "";
 	bool bOrthogonal = true;
 };
 

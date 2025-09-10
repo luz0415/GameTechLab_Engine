@@ -14,7 +14,7 @@ struct FPrimitiveData
     FVector Rotation;
     FVector Scale;
 
-    string Type;
+    FString Type;
 };
 
 struct FSceneData

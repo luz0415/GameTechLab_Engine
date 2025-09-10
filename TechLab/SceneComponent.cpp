@@ -104,35 +104,44 @@ void USceneComponent::SetWorldLocation(const FVector& InLocation)
 	SetDirty();
 }
 
-void USceneComponent::SetWorldRotation(const FVector& InRotation)
+void USceneComponent::SetWorldRotation(const FVector& InRotationDegree)
+{
+	FVector RotationRadians = DegreeToRadians(InRotationDegree);
+	if (Attachment)
+	{
+		FVector ParentWorldRotationVec = DegreeToRadians(Attachment->GetWorldRotation());
+		FQuaternion ParentWorldQuat = FQuaternion::FromYawPitchRollLH(ParentWorldRotationVec.Y, ParentWorldRotationVec.X, ParentWorldRotationVec.Z);
+		FQuaternion TargetWorldQuat = FQuaternion::FromYawPitchRollLH(RotationRadians.Y, RotationRadians.X, RotationRadians.Z);
+
+		// 상대 회전 = 부모의 역회전 * 목표 월드 회전
+		FQuaternion RelativeQuat = ParentWorldQuat.Inverse() * TargetWorldQuat;
+		CachedRelativeTransform.SetRotation(RelativeQuat);	
+		CachedWorldTransform.SetRotation(TargetWorldQuat);
+	}
+	else
+	{
+		CachedRelativeTransform.SetRotationFromEuler(RotationRadians);
+		CachedWorldTransform.SetRotationFromEuler(RotationRadians);
+	}
+
+	SetDirty();
+}
+
+void USceneComponent::SetWorldRotation(const FQuaternion& InRotation)
 {
 	if (Attachment)
 	{
 		FVector ParentWorldRotationVec = Attachment->GetWorldRotation();
 		FQuaternion ParentWorldQuat = FQuaternion::FromYawPitchRollLH(ParentWorldRotationVec.Y, ParentWorldRotationVec.X, ParentWorldRotationVec.Z);
-
-		FQuaternion TargetWorldQuat = FQuaternion::FromYawPitchRollLH(InRotation.Y, InRotation.X, InRotation.Z);
-
-		// 상대 회전 = 부모의 역회전 * 목표 월드 회전
-		FQuaternion RelativeQuat = ParentWorldQuat.Inverse() * TargetWorldQuat;
-
+		FQuaternion RelativeQuat = ParentWorldQuat.Inverse() * InRotation;
 		CachedRelativeTransform.SetRotation(RelativeQuat);
 	}
 	else
 	{
-		CachedRelativeTransform.SetRotationFromEuler(InRotation);
-		
+		CachedRelativeTransform.SetRotation(InRotation);
 	}
-	FQuaternion TargetWorldQuat = FQuaternion::FromYawPitchRollLH(InRotation.Y, InRotation.X, InRotation.Z);
-	CachedWorldTransform.SetRotation(TargetWorldQuat);
-
-	bIsDirty = true;
-}
-
-void USceneComponent::SetWorldRotation(const FQuaternion& InRotation)
-{
-	CachedRelativeTransform.SetRotation(InRotation);
-	bIsDirty = true;
+	CachedWorldTransform.SetRotation(InRotation);
+	SetDirty();
 }
 
 void USceneComponent::SetWorldScale(const FVector& InScale)
