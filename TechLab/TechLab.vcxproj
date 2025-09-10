@@ -211,7 +211,6 @@
     <ClInclude Include="PrimitiveType.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="ShapeType.h" />
     <ClInclude Include="SimpleConstants.h" />
     <ClInclude Include="Class.h" />
     <ClInclude Include="Core.h" />

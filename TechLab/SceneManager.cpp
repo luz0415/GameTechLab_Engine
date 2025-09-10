@@ -17,7 +17,7 @@ void USceneManager::Init()
 {
     CurrentScene = FObjectFactory::Get()->ConstructObject<UScene>();
     //CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker();
+    ObjectPicker = FObjectFactory::Get()->ConstructObject<UObjectPicker>();
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
@@ -260,9 +260,9 @@ void USceneManager::LoadNewScene()
 
 void USceneManager::ResetResources()
 {
-    delete ObjectPicker;
+    ObjectPicker->Destroy();    
+    ObjectPicker = FObjectFactory::Get()->ConstructObject<UObjectPicker>();
     CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker;
     SetObjectPickerCamera();
 }
 

@@ -1,21 +1,34 @@
 #pragma once
+#include "Object.h"
 #include "Matrix.h"
 #include "Vector.h"
 
-class UCamera
+class UCamera : public UObject
 {
+	// UObject Derived Class Must Declaration
 public:
-	UCamera(
-		const FVector& InPosition,
-		const FVector& InTarget,
-		const FVector& InUpDirection,
-		float InFovYRad,
-		float InAspectRatio,
-		float InNearZ,
-		float InFarZ
-	) noexcept;
+	static UObject* StaticUObjectFactory()
+	{
+		return new UCamera();
+	}
 
-	virtual ~UCamera() = default;
+	static UClass* StaticClass()
+	{
+		static UClass Class(FString("UCamera"), StaticUObjectFactory, UObject::StaticClass());
+		return &Class;
+	}
+
+	virtual UClass* GetClass() const
+	{
+		return StaticClass();
+	}
+
+public:
+
+	UCamera();
+	~UCamera() = default;
+	void Init(const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
+		float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ);
 
 	const FMatrix& GetViewMatrix() const noexcept { return ViewMatrix; }
 	const FMatrix& GetProjectionMatrix() const noexcept { return ProjectionMatrix; }

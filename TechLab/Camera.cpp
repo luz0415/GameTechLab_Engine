@@ -3,31 +3,25 @@
 #include "SceneManager.h"
 #include "ImGuiManager.h"
 #include "Core.h"
-UCamera::UCamera(
-	const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection,
-	float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ) noexcept
-	: Eye(InPosition)
-	, At(InTarget)
-	, Up(InUpDirection)
-	, FovYRad(InFovYRad)
-	, AspectRatio(InAspectRatio)
-	, NearZ(InNearZ)
-	, FarZ(InFarZ)
-	, Yaw(0.0f)
-	, Pitch(0.0f)
-	, MoveLeftRight(0.0f)
-	, MoveBackForward(0.0f)
-	, MoveUpDown(0.0f)
-	, MovementSpeed(10.0f)
-	, RotationSpeed(0.002f)
-	, CameraForward(FVector(0.f, 0.f, 1.f))
-	, CameraRight(FVector(1.f, 0.f, 0.f))
-	, CameraUp(FVector(0.f, 1.f, 0.f))
+
+UCamera::UCamera()
+	: Eye(FVector(0, 3, -5)), At(FVector()), Up(FVector(0, 1, 0)), FovYRad(90.0f), AspectRatio(1920/1080)
+	, NearZ(0.1f), FarZ(100.f), Yaw(0.0f), Pitch(0.0f), MoveLeftRight(0.0f), MoveBackForward(0.0f)
+	, MoveUpDown(0.0f), MovementSpeed(10.0f), RotationSpeed(0.002f)
+	, CameraForward(FVector(0.f, 0.f, 1.f)), CameraRight(FVector(1.f, 0.f, 0.f)), CameraUp(FVector(0.f, 1.f, 0.f))
 {
 	UpdateViewMatrix();
 	UpdateProjectionMatrix();
 }
 
+void UCamera::Init(const FVector& InPosition, const FVector& InTarget, const FVector& InUpDirection, float InFovYRad, float InAspectRatio, float InNearZ, float InFarZ)
+{
+	Eye = InPosition; At = InTarget; Up = InUpDirection; FovYRad = InFovYRad;
+	AspectRatio = InAspectRatio; NearZ = InNearZ; FarZ = InFarZ;
+
+	UpdateViewMatrix();
+	UpdateProjectionMatrix();
+}
 
 const float UCamera::GetFOVInAngle()
 {
