@@ -80,7 +80,7 @@ void UE_LogImpl(const char* fmt, ...)
     {
         va_list args;
         va_start(args, fmt);
-        UImGuiManager::Get()->GetConsole()->AddLog(fmt, args);
+        UImGuiManager::Get()->GetConsole()->AddLogV(fmt, args);
         va_end(args);
     }
 }

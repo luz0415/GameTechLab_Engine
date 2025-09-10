@@ -17,6 +17,16 @@ void UImGuiConsole::Render()
 	}
 }
 
+void UImGuiConsole::AddLogV(const char* fmt, va_list args)
+{
+	if (AppConsole)
+	{
+		char buf[1024];
+		vsnprintf(buf, sizeof(buf), fmt, args);
+		AppConsole->AddLog("%s", buf);
+	}
+}
+
 void UImGuiConsole::AddLog(const char* fmt, ...) IM_FMTARGS(2)
 {
 	if (AppConsole)
