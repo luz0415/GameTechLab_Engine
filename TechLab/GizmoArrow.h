@@ -3,11 +3,10 @@
 #include "Core.h"
 #include "MeshResource.h"
 #include "SceneComponent.h"
+#include "UGizmo.h"
 #include "PrimitiveComponent.h"
 
-enum class EGizmoArrowAxis { X, Y, Z };
-
-class UGizmoArrow : public UPrimitiveComponent
+class UGizmoArrow : public UGizmo
 {
 public:
     static UObject* StaticUObjectFactory()
@@ -29,13 +28,9 @@ public:
 public:
     UGizmoArrow();
     ~UGizmoArrow() override;
-    void SubmitProxy() override;
-    void SetName(const FString& InName);
-    const FString& GetName() { return Name; }
-    void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
-    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
-    void SetArrowAxis(EGizmoArrowAxis InAxis);
+    virtual void SubmitProxy() override;
+//    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
+    virtual void SetAxis(EGizmoAxis InAxis) override;
+    virtual void HandleDrag(int x, int y, int z);
 
-private:
-    FString Name;
 };

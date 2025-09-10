@@ -5,7 +5,7 @@
 
 UGizmoArrow::UGizmoArrow()
 {
-    SetWorldScale(FVector(3.f, 3.f, 3.f));
+
 }
 
 UGizmoArrow::~UGizmoArrow()
@@ -19,21 +19,21 @@ void UGizmoArrow::SubmitProxy()
     Renderer->SubmitProxy(RenderProxy);
 }
 
-void UGizmoArrow::SetArrowAxis(EGizmoArrowAxis InAxis)
+void UGizmoArrow::SetAxis(EGizmoAxis InAxis)
 {
     switch (InAxis)
     {
-    case EGizmoArrowAxis::X:
+    case EGizmoAxis::X:
         SetBoundingVolume(new FAABB(Shapes::ArrowX_MeshData));
         SetMeshForPreciseRaycast(Shapes::ArrowX_MeshData); 
         SetName(FString("ArrowX"));
         break;
-    case EGizmoArrowAxis::Y:
+    case EGizmoAxis::Y:
         SetBoundingVolume(new FAABB(Shapes::ArrowY_MeshData));
         SetMeshForPreciseRaycast(Shapes::ArrowY_MeshData);
         SetName(FString("ArrowY"));
         break;
-    case EGizmoArrowAxis::Z:
+    case EGizmoAxis::Z:
         SetBoundingVolume(new FAABB(Shapes::ArrowZ_MeshData));
         SetMeshForPreciseRaycast(Shapes::ArrowZ_MeshData);
         SetName(FString("ArrowZ"));
@@ -41,7 +41,11 @@ void UGizmoArrow::SetArrowAxis(EGizmoArrowAxis InAxis)
     }
 }
 
-void UGizmoArrow::SetName(const FString& InName)
+void UGizmoArrow::HandleDrag(int x, int y, int z)
 {
-    Name = InName;
+    USceneComponent* Attach = GetAttachment();
+    if (Attach != nullptr)
+    {
+        Attach->AddLocalRotation()
+    }
 }
