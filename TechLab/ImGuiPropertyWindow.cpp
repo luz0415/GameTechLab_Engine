@@ -49,7 +49,8 @@ void UImGuiPropertyWindow::Render()
 	}
 	ImGui::SameLine();
 
-	ImGui::Text("Translation");
+
+	ColoredButton("Translation", EGizmoControlMode::Translation);
 
 	// Rotation
 	static FVector lastRotationEuler = { 0,0,0 };
@@ -88,7 +89,7 @@ void UImGuiPropertyWindow::Render()
 	}
 	ImGui::SameLine();
 
-	ImGui::Text("Rotation");
+	ColoredButton("Rotation", EGizmoControlMode::Rotation);
 
 	// Scale
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
@@ -125,7 +126,7 @@ void UImGuiPropertyWindow::Render()
 
 	ImGui::SameLine();
 
-	ImGui::Text("Scale");
+	ColoredButton("Scale", EGizmoControlMode::Scale);
 
 	IPickable* Pickable = USceneManager::Get()->GetObjectPicker()->GetCurrentSelection();
 	if (Pickable)
@@ -155,6 +156,28 @@ void UImGuiPropertyWindow::Render()
 	}
 
 	ImGui::End();
+}
+
+void UImGuiPropertyWindow::ColoredButton(const char* Label, EGizmoControlMode Mode)
+{
+	bool bPushed = false;
+
+	if (CurrentGizmoControlMode == Mode)
+	{
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.7f, 0.2f, 1.0f));
+		bPushed = true;
+	}
+
+	if (ImGui::Button(Label))
+	{
+		CurrentGizmoControlMode = Mode;
+	}
+
+	if (bPushed)
+	{
+		ImGui::PopStyleColor();
+	}
+
 }
 //void USceneManager::LoadNewScene()
 //{

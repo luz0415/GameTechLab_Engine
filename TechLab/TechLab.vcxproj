@@ -194,6 +194,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CubeComp.h" />
     <ClInclude Include="GizmoArrow.h" />
+    <ClInclude Include="GizmoControlMode.h" />
     <ClInclude Include="GizmoRenderer.h" />
     <ClInclude Include="GridRenderer.h" />
     <ClInclude Include="ImGuiControlPanel.h" />
