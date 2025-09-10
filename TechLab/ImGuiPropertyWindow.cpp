@@ -4,6 +4,7 @@
 #include "Object.h"
 #include "Math.h"
 #include "Quaternion.h"
+#include "GizmoArrow.h"
 
 #define INPUT_BOX_WIDTH 70
 
@@ -133,7 +134,7 @@ void UImGuiPropertyWindow::Render()
 	if (Pickable)
 	{
 		USceneComponent* PickableSceneComponent = dynamic_cast<USceneComponent*>(Pickable);
-		if (PickableSceneComponent)
+		if (PickableSceneComponent && !PickableSceneComponent->IsA(UGizmoArrow::StaticClass()))
 		{
 			TargetSceneComponent = PickableSceneComponent;
 			TargetProp =
