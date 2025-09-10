@@ -14,6 +14,7 @@ UGizmoRotation::~UGizmoRotation()
 {
 }
 
+
 void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
 {
 	float R = 1.f;
@@ -93,6 +94,7 @@ void UGizmoRotation::OnDragStart(UCamera* Camera, const FVector& RayOrigin, cons
 	USceneComponent* Attach = GetAttachment();
 	if (Attach)
 	{
+		// 1. 드래그 시작 시점의 객체 회전값과 위치를 가져옴
 		InitialObjectRotation = Attach->GetWorldRotationAsQuaternion();
 		const FVector objectLocation = Attach->GetWorldLocation();
 
