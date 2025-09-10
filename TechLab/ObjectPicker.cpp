@@ -79,7 +79,7 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	GLastBestT = BestT;
 	if (NewSelection)
 	{
-		if (auto* GizmoArrow = dynamic_cast<UGizmoArrow*>(NewSelection))
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(NewSelection))
 		{
 			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
 		}
@@ -91,6 +91,64 @@ void UObjectPicker::HandleMouseClick(float ScreenX, float ScreenY)
 	}
 
 	UpdateSelection(NewSelection);
+}
+
+void UObjectPicker::HandleMouseDrag(float ScreenX, float ScreenY)
+{
+	GSuccessfulCastCount = 0;
+	GLastBestT = 0.0f;
+	GNewSelectionID = 0;
+
+	//UE_LOG("(%f %f)", ScreenX, ScreenY);
+
+	FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
+	GRayOrigin = Ray.GetOrigin();
+	GRayDirection = Ray.GetDirection();
+
+	UE_LOG("RayOrigin : [%f , %f , %f]", GRayOrigin.X, GRayOrigin.Y, GRayOrigin.Z);
+	UE_LOG("RayDir : [%f , %f , %f]", GRayDirection.X, GRayDirection.Y, GRayDirection.Z);
+
+
+	IPickable* NewSelection = nullptr;
+	float BestT = std::numeric_limits<float>::infinity();
+
+	// Ray casting !!
+	const TArray<UObject*> Objects = FObjectFactory::Get()->GetObjectArray();
+	GTotalObjectCount = Objects.size();
+
+	for (UObject* Object : Objects)
+	{
+		if (!Object)	continue;
+
+		if (auto* RayTarget = Cast<USceneComponent>(Object))
+		{
+			FMatrix WorldTransform = RayTarget->GetWorldMatrix();
+			FRay LocalRay = TransformRayToLocalSpace(Ray, WorldTransform);
+
+			FHitRecord Hit;
+			if (RayTarget->CanPickable() && RayTarget->Raycast(LocalRay, BestT, Hit) && Hit.Time < BestT) {
+				GSuccessfulCastCount++;
+				BestT = Hit.Time;
+				NewSelection = RayTarget;
+			}
+		}
+	}
+
+	GLastBestT = BestT;
+	if (NewSelection)
+	{
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(NewSelection))
+		{
+			UE_LOG(("+-+-+-+Selected Gizmo: %s"), GizmoArrow->GetName().c_str());
+			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
+		}
+		else if (auto* SelectedObject = dynamic_cast<UObject*>(NewSelection))
+		{
+			GNewSelectionID = SelectedObject->UUID;
+			UE_LOG(("+-+-+Selected Object: %d"), GNewSelectionID);
+		}
+	}
+
 }
 
 IPickable* UObjectPicker::GetCurrentSelection() const

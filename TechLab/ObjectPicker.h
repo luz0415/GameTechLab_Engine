@@ -15,6 +15,7 @@ public:
     ~UObjectPicker();
 
     void HandleMouseClick(float ScreenX, float ScreenY);
+    void HandleMouseDrag(float ScreenX, float ScreenY);
     void SetViewportSize(int Width, int Height) { ViewportWidth = Width; ViewportHeight = Height; }
     IPickable* GetCurrentSelection() const;
 

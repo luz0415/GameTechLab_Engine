@@ -1,4 +1,4 @@
-#include "UGizmo.h"
+#include "Gizmo.h"
 
 
 
@@ -28,6 +28,6 @@ void UGizmo::SetAxis(EGizmoAxis InAxis)
 {
 }
 
-void UGizmo::HandleDrag(int x, int y, int z)
+void UGizmo::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection)
 {
 }

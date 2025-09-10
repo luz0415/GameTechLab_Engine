@@ -86,6 +86,24 @@ void FTransform::AddRotationZ(float Degree)
 	MarkAsDirty();
 }
 
+void FTransform::AddLocationX(float X)
+{
+	Location.X += X;
+	MarkAsDirty();
+}
+
+void FTransform::AddLocationY(float Y)
+{
+	Location.Y += Y;
+	MarkAsDirty();
+}
+
+void FTransform::AddLocationZ(float Z)
+{
+	Location.Z += Z;
+	MarkAsDirty();
+}
+
 void FTransform::SetLocation(float X, float Y, float Z)
 {
 	Location = FVector(X, Y, Z);

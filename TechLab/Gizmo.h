@@ -3,10 +3,13 @@
 #include "MeshResource.h"
 #include "SceneComponent.h"
 #include "PrimitiveComponent.h"
+
+class UCamera;
 enum class EGizmoAxis { X, Y, Z };
 
 class UGizmo : public UPrimitiveComponent
 {
+public:
     static UObject* StaticUObjectFactory()
     {
         return new UGizmo();
@@ -32,8 +35,9 @@ public:
     virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
     virtual void SubmitProxy() override;
     virtual void SetAxis(EGizmoAxis InAxis);
-    virtual void HandleDrag(int x, int y, int z);
+    virtual void HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection);
 
 protected:
     FString Name;
+    FVector Direction;
 };
