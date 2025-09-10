@@ -28,7 +28,7 @@ public:
 public:
     UGizmoRotation();
     ~UGizmoRotation() override;
-    virtual void SubmitProxy() override;
+    //virtual void SubmitProxy() override;
     //    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
     virtual void SetAxis(EGizmoAxis InAxis) override;
     virtual void HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection) override;

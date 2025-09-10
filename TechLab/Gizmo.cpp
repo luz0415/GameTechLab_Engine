@@ -1,5 +1,5 @@
 #include "Gizmo.h"
-
+#include "Renderer.h"
 
 
 UGizmo::UGizmo()
@@ -22,6 +22,9 @@ void UGizmo::SetName(const FString& InName)
 /// </summary>
 void UGizmo::SubmitProxy()
 {
+    URenderer* Renderer = URenderer::Get();
+    FRenderProxy RenderProxy(GetWorldMatrix(), Renderer->GetMeshResource(FString(Name)));
+    Renderer->SubmitProxy(RenderProxy);
 }
 
 void UGizmo::SetAxis(EGizmoAxis InAxis)

@@ -14,12 +14,6 @@ UGizmoRotation::~UGizmoRotation()
 {
 }
 
-void UGizmoRotation::SubmitProxy()
-{
-	URenderer* Renderer = URenderer::Get();
-	FRenderProxy RenderProxy(GetWorldMatrix(), Renderer->GetMeshResource(FString(Name)));
-	Renderer->SubmitProxy(RenderProxy);
-}
 
 void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
 {
