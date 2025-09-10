@@ -14,6 +14,13 @@ UGizmoRotation::~UGizmoRotation()
 {
 }
 
+void UGizmoRotation::SubmitProxy()
+{
+	URenderer* Renderer = URenderer::Get();
+	FRenderProxy RenderProxy(GetWorldMatrix(), Renderer->GetMeshResource(FString(Name)));
+	Renderer->SubmitProxy(RenderProxy);
+}
+
 void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
 {
 	float R = 1.f;
@@ -93,6 +100,8 @@ void UGizmoRotation::OnDragStart(UCamera* Camera, const FVector& RayOrigin, cons
 	USceneComponent* Attach = GetAttachment();
 	if (Attach)
 	{
+		// 1. 회전 축과 객체 위치 정의
+		RotationAxis = this->Direction;
 		InitialObjectRotation = Attach->GetWorldRotationAsQuaternion();
 		const FVector objectLocation = Attach->GetWorldLocation();
 
