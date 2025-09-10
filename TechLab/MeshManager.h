@@ -14,7 +14,6 @@ public:
 	FMeshResource* GetPrimitiveMeshResource(const EPrimitiveType Type);
 	FMeshResource* GetMeshResource(const FString& MeshId);
 	void Release();
-
 private:
 	FMeshResource* CreateMeshResource(const FMeshData& MeshData, D3D_PRIMITIVE_TOPOLOGY Topology);
 

@@ -135,6 +135,8 @@
     <ClCompile Include="CubeComp.cpp" />
     <ClCompile Include="GizmoArrow.cpp" />
     <ClCompile Include="GizmoRenderer.cpp" />
+    <ClCompile Include="GizmoRotation.cpp" />
+    <ClCompile Include="GizmoRotation.h" />
     <ClCompile Include="GridRenderer.cpp" />
     <ClCompile Include="ImGuiControlPanel.cpp" />
     <ClCompile Include="ImGuiPropertyWindow.cpp" />

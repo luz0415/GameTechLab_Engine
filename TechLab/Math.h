@@ -18,3 +18,10 @@ constexpr T Min(const T& a, const T& b)
 {
     return std::min<T>(a, b);
 }
+template<typename T>
+const T& Clamp(const T& value, const T& minValue, const T& maxValue)
+{
+    if (value < minValue) return minValue;
+    if (value > maxValue) return maxValue;
+    return value;
+}
