@@ -40,12 +40,12 @@ bool FTriangleMeshCollider::RayTriangleIntersect(const FRay& Ray, const FVector&
 {
     const float EPSILON = 0.0000001f; // A small epsilon value for floating point comparisons
 
+    // Find vectors for two edges sharing V1
     FVector Edge1 = V1 - V0;
     FVector Edge2 = V2 - V0;
     FVector P = Ray.GetDirection().Cross(Edge2);
     float Determinant = Edge1.Dot(P);
 
-    // Check for back-facing or parallel triangles
     // If Determinant is close to 0, ray is parallel to triangle plane
     if (Determinant > -EPSILON && Determinant < EPSILON)
     {
@@ -54,17 +54,17 @@ bool FTriangleMeshCollider::RayTriangleIntersect(const FRay& Ray, const FVector&
 
     float InvDeterminant = 1.0f / Determinant;
 
+    // Calculate U parameter and test bounds
     FVector T = Ray.GetOrigin() - V0;
     float U = T.Dot(P) * InvDeterminant;
-
     if (U < 0.0f || U > 1.0f)
     {
         return false;
     }
 
+    // Calculate U parameter and test bounds
     FVector Q = T.Cross(Edge1);
     float V = Ray.GetDirection().Dot(Q) * InvDeterminant;
-
     if (V < 0.0f || U + V > 1.0f)
     {
         return false;
