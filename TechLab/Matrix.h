@@ -30,6 +30,8 @@ struct FMatrix
 	FMatrix operator*(const FMatrix& Other) const noexcept;
 	FVector4 operator*(const FVector4& Other) const noexcept;
 
+	//bool Decompose(FVector& OutScale, FQuaternion& OutRotation, FVector& OutTranslation) const;
+
 	float(&operator[](int Row) noexcept)[4] { return M[Row]; }
 	const float(&operator[](int Row) const noexcept)[4] { return M[Row]; }
 };

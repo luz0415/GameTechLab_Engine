@@ -39,10 +39,10 @@ public:
     FVector GetRelativeScale() const { return CachedRelativeTransform.GetScale(); }
 
     void Translate(const FVector& InTranslation) { SetDirty();  CachedRelativeTransform.Translate(InTranslation); }
-    void SetRelativeLocation(const FVector& InLocation);
-    void SetRelativeRotation(const FVector& InRotation);
-    void SetRelativeRotation(const FQuaternion& InRotation);
-    void SetRelativeScale(const FVector& InScale);
+   // void SetRelativeLocation(const FVector& InLocation);
+    //void SetRelativeRotation(const FVector& InRotation);
+   // void SetRelativeRotation(const FQuaternion& InRotation);
+    //void SetRelativeScale(const FVector& InScale);
     void AddLocalRotation(const FVector& InRotationDelta);
     void AddRelativeRotationX(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationX(Degree); }
     void AddRelativeRotationY(const float& Degree) { SetDirty(); CachedRelativeTransform.AddRotationY(Degree); }

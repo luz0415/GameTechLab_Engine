@@ -3,6 +3,7 @@
 #include "Vector4.h"
 #include <cmath>
 #include "Math.h"
+#include "Quaternion.h"
 
 
 //-1 : 1 = left :right
@@ -301,3 +302,4 @@ FVector4 operator*(const FVector4& v, const FMatrix& M) noexcept {
 		v.X * M[0][3] + v.Y * M[1][3] + v.Z * M[2][3] + v.W * M[3][3]
 	);
 }
+

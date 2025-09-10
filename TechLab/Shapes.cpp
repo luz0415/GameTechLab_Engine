@@ -106,9 +106,9 @@ namespace Shapes {
     };
 
     // Y축 화살표 (초록색)
-    FMeshData ArrowY_MeshData = FMeshData
+// Y축 화살표 (초록색, CCW)
+    FMeshData ArrowY_MeshData= FMeshData
     {
-        // Vertices
         {
             // Cylinder bottom ring (y=0)
             {{ 0.05f, 0.0f, 0.0f},   {0,1,0,1}}, // 0
@@ -183,7 +183,6 @@ namespace Shapes {
     // Z축 화살표 (파란색)
     FMeshData ArrowZ_MeshData =
     {
-        // Vertices
         {
             // Cylinder bottom ring (z=0)
             {{ 0.05f, 0.0f, 0.0f},   {0,0,1,1}}, // 0
