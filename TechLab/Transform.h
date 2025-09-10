@@ -29,7 +29,7 @@ public:
 
 	const FVector& GetScale() const { return Scale; }
 	const FVector& GetRotationAsEuler() const { return EulerRotation; }
-	const FQuaternion& GetRotationQuat() const { return Rotation; }
+	const FQuaternion& GetRotation() const { return Rotation; }
 	FVector GetRotationRadians() const;
 	const FVector& GetLocation() const { return Location; }
 
