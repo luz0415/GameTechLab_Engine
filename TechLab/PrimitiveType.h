@@ -5,7 +5,8 @@ enum class EPrimitiveType
 {
 	Custom,
 	Cube,
-	Sphere
+	Sphere,
+    Ring,
 };
 
 inline FString PrimitiveTypeToString(EPrimitiveType Type)
@@ -18,6 +19,8 @@ inline FString PrimitiveTypeToString(EPrimitiveType Type)
         return FString("Cube");
     case EPrimitiveType::Sphere:
         return FString("Sphere");
+    case EPrimitiveType::Ring:
+            return FString("Ring");
     default:
         return FString("Default");
     }
@@ -31,6 +34,8 @@ inline EPrimitiveType StringToPrimitiveType(const FString& Str)
         return EPrimitiveType::Cube;
     else if (Str == "Sphere")
         return EPrimitiveType::Sphere;
+    else if (Str == "Ring")
+        return EPrimitiveType::Ring;
     else
         return EPrimitiveType::Custom;
 }

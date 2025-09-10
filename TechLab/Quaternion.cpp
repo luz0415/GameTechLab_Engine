@@ -9,6 +9,10 @@ FQuaternion FQuaternion::FromAxisAngleLH(const FVector& axis, float angleRad)
 	return FQuaternion(a.X * s, a.Y * s, a.Z * s, c);
 }
 
+/// <summary>
+/// In Radian
+/// </summary>
+/// <returns></returns>
 FQuaternion FQuaternion::FromYawPitchRollLH(float yawY, float pitchX, float rollZ) {
     FQuaternion qYaw = FromAxisAngleLH(FVector(0, 1, 0), yawY);
     FQuaternion qPitch = FromAxisAngleLH(FVector(1, 0, 0), pitchX);

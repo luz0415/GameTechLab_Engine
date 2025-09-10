@@ -61,6 +61,7 @@ public:
     FVector GetWorldLocation() { return CachedWorldTransform.GetLocation(); }
     FVector GetWorldRotation() { return CachedWorldTransform.GetRotationAsEuler(); }
     FVector GetWorldRotationAsEuler() { return CachedWorldTransform.GetRotationAsEuler(); }
+    FQuaternion GetWorldRotationAsQuaternion() { return CachedWorldTransform.GetRotation(); }
     FVector GetWorldScale() { return CachedWorldTransform.GetScale(); }
 
     void SetWorldLocation(const FVector& InLocation);
