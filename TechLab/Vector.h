@@ -39,6 +39,7 @@ struct FVector
 	bool IsNearlyZero(float Tolerance = KINDA_SMALL_NUMBER) const noexcept;
 	static float Dist(const FVector& V1, const FVector& V2) noexcept;
 	static float DistSquared(const FVector& V1, const FVector& V2) noexcept;
+	static bool Invalid() { return true; }
 };
 
 inline FVector operator*(float Scale, const FVector& V) noexcept { return V * Scale; }

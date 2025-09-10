@@ -52,15 +52,22 @@ void UGizmoArrow::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FV
     {
         // 1. 현재 마우스 위치의 교차점을 구함
         FVector currentHitPoint = GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection);
+        if (Invalid == true)
+        {
+            Invalid = false;
+            return;
+        }
 
         // 2. 시작점과의 차이를 통해 '이동 벡터'를 계산
         FVector movementVector = currentHitPoint - InitialHitPoint;
-
+        
         // 3. 이동 벡터를 해당 축으로 투영하여 최종 이동 거리를 구함
-        float distance = movementVector.Dot(Direction) * 0.1;
+        FVector Rot = Attach->GetWorldRotationAsEuler();
+        FVector Dir = FQuaternion::FromYawPitchRollLH(Rot.Y,Rot.X,Rot.Z).RotateVector(Direction);
+        float distance = movementVector.Dot(Dir);
 
         // 4. 시작 위치에서 최종 이동 거리만큼 떨어진 곳으로 위치를 '설정'
-        FVector newPosition = InitialObjectPosition + (Direction * distance);
+        FVector newPosition = InitialObjectPosition + (Dir * distance);
         Attach->SetWorldLocation(newPosition);
     }
 }

@@ -40,6 +40,7 @@ public:
     virtual void OnDragStart(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection);
 protected:
     bool bIsDragging = false;
+    bool Invalid = false;
     FVector InitialHitPoint;
     FVector InitialObjectPosition;
     FString Name;

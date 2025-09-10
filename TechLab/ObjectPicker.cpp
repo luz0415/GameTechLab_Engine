@@ -106,7 +106,7 @@ void UObjectPicker::HandleMouseDrag(float ScreenX, float ScreenY)
 			GRayDirection = Ray.GetDirection();
 			if (bIsDragging)
 			{
-				GizmoArrow->OnDragStart(Camera, GRayDirection, GRayDirection);
+				GizmoArrow->OnDragStart(Camera, GRayOrigin, GRayDirection);
 				bIsDragging = false;
 			}
 			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
@@ -213,7 +213,15 @@ void UObjectPicker::UpdateSelection(IPickable* NewSelection)
 
 void UObjectPicker::HandleMouseRelease()
 {
+	if (DraggedObject)
+	{
+		if (auto* GizmoArrow = dynamic_cast<UGizmo*>(DraggedObject))
+		{
+			GizmoArrow->OnDragStart(Camera, GRayOrigin, GRayDirection);
+		}
+	}
     DraggedObject = nullptr;
+	bIsDragging = false;
 }
 
 void UObjectPicker::ClearSelection()

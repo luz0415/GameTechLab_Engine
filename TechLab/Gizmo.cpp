@@ -41,6 +41,11 @@ FVector UGizmo::GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOri
     FVector PlaneNormal = TempVec.Cross(Direction);
     float numerator = ((PlaneOrigin - RayOrigin).Dot(PlaneNormal));//분자
     float denominator = (RayDirection.Dot(PlaneNormal));
+    if (denominator < 0.000001f)
+    {
+        Invalid = true;
+        return FVector();
+    }
     //denom이 0에 가까우면 예외처리
     float DistanceToPlane = numerator / denominator;
 
