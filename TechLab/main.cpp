@@ -30,7 +30,6 @@ POINT GLastMousePosition;
 
 // Object Picker (TEMP)
 UObjectPicker* GObjectPicker = nullptr;
-uint32_t GPickedObjectID = 0;
 
 // Mouse Position (TEMP)
 int GMouseX = 0;

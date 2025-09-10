@@ -34,7 +34,7 @@ public:
     const FString& GetName() { return Name; }
     void SetPickedItem(USceneComponent* Item) { SetAttachment(Item); }
     virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
-    void SetAABB(EGizmoArrowAxis InAxis);
+    void SetArrowAxis(EGizmoArrowAxis InAxis);
 
 private:
     FString Name;

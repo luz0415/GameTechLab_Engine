@@ -181,15 +181,11 @@ void UObjectPicker::UpdateSelection(IPickable* NewSelection)
 
         if (auto* SelectedObject = dynamic_cast<UObject*>(CurrentSelection))
         {
-            extern uint32_t GPickedObjectID;
-            GPickedObjectID = SelectedObject->UUID;
             GizmoRenderer->SetPickedItem(SelectedObject);
         }
     }
     else
     {
-        extern uint32_t GPickedObjectID;
-        GPickedObjectID = 0;
         GizmoRenderer->SetPickedItem(nullptr);
     }
 }
@@ -202,7 +198,5 @@ void UObjectPicker::ClearSelection()
         CurrentSelection = nullptr;
     }
     
-    extern uint32_t GPickedObjectID;
-    GPickedObjectID = 0;
     GizmoRenderer->SetPickedItem(nullptr);
 }

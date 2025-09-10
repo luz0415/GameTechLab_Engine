@@ -13,14 +13,11 @@ UGizmoRenderer::UGizmoRenderer()
 	URenderer::Get()->RegisterMesh(FString("ArrowX"), Shapes::ArrowX_MeshData, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	UGizmoArrow* ArrowZ = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowZ->SetName(FString("ArrowZ"));
-	ArrowZ->SetAABB(EGizmoArrowAxis::Z);
+	ArrowZ->SetArrowAxis(EGizmoArrowAxis::Z);
 	UGizmoArrow* ArrowY = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowY->SetName(FString("ArrowY"));
-	ArrowY->SetAABB(EGizmoArrowAxis::Y);
+	ArrowY->SetArrowAxis(EGizmoArrowAxis::Y);
 	UGizmoArrow* ArrowX = FObjectFactory::Get()->ConstructObject<UGizmoArrow>();
-	ArrowX->SetName(FString("ArrowX"));
-	ArrowX->SetAABB(EGizmoArrowAxis::X);
+	ArrowX->SetArrowAxis(EGizmoArrowAxis::X);
 
 	Arrows.push_back(ArrowZ);
 	Arrows.push_back(ArrowY);
@@ -53,18 +50,25 @@ void UGizmoRenderer::SubmitProxy()
 
 void UGizmoRenderer::SetPickedItem(UObject* Item)
 {
-	if (Item && Item->GetClass() == UGizmoArrow::StaticClass()) { return; }
-	USceneComponent* Comp = Cast<USceneComponent>(Item);
-	if (Comp == nullptr)
+	if (Item && Item->IsA(UGizmoArrow::StaticClass())) { return; }
+
+	if (USceneComponent* Comp = Cast<USceneComponent>(Item))
 	{
-		UE_LOG("FGIZMORENDERER : NOT A USCeneComponent!");
-		return;
+		UE_LOG("FGIZMORENDERER : PICKED");
+		SetAttachment(Comp);
+		for (auto& Arrow : Arrows)
+		{
+			Arrow->SetPickedItem(Comp);
+		}
 	}
-	UE_LOG("FGIZMORENDERER : PICKED");
-	SetAttachment(Comp);
-	for (auto& Arrow : Arrows)
+	else
 	{
-		Arrow->SetPickedItem(Comp);
-		//Arrow.SubmitProxy(FMatrix::ScaleMatrix(FVector(3.0f, 3.0f, 3.0f)));
+		UE_LOG("FGIZMORENDERER : No SceneComponent");
+		Detach();
+		for (auto& Arrow : Arrows)
+		{
+			Arrow->Detach();
+		}
+		return;
 	}
 }

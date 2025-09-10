@@ -41,16 +41,14 @@ FMeshResource* FMeshManager::GetPrimitiveMeshResource(const EPrimitiveType Type)
         return GetMeshResource(iter->second);
     }
     
-    FString Key;
+    FString Key = PrimitiveTypeToString(Type);
     FMeshData MeshData;
     switch(Type)
     {
             case EPrimitiveType::Cube:
-                Key = "PrimitiveCube";
                 MeshData = Shapes::CubeMeshData;
                 break;
             case EPrimitiveType::Sphere:
-                Key = "PrimitiveSphere";
                 MeshData = Shapes::SphereMeshData;
                 break;
             default:

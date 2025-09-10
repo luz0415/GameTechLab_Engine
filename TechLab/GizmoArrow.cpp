@@ -19,21 +19,24 @@ void UGizmoArrow::SubmitProxy()
     Renderer->SubmitProxy(RenderProxy);
 }
 
-void UGizmoArrow::SetAABB(EGizmoArrowAxis InAxis)
+void UGizmoArrow::SetArrowAxis(EGizmoArrowAxis InAxis)
 {
     switch (InAxis)
     {
     case EGizmoArrowAxis::X:
         SetBoundingVolume(new FAABB(Shapes::ArrowX_MeshData));
-        SetMeshForPreciseRaycast(Shapes::ArrowX_MeshData);
+        SetMeshForPreciseRaycast(Shapes::ArrowX_MeshData); 
+        SetName(FString("ArrowX"));
         break;
     case EGizmoArrowAxis::Y:
         SetBoundingVolume(new FAABB(Shapes::ArrowY_MeshData));
         SetMeshForPreciseRaycast(Shapes::ArrowY_MeshData);
+        SetName(FString("ArrowY"));
         break;
     case EGizmoArrowAxis::Z:
         SetBoundingVolume(new FAABB(Shapes::ArrowZ_MeshData));
         SetMeshForPreciseRaycast(Shapes::ArrowZ_MeshData);
+        SetName(FString("ArrowZ"));
         break;
     }
 }
