@@ -37,6 +37,7 @@ public:
 
 	void Prepare();
 	void PrepareShader();
+	void Resize(uint32 Width, uint32 Height);
 
 	void RenderScene(const class UCamera* SceneCamera);
 
@@ -90,14 +91,15 @@ private:
 	void CreateDeviceAndSwapChain(HWND& hWindow);
 	void ReleaseDeviceAndSwapChain();
 
-	void CreateFrameBuffer();
-	void ReleaseFrameBuffer();
+	void CreateRTV();
+	void ReleaseRTV();
 
 	void CreateRasterizerState();
 	void ReleaseRasterizerState();
 
-	void CreateDepthStencilResources(HWND& Hwnd);
+	void CreateDepthStencilResources(uint32 Width, uint32 Height);
 	void ReleaseDepthStencilResources();
+
 	
 	IDXGISwapChain* SwapChain = nullptr;
 

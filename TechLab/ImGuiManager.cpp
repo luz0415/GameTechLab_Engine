@@ -21,7 +21,6 @@ UImGuiManager::UImGuiManager()
     PropertyWindow = new UImGuiPropertyWindow();
 
     Init();
-
 }
 
 UImGuiManager::~UImGuiManager()

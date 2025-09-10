@@ -5,13 +5,19 @@
 #include "GridRenderer.h"
 #include "MeshManager.h"
 #include "GizmoRenderer.h"
+#include "SceneManager.h"
+
 //#include <dxgidebug.h>
 void URenderer::Create(HWND hWindow)
 {
 	CreateDeviceAndSwapChain(hWindow);
-	CreateFrameBuffer();
-	CreateRasterizerState();
-	CreateDepthStencilResources(hWindow);
+
+	RECT Rect;
+	GetClientRect(hWindow, &Rect);
+	const uint32 Width = Rect.right - Rect.left;
+	const uint32 Height = Rect.bottom - Rect.top;
+	Resize(Width, Height);
+
 	VPConstantBuffer = CreateConstantBuffer<FViewProjConstant>();
 	MConstantBuffer = CreateConstantBuffer<FModelConstant>();
 	MeshManager = new FMeshManager(Device);
@@ -89,18 +95,20 @@ void URenderer::ReleaseDeviceAndSwapChain()
 	}
 }
 
-void URenderer::CreateFrameBuffer()
+void URenderer::CreateRTV()
 {
 	SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&FrameBuffer);
 
 	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
-	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // ���� ����
-	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D �ؽ�ó
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB;
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
 	Device->CreateRenderTargetView(FrameBuffer, &framebufferRTVdesc, &FrameBufferRTV);
+	FrameBuffer->Release();
+	FrameBuffer = nullptr;
 }
 
-void URenderer::ReleaseFrameBuffer()
+void URenderer::ReleaseRTV()
 {
 	if (FrameBuffer)
 	{
@@ -154,18 +162,45 @@ void URenderer::ReleaseDepthStencilResources()
 	}
 }
 
-void URenderer::CreateDepthStencilResources(HWND& Hwnd)
+void URenderer::Resize(uint32 Width, uint32 Height)
 {
-	RECT rect;
-	GetClientRect(Hwnd, &rect);
-	const int width = rect.right - rect.left;
-	const int height = rect.bottom - rect.top;
+	float AspectRatio = (float)Width / (float)Height;
+	UCamera* CurrentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
+	if (CurrentCamera) { CurrentCamera->UpdateAspectRatio(AspectRatio); }
 
+	if (DeviceContext)
+	{
+		DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
+	}
+
+	if (Width == 0 || Height == 0)
+	{
+		return;
+	}
+
+	if (SwapChain)
+	{
+		ReleaseRTV();
+		ReleaseDepthStencilResources();
+		SwapChain->ResizeBuffers(0, Width, Height, DXGI_FORMAT_UNKNOWN, 0);
+
+		CreateRTV();
+		CreateDepthStencilResources(Width, Height);
+
+		ViewportInfo = { 0.0f, 0.0f, (float)Width, (float)Height, 0.0f, 1.0f };
+
+		DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, DepthStencilView);
+		DeviceContext->RSSetViewports(1, &ViewportInfo);
+	}
+}
+
+void URenderer::CreateDepthStencilResources(uint32 Width, uint32 Height)
+{
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
 
 	dsDesc.DepthEnable = TRUE;
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;//기존 픽셀보다 z값이 적은걸 깊이버퍼에 적는다
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS; //기존 픽셀보다 z값이 적은걸 깊이버퍼에 적는다
 
 	dsDesc.StencilEnable = FALSE;
 	dsDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
@@ -178,8 +213,8 @@ void URenderer::CreateDepthStencilResources(HWND& Hwnd)
 	}
 
 	D3D11_TEXTURE2D_DESC texDesc = {};
-	texDesc.Width = width;                           
-	texDesc.Height = height;                         
+	texDesc.Width = Width;
+	texDesc.Height = Height;
 	texDesc.MipLevels = 1;                             
 	texDesc.ArraySize = 1;                             
 	texDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;    
@@ -209,7 +244,6 @@ void URenderer::CreateDepthStencilResources(HWND& Hwnd)
 
 void URenderer::Release()
 {
-
 	if (DeviceContext)
 	{
 		DeviceContext->ClearState();
@@ -220,7 +254,7 @@ void URenderer::Release()
 	ReleaseConstantBuffer(VPConstantBuffer);
 	ReleaseConstantBuffer(MConstantBuffer);
 	ReleaseShader();
-	ReleaseFrameBuffer();
+	ReleaseRTV();
 	ReleaseDepthStencilResources();
 	ReleaseDeviceAndSwapChain();
 
@@ -301,7 +335,6 @@ void URenderer::PrepareShader()
 
 void URenderer::RenderScene(const UCamera* SceneCamera)
 {
-	//Prepare();
 	PrepareShader();
 
 	FViewProjConstant VPConstant{ SceneCamera->GetViewMatrix(), SceneCamera->GetProjectionMatrix() };
@@ -313,8 +346,6 @@ void URenderer::RenderScene(const UCamera* SceneCamera)
 		elem->Update(SceneCamera->GetEye());
 		elem->SubmitProxy();
 	}
-
-	//GizmoRenderer->SubmitProxy();
 
 	for (const auto& RenderProxy : RenderProxyList)
 	{

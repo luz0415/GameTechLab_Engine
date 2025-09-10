@@ -127,10 +127,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			return 0;
 		UINT Width = LOWORD(lParam);
 		UINT Height = HIWORD(lParam);
-		float AspectRatio = (float)Width / (float)Height;
 
-		UCamera* CurrentCamera = USceneManager::Get()->GetCurrentScene()->GetCurrentCamera();
-		if (CurrentCamera!=nullptr) { CurrentCamera->UpdateAspectRatio(AspectRatio); }
+		URenderer::Get()->Resize(Width, Height);
 
 		break;
 	}
