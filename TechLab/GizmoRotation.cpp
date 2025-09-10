@@ -14,7 +14,6 @@ UGizmoRotation::~UGizmoRotation()
 {
 }
 
-
 void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
 {
 	float R = 1.f;
@@ -54,7 +53,10 @@ void UGizmoRotation::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const
 	USceneComponent* Attach = GetAttachment();
 	if (Attach)
 	{
+		// 1. 현재 마우스 위치의 교차점을 구함
 		FVector currentHitPoint = GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection);
+
+		// 2. 교차점 계산이 실패했는지 Invalid 플래그로 확인
 		if (Invalid == true)
 		{
 			Invalid = false;
@@ -91,7 +93,6 @@ void UGizmoRotation::OnDragStart(UCamera* Camera, const FVector& RayOrigin, cons
 	USceneComponent* Attach = GetAttachment();
 	if (Attach)
 	{
-		// 1. 드래그 시작 시점의 객체 회전값과 위치를 가져옴
 		InitialObjectRotation = Attach->GetWorldRotationAsQuaternion();
 		const FVector objectLocation = Attach->GetWorldLocation();
 
@@ -99,12 +100,18 @@ void UGizmoRotation::OnDragStart(UCamera* Camera, const FVector& RayOrigin, cons
 		// LocalAxisDirection은 이 기즈모 핸들이 담당하는 축입니다 (예: X축 핸들이면 FVector(1,0,0))
 		RotationAxis = InitialObjectRotation.RotateVector(Direction);
 
-		// 3. 교차점을 구하고 시작 벡터 계산
+		// 2. 교차점을 구하고, Invalid 플래그를 확인
 		FVector hitPoint = GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection);
+
+		// 3. 만약 교차점 계산에 실패했다면(Invalid == true), 시작 벡터를 계산하지 않음
+		//    이 경우 드래그가 시작되지 않도록 막는 것이 좋음
 		if (Invalid) {
+			// 필요하다면 여기서 드래그 취소 로직을 넣을 수 있습니다.
 			return;
 		}
-		InitialVectorOnPlane = hitPoint;//-objectLocation;
+
+		// 4. 성공 시에만 시작 벡터 계산 및 저장
+		InitialVectorOnPlane = hitPoint - Attach->GetWorldLocation();
 		InitialVectorOnPlane.Normalize();
 	}
 }

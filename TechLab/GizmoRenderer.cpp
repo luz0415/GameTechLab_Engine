@@ -30,9 +30,9 @@ UGizmoRenderer::UGizmoRenderer()
     UGizmoScale* ScaleX = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
     ScaleX->SetAxis(EGizmoAxis::X);
     UGizmoScale* ScaleY = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
-    ScaleX->SetAxis(EGizmoAxis::Y);
+    ScaleY->SetAxis(EGizmoAxis::Y);
     UGizmoScale* ScaleZ = FObjectFactory::Get()->ConstructObject<UGizmoScale>();
-    ScaleX->SetAxis(EGizmoAxis::Z);
+    ScaleZ->SetAxis(EGizmoAxis::Z);
 
 	UGizmoRotation* RotationZ = FObjectFactory::Get()->ConstructObject<UGizmoRotation>();
 	RotationZ->SetAxis(EGizmoAxis::Z);
