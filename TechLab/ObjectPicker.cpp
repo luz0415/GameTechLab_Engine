@@ -129,6 +129,11 @@ void UObjectPicker::SubmitProxy()
 	GizmoRenderer->SubmitProxy();
 }
 
+void UObjectPicker::ChangeMode(EGizmoControlMode Mode)
+{
+	GizmoRenderer->ChangeGizmoControlMode(Mode);
+}
+
 FRay UObjectPicker::CreateRayFromScreen(float ScreenX, float ScreenY) const
 {
 	const float NDCx = (2.0f * ScreenX) / static_cast<float>(ViewportWidth) - 1.0f;

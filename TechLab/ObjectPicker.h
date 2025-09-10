@@ -1,6 +1,7 @@
 #pragma once
 #include "Core.h"
 #include "Object.h"
+#include "GizmoControlMode.h"
 
 class IPickable;
 class UCamera;
@@ -45,6 +46,8 @@ public:
 
     void SetIsDragging(bool b) { bIsDragging = b; }
     bool GetIsDragging() { return bIsDragging; }
+
+    void ChangeMode(EGizmoControlMode Mode);
 
 private:
     FRay CreateRayFromScreen(float ScreenX, float ScreenY) const;

@@ -17,6 +17,9 @@ class UImGuiPropertyWindow : public IImGuiWindow
 public:
 	virtual void Render() override;
 	void ColoredButton(const char* Label, EGizmoControlMode Mode);
+	void SetControlMode(EGizmoControlMode Mode) { CurrentGizmoControlMode = Mode; }
+	EGizmoControlMode GetControlMode() { return CurrentGizmoControlMode; }
+	void IncreaseControlMode();
 
 private:
 	class USceneComponent* TargetSceneComponent = nullptr;

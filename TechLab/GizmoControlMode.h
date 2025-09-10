@@ -5,5 +5,6 @@ enum class EGizmoControlMode
 {
 	Translation,
 	Rotation,
-	Scale
+	Scale,
+	END,
 };

@@ -4,13 +4,7 @@
 #include "MeshResource.h"
 #include <functional>
 #include "PrimitiveComponent.h"
-
-enum class GizmoType
-{
-    Arrow,
-    Scale,
-    Torus
-};
+#include "GizmoControlMode.h"
 
 class UGizmoRenderer : public UPrimitiveComponent
 {
@@ -35,10 +29,11 @@ public:
     ~UGizmoRenderer() override;
     virtual void SubmitProxy() override;
     void SetPickedItem(UObject* Item);
+    void ChangeGizmoControlMode(EGizmoControlMode Mode);
     FMeshData MakeTorus(EGizmoAxis InAxis);
     const USceneComponent* GetPickedItem() const { return GetAttachment(); }
     
 private:
     TArray<TArray<UGizmo*>> Gizmos;
-    GizmoType Type = GizmoType::Arrow;
+    EGizmoControlMode Type = EGizmoControlMode::Translation;
 };

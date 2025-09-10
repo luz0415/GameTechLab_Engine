@@ -7,6 +7,7 @@
 #include "GizmoArrow.h"
 #include "GizmoRotation.h"
 #include "GizmoScale.h"
+#include "ImGuiManager.h"
 UGizmoRenderer::UGizmoRenderer()
 {
 	//Init();
@@ -57,8 +58,8 @@ UGizmoRenderer::UGizmoRenderer()
     Toruses.push_back(RotationX);
     
     Gizmos.push_back(Arrows);
-    Gizmos.push_back(Scales);
     Gizmos.push_back(Toruses);
+    Gizmos.push_back(Scales);
 }
 
 UGizmoRenderer::~UGizmoRenderer()
@@ -78,7 +79,7 @@ void UGizmoRenderer::SubmitProxy()
 	if (GetAttachment() != nullptr)
 	{
 		//UE_LOG("PickedItem : [%f , %f , %f]", PickedItem->GetWorldLocation().X, PickedItem->GetWorldLocation().Y, PickedItem->GetWorldLocation().Z);
-		for (auto& Gizmo : Gizmos[(int)Type])
+		for (auto& Gizmo : Gizmos[(int)UImGuiManager::Get()->GetPropertyWindow()->GetControlMode()])
 		{
 			Gizmo->SubmitProxy();
 			//Arrow.SubmitProxy(FMatrix::ScaleMatrix(FVector(3.0f, 3.0f, 3.0f)));
@@ -88,7 +89,6 @@ void UGizmoRenderer::SubmitProxy()
 
 void UGizmoRenderer::SetPickedItem(UObject* Item)
 {
-    Type = GizmoType::Scale;
 	if (Item && 
 		((Item->IsA(UGizmoArrow::StaticClass())
 			||(Item->IsA(UGizmoRotation::StaticClass()))
@@ -99,16 +99,12 @@ void UGizmoRenderer::SetPickedItem(UObject* Item)
 	{
 		UE_LOG("FGIZMORENDERER : PICKED");
 		SetAttachment(Comp);
-		for (auto& GizmoList : Gizmos)
-		{
-            for (auto& Gizmo : GizmoList)
-            {
-                Gizmo->SetWorldLocation(Comp->GetWorldLocation());
-                Gizmo->SetWorldScale(Comp->GetWorldScale() * 3);
-                Gizmo->SetPickedItem(Comp);
-            }
-			//Arrow->SetWorldRotation(GetWorldRotationAsQuaternion()*Arrow->GetWorldRotationAsQuaternion());
-		}
+        for (auto& Gizmo : Gizmos[static_cast<int>(Type)])
+        {
+            Gizmo->SetWorldLocation(Comp->GetWorldLocation());
+            Gizmo->SetWorldScale(Comp->GetWorldScale() * 3);
+            Gizmo->SetPickedItem(Comp);
+        }
 	}
 	else
 	{
@@ -123,6 +119,22 @@ void UGizmoRenderer::SetPickedItem(UObject* Item)
         }
 		return;
 	}
+}
+
+void UGizmoRenderer::ChangeGizmoControlMode(EGizmoControlMode Mode)
+{
+    USceneComponent* Comp = GetAttachment();
+    for (auto& Gizmo : Gizmos[static_cast<int>(Type)])
+    {
+        Gizmo->Detach();
+    }
+    Type = Mode;
+    for (auto& Gizmo : Gizmos[static_cast<int>(Type)])
+    {
+        Gizmo->SetWorldLocation(Comp->GetWorldLocation());
+        Gizmo->SetWorldScale(Comp->GetWorldScale() * 3);
+        Gizmo->SetPickedItem(Comp);
+    }
 }
 
 FMeshData UGizmoRenderer::MakeTorus(EGizmoAxis InAxis)

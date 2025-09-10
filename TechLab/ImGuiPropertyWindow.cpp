@@ -179,6 +179,14 @@ void UImGuiPropertyWindow::ColoredButton(const char* Label, EGizmoControlMode Mo
 	}
 
 }
+void UImGuiPropertyWindow::IncreaseControlMode()
+{
+	int End = static_cast<int>(EGizmoControlMode::END);
+	int Current = static_cast<int>(CurrentGizmoControlMode);
+	++Current;
+	Current = Current % End;
+	CurrentGizmoControlMode = static_cast<EGizmoControlMode>(Current);
+}
 //void USceneManager::LoadNewScene()
 //{
 //	UScene* newScene = new UScene();
