@@ -19,9 +19,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##TX", &TargetProp.Translation.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldLocation(TargetProp.Translation);
+			TargetSceneComponent->SetWorldLocation(TargetProp.Translation);
 		}
 	}
 	ImGui::SameLine();
@@ -30,9 +30,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##TY", &TargetProp.Translation.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldLocation(TargetProp.Translation);
+			TargetSceneComponent->SetWorldLocation(TargetProp.Translation);
 		}
 	}
 	ImGui::SameLine();
@@ -41,9 +41,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##TZ", &TargetProp.Translation.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldLocation(TargetProp.Translation);
+			TargetSceneComponent->SetWorldLocation(TargetProp.Translation);
 		}
 	}
 	ImGui::SameLine();
@@ -53,15 +53,15 @@ void UImGuiPropertyWindow::Render()
 	// Rotation
 	static FVector lastRotationEuler = { 0,0,0 };
 
-	//FVector currentRotationEuler = RadiansToDegree(TargetComp->GetWorldRotation());
+	//FVector currentRotationEuler = RadiansToDegree(TargetSceneComponent->GetWorldRotation());
 	ImGui::SetNextItemWidth(INPUT_BOX_WIDTH);
 	ImGui::InputFloat("##RX", &TargetProp.Rotation.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
 			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -70,10 +70,10 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##RY", &TargetProp.Rotation.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
 			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -82,10 +82,10 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##RZ", &TargetProp.Rotation.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
 			FVector Radians = DegreeToRadians(TargetProp.Rotation);
-			TargetComp->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
+			TargetSceneComponent->SetWorldRotation(FQuaternion::FromYawPitchRollLH(Radians.Y, Radians.X, Radians.Z));
 		}
 	}
 	ImGui::SameLine();
@@ -97,9 +97,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##SX", &TargetProp.Scale.X, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldScale(TargetProp.Scale);
+			TargetSceneComponent->SetWorldScale(TargetProp.Scale);
 		}
 	}
 	ImGui::SameLine();
@@ -108,9 +108,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##SY", &TargetProp.Scale.Y, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldScale(TargetProp.Scale);
+			TargetSceneComponent->SetWorldScale(TargetProp.Scale);
 		}
 	}
 	ImGui::SameLine();
@@ -119,9 +119,9 @@ void UImGuiPropertyWindow::Render()
 	ImGui::InputFloat("##SZ", &TargetProp.Scale.Z, 0, 0, "%.3f");
 	if (ImGui::IsItemDeactivatedAfterEdit())
 	{
-		if (TargetComp)
+		if (TargetSceneComponent)
 		{
-			TargetComp->SetWorldScale(TargetProp.Scale);
+			TargetSceneComponent->SetWorldScale(TargetProp.Scale);
 		}
 	}
 
@@ -129,24 +129,30 @@ void UImGuiPropertyWindow::Render()
 
 	ImGui::Text("Scale");
 
-	if (!USceneManager::Get()->GetObjectPicker()->GetCurrentSelection())
+	IPickable* Pickable = USceneManager::Get()->GetObjectPicker()->GetCurrentSelection();
+	if (Pickable)
 	{
-		if (TargetObject != dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection()))
+		USceneComponent* PickableSceneComponent = dynamic_cast<USceneComponent*>(Pickable);
+		if (PickableSceneComponent)
 		{
-			TargetObject = dynamic_cast<UObject*>(USceneManager::Get()->GetObjectPicker()->GetCurrentSelection());
-			TargetComp = dynamic_cast<USceneComponent*>(TargetObject);
+			TargetSceneComponent = PickableSceneComponent;
 			TargetProp =
 			{
-				TargetComp->GetWorldLocation(),
-				RadiansToDegree(TargetComp->GetWorldRotationAsEuler()),
-				TargetComp->GetWorldScale()
+				TargetSceneComponent->GetWorldLocation(),
+				RadiansToDegree(TargetSceneComponent->GetWorldRotationAsEuler()),
+				TargetSceneComponent->GetWorldScale()
 			};
 		}
 	}
-	
-	if (TargetObject)
+	else
 	{
-		ImGui::Text("%d", TargetObject->UUID);
+		TargetSceneComponent = nullptr;			
+		TargetProp = { FVector(), FVector(), FVector() };
+	}
+	
+	if (TargetSceneComponent)
+	{
+		ImGui::Text("UUID: %d", TargetSceneComponent->UUID);
 	}
 
 	ImGui::End();

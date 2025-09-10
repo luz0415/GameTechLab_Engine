@@ -4,7 +4,7 @@
 #include "ImGui/imgui.h"
 #include "Vector.h"
 
-struct ObjectProperty
+struct FObjectProperty
 {
 	FVector Translation;
 	FVector Rotation;
@@ -25,7 +25,6 @@ public:
 	void SetScale(const FVector& scale) { TargetProp.Scale = scale; }
 
 private:
-	class UObject* TargetObject = nullptr;
-	class USceneComponent* TargetComp = nullptr;
-	ObjectProperty TargetProp = {};
+	class USceneComponent* TargetSceneComponent = nullptr;
+	FObjectProperty TargetProp = {};
 };
