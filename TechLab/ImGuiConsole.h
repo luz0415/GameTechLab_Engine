@@ -14,6 +14,7 @@ public:
 
 	virtual void Render() override;
 	void AddLog(const char* fmt, ...) IM_FMTARGS(2);
+	void AddLogV(const char* fmt, va_list args);
 
 	ImGuiAppConsole* GetAppConsole() { return AppConsole; }
 

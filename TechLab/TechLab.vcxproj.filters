@@ -230,9 +230,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="W2Shader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
@@ -284,9 +281,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="RenderProxy.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="ShapeType.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="MeshManager.h">
@@ -419,6 +413,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="GizmoScale.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GizmoControlMode.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

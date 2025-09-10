@@ -1,5 +1,6 @@
 #pragma once
-#include <vector>
+#include "Core.h"
+#include "Object.h"
 
 class IPickable;
 class UCamera;
@@ -8,8 +9,26 @@ struct FHitResult;
 class UGizmoRenderer;
 struct FMatrix;
 
-class UObjectPicker
+class UObjectPicker : public UObject
 {
+    // UObject Derived Class Must Declaration
+public:
+    static UObject* StaticUObjectFactory()
+    {
+        return new UObjectPicker();
+    }
+
+    static UClass* StaticClass()
+    {
+        static UClass Class(FString("UObjectPicker"), StaticUObjectFactory, UObject::StaticClass());
+        return &Class;
+    }
+
+    virtual UClass* GetClass() const
+    {
+        return StaticClass();
+    }
+
 public:
     UObjectPicker();
     ~UObjectPicker();

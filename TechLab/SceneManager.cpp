@@ -2,6 +2,7 @@
 #include "json.hpp"
 #include "ObjectPicker.h"
 #include "ObjectFactory.h"
+#include "EngineStatics.h"
 
 using namespace json;
 
@@ -17,7 +18,7 @@ void USceneManager::Init()
 {
     CurrentScene = FObjectFactory::Get()->ConstructObject<UScene>();
     //CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker();
+    ObjectPicker = FObjectFactory::Get()->ConstructObject<UObjectPicker>();
 }
 
 // Path에서 경로 받아와서 JSON 객체로 반환
@@ -232,6 +233,7 @@ void USceneManager::LoadSceneByExplorer()
 {
     json::JSON SceneJson = LoadJSONByExplorer();
     FSceneData SceneData = JSONToUSceneData(SceneJson);
+    UEngineStatics::NextUUID = SceneData.NextUUID;
     UScene* Scene = FObjectFactory::Get()->ConstructObject<UScene>();
     Scene->CopyPrimComp(SceneData);
     if (CurrentScene)
@@ -260,9 +262,9 @@ void USceneManager::LoadNewScene()
 
 void USceneManager::ResetResources()
 {
-    delete ObjectPicker;
+    ObjectPicker->Destroy();    
+    ObjectPicker = FObjectFactory::Get()->ConstructObject<UObjectPicker>();
     CurrentScene->InitCamera();
-    ObjectPicker = new UObjectPicker;
     SetObjectPickerCamera();
 }
 
