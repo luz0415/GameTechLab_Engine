@@ -20,9 +20,9 @@ UScene::UScene() : UObject()
 
 UScene::~UScene()
 {
-	for (auto& SceneComp : Primitives)
+	for (auto& Prim : Primitives)
 	{
-		SceneComp->Destroy();
+		if (FObjectFactory::Get()->IsObjectValid(Prim)) Prim->Destroy();
 	}
 	if(FObjectFactory::Get()->IsObjectValid(CurrentCamera)) CurrentCamera->Destroy();
 }
