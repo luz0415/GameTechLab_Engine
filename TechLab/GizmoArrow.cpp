@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "AABB.h"
 #include "Shapes.h"
+#include "TimeManager.h"
 #include "Camera.h"
 UGizmoArrow::UGizmoArrow()
 {
@@ -56,7 +57,7 @@ void UGizmoArrow::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FV
         FVector movementVector = currentHitPoint - InitialHitPoint;
 
         // 3. 이동 벡터를 해당 축으로 투영하여 최종 이동 거리를 구함
-        float distance = movementVector.Dot(Direction);
+        float distance = movementVector.Dot(Direction) * 0.1;
 
         // 4. 시작 위치에서 최종 이동 거리만큼 떨어진 곳으로 위치를 '설정'
         FVector newPosition = InitialObjectPosition + (Direction * distance);

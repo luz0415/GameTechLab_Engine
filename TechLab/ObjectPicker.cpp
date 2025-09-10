@@ -104,12 +104,12 @@ void UObjectPicker::HandleMouseDrag(float ScreenX, float ScreenY)
 			FRay Ray = CreateRayFromScreen(ScreenX, ScreenY);
 			GRayOrigin = Ray.GetOrigin();
 			GRayDirection = Ray.GetDirection();
-			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
 			if (bIsDragging)
 			{
 				GizmoArrow->OnDragStart(Camera, GRayDirection, GRayDirection);
 				bIsDragging = false;
 			}
+			GizmoArrow->HandleDrag(Camera, GRayOrigin, GRayDirection);
 		}
 	}
 }
