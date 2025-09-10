@@ -28,7 +28,7 @@ public:
 public:
     UGizmoRotation();
     ~UGizmoRotation() override;
-    
+    virtual FVector GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection) override;
     //virtual void SubmitProxy() override;
     //    virtual bool CanPickable() { if (GetAttachment()) return true; return false; }
     virtual void SetAxis(EGizmoAxis InAxis) override;

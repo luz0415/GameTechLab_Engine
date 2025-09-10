@@ -129,11 +129,14 @@ void UGizmoRenderer::ChangeGizmoControlMode(EGizmoControlMode Mode)
         Gizmo->Detach();
     }
     Type = Mode;
-    for (auto& Gizmo : Gizmos[static_cast<int>(Type)])
+    if (Comp)
     {
-        Gizmo->SetWorldLocation(Comp->GetWorldLocation());
-        Gizmo->SetWorldScale(Comp->GetWorldScale() * 3);
-        Gizmo->SetPickedItem(Comp);
+        for (auto& Gizmo : Gizmos[static_cast<int>(Type)])
+        {
+            Gizmo->SetWorldLocation(Comp->GetWorldLocation());
+            Gizmo->SetWorldScale(Comp->GetWorldScale() * 3);
+            Gizmo->SetPickedItem(Comp);
+        }
     }
 }
 

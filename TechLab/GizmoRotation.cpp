@@ -14,6 +14,32 @@ UGizmoRotation::~UGizmoRotation()
 {
 }
 
+// UGizmoRotation.cpp
+FVector UGizmoRotation::GetIntersectionWithMovementPlane(UCamera* Camera, FVector RayOrigin, FVector RayDirection)
+{
+	USceneComponent* Attach = GetAttachment();
+	if (!Attach) { Invalid = true; return FVector(); }
+
+	FVector PlaneOrigin = Attach->GetWorldLocation();
+
+	// (수정) 로컬 Direction을 현재 객체의 회전에 맞게 월드 방향으로 변환합니다.
+	FQuaternion worldRotation = Attach->GetWorldRotationAsQuaternion();
+	FVector PlaneNormal = worldRotation.RotateVector(Direction);
+
+	float numerator = ((PlaneOrigin - RayOrigin).Dot(PlaneNormal));
+	float denominator = (RayDirection.Dot(PlaneNormal));
+
+	if (abs(denominator) < 0.0001f)
+	{
+		Invalid = true;
+		return FVector();
+	}
+
+	float DistanceToPlane = numerator / denominator;
+	FVector IntersectionPoint = RayOrigin + (RayDirection * DistanceToPlane);
+	return IntersectionPoint;
+}
+
 
 
 void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
@@ -49,6 +75,8 @@ void UGizmoRotation::SetAxis(EGizmoAxis InAxis)
 	}
 
 }
+
+
 
 void UGizmoRotation::HandleDrag(UCamera* Camera, const FVector& RayOrigin, const FVector& RayDirection)
 {
@@ -92,20 +120,19 @@ void UGizmoRotation::OnDragStart(UCamera* Camera, const FVector& RayOrigin, cons
 	USceneComponent* Attach = GetAttachment();
 	if (Attach)
 	{
-		// 1. 드래그 시작 시점의 객체 회전값과 위치를 가져옴
 		InitialObjectRotation = Attach->GetWorldRotationAsQuaternion();
 		const FVector objectLocation = Attach->GetWorldLocation();
 
-		// 2. (핵심) 로컬 축 방향을 월드 축으로 변환하여 '고정된 회전축'으로 설정
-		// LocalAxisDirection은 이 기즈모 핸들이 담당하는 축입니다 (예: X축 핸들이면 FVector(1,0,0))
+		// RotationAxis 계산은 원래대로 완벽합니다.
 		RotationAxis = InitialObjectRotation.RotateVector(Direction);
 
-		// 3. 교차점을 구하고 시작 벡터 계산
 		FVector hitPoint = GetIntersectionWithMovementPlane(Camera, RayOrigin, RayDirection);
 		if (Invalid) {
 			return;
 		}
-		InitialVectorOnPlane = hitPoint;//-objectLocation;
+
+		// (수정) 반드시 objectLocation을 빼서 회전 중심으로부터의 방향 벡터로 만들어야 합니다.
+		InitialVectorOnPlane = hitPoint - objectLocation;
 		InitialVectorOnPlane.Normalize();
 	}
 }
