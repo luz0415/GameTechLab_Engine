@@ -24,7 +24,7 @@ UScene::~UScene()
 	{
 		SceneComp->Destroy();
 	}
-	CurrentCamera->Destroy();
+	if(FObjectFactory::Get()->IsObjectValid(CurrentCamera)) CurrentCamera->Destroy();
 }
 
 UPrimitiveComponent* UScene::PrimToPrimComp(const FPrimitiveData& PrimData)
