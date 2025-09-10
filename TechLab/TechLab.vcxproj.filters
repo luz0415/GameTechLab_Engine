@@ -421,5 +421,8 @@
     <ClInclude Include="GizmoScale.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="GizmoScale.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

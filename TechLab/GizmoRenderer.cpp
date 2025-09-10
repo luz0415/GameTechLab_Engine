@@ -58,7 +58,7 @@ UGizmoRenderer::UGizmoRenderer()
     
     Gizmos.push_back(Arrows);
     Gizmos.push_back(Scales);
-   // Gizmos.push_back(Toruses);
+    Gizmos.push_back(Toruses);
 }
 
 UGizmoRenderer::~UGizmoRenderer()
