@@ -50,10 +50,11 @@ void UImGuiControlPanel::Render()
 	
 	if (ImGui::Button("Spawn", ImVec2(100, 0)))
 	{
-		UPrimitiveComponent* SpawnedActor = USceneManager::Get()->GetCurrentScene()->SpawnActor(SpawnProperty.Type);
+		for (int i = 0; i < SpawnProperty.SpawnNum; i++)
+		{UPrimitiveComponent* SpawnedActor = USceneManager::Get()->GetCurrentScene()->SpawnActor(SpawnProperty.Type);
 		SpawnedActor->SetWorldLocation({ 0.f, 0.f, 0.f });
 		SpawnedActor->SetWorldRotation({ 0.f, 0.f, 0.f });
-		SpawnedActor->SetWorldScale({ 1.f, 1.f, 1.f });
+		SpawnedActor->SetWorldScale({ 1.f, 1.f, 1.f });}
 	}
 
 	ImGui::SameLine();
