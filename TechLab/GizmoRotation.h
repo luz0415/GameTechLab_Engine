@@ -16,7 +16,7 @@ public:
 
     static UClass* StaticClass()
     {
-        static UClass Class(FString("UGizmoRotation"), StaticUObjectFactory, UPrimitiveComponent::StaticClass());
+        static UClass Class(FString("UGizmoRotation"), StaticUObjectFactory, UGizmo::StaticClass());
         return &Class;
     }
 

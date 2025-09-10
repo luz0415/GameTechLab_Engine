@@ -121,9 +121,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		 case 'D': GInput.bRight = true; break;
 		 case 'E': GInput.bUp = true; break;
 		 case 'Q': GInput.bDown = true; break;
-		 case VK_SPACE: 
-			 UImGuiManager::Get()->GetPropertyWindow()->IncreaseControlMode();
-			 USceneManager::Get()->GetObjectPicker()->ChangeMode(UImGuiManager::Get()->GetPropertyWindow()->GetControlMode());
+		 case VK_SPACE:
+			 if (USceneManager::Get()->GetObjectPicker()->GetCurrentSelection() != nullptr)
+			 {
+				 UImGuiManager::Get()->GetPropertyWindow()->IncreaseControlMode();
+				 USceneManager::Get()->GetObjectPicker()->ChangeMode(UImGuiManager::Get()->GetPropertyWindow()->GetControlMode());
+			 }
 			 break;
 		default: break;
 		}
