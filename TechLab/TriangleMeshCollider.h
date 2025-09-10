@@ -5,7 +5,6 @@
 #include "VertexData.h"
 #include "Vector.h"
 #include "Ray.h"
-#include <vector>
 
 struct FTriangle
 {

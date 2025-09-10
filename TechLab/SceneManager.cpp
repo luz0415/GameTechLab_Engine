@@ -2,6 +2,7 @@
 #include "json.hpp"
 #include "ObjectPicker.h"
 #include "ObjectFactory.h"
+#include "EngineStatics.h"
 
 using namespace json;
 
@@ -232,6 +233,7 @@ void USceneManager::LoadSceneByExplorer()
 {
     json::JSON SceneJson = LoadJSONByExplorer();
     FSceneData SceneData = JSONToUSceneData(SceneJson);
+    UEngineStatics::NextUUID = SceneData.NextUUID;
     UScene* Scene = FObjectFactory::Get()->ConstructObject<UScene>();
     Scene->CopyPrimComp(SceneData);
     if (CurrentScene)

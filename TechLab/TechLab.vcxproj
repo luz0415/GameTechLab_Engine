@@ -180,9 +180,6 @@
     <ClCompile Include="WorldAxisRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
     <FxCompile Include="W2Shader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
