@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core.h"
 #include "BoundingVolume.h"
 #include "VertexData.h"
 #include "Vector.h"
@@ -20,8 +21,8 @@ public:
     bool RaycastHit(const FRay& Ray, float TMax, FHitRecord& OutHit) const;
 
 private:
-    std::vector<FVertex> Vertices;
-    std::vector<FTriangle> Triangles;
+    TArray<FVertex> Vertices;
+    TArray<FTriangle> Triangles;
 
     bool RayTriangleIntersect(const FRay& Ray, const FVector& V0, const FVector& V1, const FVector& V2, float TMax, FHitRecord& OutHit) const;
 };
