@@ -49,8 +49,6 @@ public:
 	UScene();
 	~UScene();
 
-
-
     UPrimitiveComponent* PrimToPrimComp(const FPrimitiveData& primitive);
     void CopyPrimComp(const FSceneData& sceneData);
     void Render();

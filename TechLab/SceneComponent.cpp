@@ -21,7 +21,7 @@ void USceneComponent::Destroy()
 	UObject::Destroy();
 	for (auto* Child : Children)
 	{
-		if (Child)
+		if (FObjectFactory::Get()->IsObjectValid(Child))
 		{
 			Child->Detach();
 		}
