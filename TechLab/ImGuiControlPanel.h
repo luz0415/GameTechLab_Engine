@@ -22,7 +22,6 @@ class UImGuiControlPanel : public IImGuiWindow
 {
 public:
 	virtual void Render() override;
-	void SpawnActor();
 
 private:
 	FSpawnObjectProperty SpawnProperty;

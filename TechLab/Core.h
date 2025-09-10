@@ -30,6 +30,9 @@ struct MemoryHeader
     char _padding[8];
 };
 
+uint32& GetTotalAllocationBytes();
+uint32& GetTotalAllocationCount();
+
 void* operator new(size_t Size);
 void operator delete(void* Ptr) noexcept;
 

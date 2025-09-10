@@ -1,5 +1,6 @@
 #include "ImGuiControlPanel.h"
 #include "SceneManager.h"
+#include "Core.h"
 
 #define CURRENT_CAMERA USceneManager::Get()->GetCurrentScene()->GetCurrentCamera()
 
@@ -184,7 +185,12 @@ void UImGuiControlPanel::Render()
 	//	continue;
 	//}
 	// 나중에 폴리싱할때 고려해보기
-	
+
+	ImGui::Separator(); // ------------------
+
+	ImGui::Text("Memory Status");
+	ImGui::Text("Memory Allocation Bytes: %d", GetTotalAllocationBytes());
+	ImGui::Text("Memory Allocation Count: %d", GetTotalAllocationCount());
 
 	ImGui::End();
 }

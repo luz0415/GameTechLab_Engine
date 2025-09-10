@@ -5,16 +5,15 @@
 
 uint32& GetTotalAllocationBytes()
 {
-    static uint32 Instance = 0; // �Լ��� ó�� ȣ��� �� �� �� �� 0���� �ʱ�ȭ�˴ϴ�.
+    static uint32 Instance = 0;
     return Instance;
 }
 
 uint32& GetTotalAllocationCount()
 {
-    static uint32 Instance = 0; // ���� ����
+    static uint32 Instance = 0;
     return Instance;
 }
-
 
 void* operator new(size_t Size)
 {
