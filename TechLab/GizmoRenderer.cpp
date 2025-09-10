@@ -58,6 +58,8 @@ void UGizmoRenderer::SetPickedItem(UObject* Item)
 		SetAttachment(Comp);
 		for (auto& Arrow : Arrows)
 		{
+			Arrow->SetWorldLocation(Comp->GetWorldLocation());
+			Arrow->SetWorldScale(Comp->GetWorldScale() * 3);
 			Arrow->SetPickedItem(Comp);
 		}
 	}

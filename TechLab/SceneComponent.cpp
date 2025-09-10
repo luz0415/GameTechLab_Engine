@@ -77,7 +77,7 @@ FMatrix& USceneComponent::GetWorldMatrix()
 	{
 		if (Attachment)
 		{
-			CachedWorldMatrix = Attachment->GetWorldMatrix() * CachedRelativeTransform.ToMatrixWithScale();
+			CachedWorldMatrix = CachedRelativeTransform.ToMatrixWithScale() * Attachment->GetWorldMatrix();
 		}
 		else
 		{
