@@ -8,10 +8,16 @@
 
 uint32 UEngineStatics::NextUUID = 0;
 
-TArray<UObject*>& GetUObjectArray()
+TArray<FUObjectItem>& GetUObjectArray()
 {
-	static TArray<UObject*> GUObjectArray;
+	static TArray<FUObjectItem> GUObjectArray;
 	return GUObjectArray;
+}
+
+TArray<uint32>& GetFreeObjectIndices()
+{
+	static TArray<uint32> GFreeObjectIndices;
+	return GFreeObjectIndices;
 }
 
 IMPLEMENT_CLASS_BASE(UObject)
@@ -21,34 +27,37 @@ UObject::UObject()
 {
 	UUID = UEngineStatics::GenUUID();
 
-	GetUObjectArray().emplace_back(this);
-	InternalIndex = static_cast<uint32>(GetUObjectArray().size()) - 1;
+	TArray<uint32>& FreeIndices = GetFreeObjectIndices();
+
+	if (!FreeIndices.empty())
+	{
+		// 삭제된 슬롯 재사용 (LIFO 스택)
+		InternalIndex = FreeIndices.back();
+		FreeIndices.pop_back();
+
+		FUObjectItem& Item = GetUObjectArray()[InternalIndex];
+		Item.Object = this;
+		// SerialNumber는 이미 증가된 상태 유지 (슬롯 재사용 감지용)
+	}
+	else
+	{
+		// 새 슬롯 할당
+		FUObjectItem NewItem(this, 0);
+		GetUObjectArray().emplace_back(NewItem);
+		InternalIndex = static_cast<uint32>(GetUObjectArray().size()) - 1;
+	}
 }
 
 UObject::~UObject()
 {
-	/** @todo: 이후에 리뷰 필요 */
-
-	TArray<UObject*>& ObjArray = GetUObjectArray();
-	const size_t IndexToRemove = this->InternalIndex;
-	const size_t LastIndex = ObjArray.size() - 1;
-
-	if (IndexToRemove > LastIndex || ObjArray[IndexToRemove] != this)
+	if (static_cast<int32>(InternalIndex) < GetUObjectArray().size())
 	{
-		return;
-	}
+		FUObjectItem& Item = GetUObjectArray()[static_cast<int32>(InternalIndex)];
+		Item.Object = nullptr;
+		Item.SerialNumber++;  // 슬롯 재사용 감지를 위해 세대 번호 증가
 
-	if (IndexToRemove == LastIndex)
-	{
-		ObjArray.pop_back();
-	}
-	else
-	{
-		UObject* LastObject = ObjArray[LastIndex];
-		ObjArray[IndexToRemove] = LastObject;
-
-		LastObject->InternalIndex = IndexToRemove;
-		ObjArray.pop_back();
+		// FreeList에 추가 (LIFO 스택)
+		GetFreeObjectIndices().push_back(InternalIndex);
 	}
 }
 
@@ -170,6 +179,15 @@ UObject* UObject::Duplicate()
 void UObject::DuplicateSubObjects(UObject* DuplicatedObject)
 {
 
+}
+
+uint32 UObject::GetSerialNumber() const
+{
+	if (static_cast<int32>(InternalIndex) < GetUObjectArray().size())
+	{
+		return GetUObjectArray()[static_cast<int32>(InternalIndex)].SerialNumber;
+	}
+	return 0;
 }
 
 void UObject::SetOuter(UObject* InObject)

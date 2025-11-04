@@ -83,7 +83,7 @@ void UWorld::Tick(float DeltaTimes)
 			{
 				Actor->Tick(DeltaTimes);
 			}
-			
+
 			if (Actor->IsPendingDestroy())
 			{
 				DestroyActor(Actor);
@@ -99,7 +99,7 @@ void UWorld::Tick(float DeltaTimes)
 			{
 				Actor->Tick(DeltaTimes);
 			}
-			
+
 			if (Actor->IsPendingDestroy())
 			{
 				DestroyActor(Actor);

@@ -369,8 +369,10 @@ xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
     <ClInclude Include="Source\Core\Public\Object\Class.h" />
     <ClInclude Include="Source\Core\Public\Object\NewObject.h" />
     <ClInclude Include="Source\Core\Public\Object\Object.h" />
+    <ClInclude Include="Source\Core\Public\Object\ObjectHandle.h" />
     <ClInclude Include="Source\Core\Public\Object\ObjectIterator.h" />
     <ClInclude Include="Source\Core\Public\Object\Property.h" />
+    <ClInclude Include="Source\Core\Public\Object\WeakObjectPtr.h" />
     <ClInclude Include="Source\Core\Public\Types.h" />
     <ClInclude Include="Source\Editor\Public\EditorEngine.h" />
     <ClInclude Include="Source\Editor\Public\Line\BatchLineManager.h" />
@@ -428,6 +430,7 @@ xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
     <ClInclude Include="Source\Manager\Public\AssetManager.h" />
     <ClInclude Include="Source\Manager\Public\ConfigManager.h" />
     <ClInclude Include="Source\Manager\Public\InputManager.h" />
+    <ClInclude Include="Source\Manager\Public\LuaManager.h" />
     <ClInclude Include="Source\Manager\Public\PathManager.h" />
     <ClInclude Include="Source\Manager\Public\TimeManager.h" />
     <ClInclude Include="Source\Manager\Public\UIManager.h" />
@@ -533,6 +536,7 @@ xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
     <ClCompile Include="Source\Editor\Private\UI\Widget\Component\ComponentWidget.cpp" />
     <ClCompile Include="Source\Editor\Private\UI\Widget\Component\SpotLightComponentWidget.cpp" />
     <ClCompile Include="Source\Editor\Private\UI\Widget\ControlPanelWidget.cpp" />
+    <ClCompile Include="Source\Manager\Private\LuaManager.cpp"/>
     <ClCompile Include="Source\Renderer\Private\Optimization\CSM.cpp" />
     <ClCompile Include="Source\Renderer\Private\RenderPass\EditorDepthPass.cpp" />
     <ClCompile Include="Source\Renderer\Private\RenderPass\EditorOverlayPass.cpp" />

@@ -4,6 +4,21 @@
 
 namespace json { class JSON; }
 using JSON = json::JSON;
+class UObject;
+/**
+ * @brief Object 배열의 각 항목을 나타내는 구조체
+ * Object 포인터와 세대(generation) 번호를 함께 저장하여
+ * 삭제된 객체의 슬롯 재사용을 안전하게 추적합니다.
+ */
+struct FUObjectItem
+{
+	UObject* Object;
+	uint32 SerialNumber;  // 슬롯이 재사용될 때마다 증가
+
+	FUObjectItem() : Object(nullptr), SerialNumber(0) {}
+	FUObjectItem(UObject* InObject, uint32 InSerialNumber)
+		: Object(InObject), SerialNumber(InSerialNumber) {}
+};
 
 UCLASS()
 class UObject
@@ -31,6 +46,7 @@ public:
 	uint64 GetAllocatedBytes() const { return AllocatedBytes; }
 	uint32 GetAllocatedCount() const { return AllocatedCounts; }
 	uint32 GetUUID() const { return UUID; }
+	uint32 GetSerialNumber() const;
 
 	FName GetName() { return Name; }
 	void SetName(const FName& InName) { Name = InName; }
@@ -137,7 +153,19 @@ T* CastChecked(UObject* InObject)
 	return static_cast<T*>(InObject);
 }
 
-TArray<UObject*>& GetUObjectArray();
+/**
+ * @brief 전역 UObject 배열을 반환하는 함수
+ * FUObjectItem 구조체로 객체 포인터와 세대 번호를 함께 관리합니다.
+ * @return GUObjectArray 참조
+ */
+TArray<FUObjectItem>& GetUObjectArray();
+
+/**
+ * @brief 삭제된 Object 슬롯의 인덱스 목록 (재사용 가능한 슬롯)
+ * LIFO 스택으로 사용: 최근 삭제된 슬롯을 먼저 재사용 (캐시 친화적)
+ * @return GFreeObjectIndices 참조
+ */
+TArray<uint32>& GetFreeObjectIndices();
 
 /**
  * @brief 타입 체크 함수 (캐스팅하지 않고 체크만)
@@ -171,7 +199,7 @@ inline bool IsValid(const UObject* InObject)
 	}
 
 	const uint32 Index = InObject->GetInternalIndex();
-	const TArray<UObject*>& ObjArray = GetUObjectArray();
+	const auto& ObjArray = GetUObjectArray();
 
-	return (Index < ObjArray.size()) && (ObjArray[Index] == InObject);
+	return (Index < ObjArray.size()) && (ObjArray[Index].Object == InObject);
 }

@@ -55,7 +55,7 @@ private:
 		CurrentObject = nullptr;
 		while (CurrentIndex < UObjectArray.size())
 		{
-			UObject* Obj = UObjectArray[CurrentIndex];
+			UObject* Obj = UObjectArray[CurrentIndex].Object;
 			if (Obj && Obj->IsA(TObject::StaticClass()))
 			{
 				CurrentObject = Cast<TObject>(Obj);
@@ -67,5 +67,5 @@ private:
 
 	int32 CurrentIndex;
 	TObject* CurrentObject = nullptr;
-	TArray<UObject*>& UObjectArray;
+	TArray<FUObjectItem>& UObjectArray;
 };
