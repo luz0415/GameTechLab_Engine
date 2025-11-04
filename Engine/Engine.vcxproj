@@ -235,8 +235,12 @@
       <AdditionalLibraryDirectories>;$(SolutionDir)External\Library</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
-xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
+      <Command>
+        IF EXIST "$(ProjectDir)Asset" xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
+        IF EXIST "$(ProjectDir)Data" xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y
+        IF EXIST "$(SolutionDir)External\Bin\Debug\*" xcopy "$(SolutionDir)External\Bin\Debug\*" "$(OutDir)" /E /I /Y
+        :VCEnd
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ObjViewerDebug|x64'">
@@ -257,8 +261,12 @@ xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
       <AdditionalLibraryDirectories>;$(SolutionDir)External\Library</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
-xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
+      <Command>
+        IF EXIST "$(ProjectDir)Asset" xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
+        IF EXIST "$(ProjectDir)Data" xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y
+        IF EXIST "$(SolutionDir)External\bin\Debug\*" xcopy "$(SolutionDir)External\bin\Debug\*" "$(OutDir)" /E /I /Y
+        :VCEnd
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -287,8 +295,12 @@ xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
       <AdditionalLibraryDirectories>;$(SolutionDir)External\Library</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
-xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y</Command>
+      <Command>
+        IF EXIST "$(ProjectDir)Asset" xcopy "$(ProjectDir)Asset" "$(OutDir)Asset" /E /I /Y
+        IF EXIST "$(ProjectDir)Data" xcopy "$(ProjectDir)Data" "$(OutDir)Data" /E /I /Y
+        IF EXIST "$(SolutionDir)External\bin\Debug\*" xcopy "$(SolutionDir)External\bin\Debug\*" "$(OutDir)" /E /I /Y
+        :VCEnd
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Develop|x64'">

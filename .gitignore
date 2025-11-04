@@ -438,3 +438,6 @@ WARP.md
 # KTL Engine - Intermediate Build Files
 # Auto-generated intermediate files (can be safely regenerated)
 Engine/Intermediate/
+
+# External
+!External/**
