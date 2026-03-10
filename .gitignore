@@ -452,6 +452,7 @@ Document/*
 
 # Python Embedded
 /Mundi/ThirdParty/Python/
+/Mundi/Tools/Python/
 
 # Generated Files
 /Mundi/Generated/
