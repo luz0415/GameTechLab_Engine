@@ -1,1 +1,20 @@
 # GameTechLab_Engine
+크래프톤 정글 게임테크랩 2기 과정에서 DirectX11을 이용해 개발한 주차별 자체엔진 코드입니다.
+
+- [WEEK01 🕹️ GameJam-1](https://github.com/luz0415/GameTechLab_Engine/tree/Week01)
+- [WEEK02 🧊 3D](https://github.com/luz0415/GameTechLab_Engine/tree/Week02)
+- [WEEK03 🗺️ UV](https://github.com/luz0415/GameTechLab_Engine/tree/Week03)
+- [WEEK04 🧱 OBJ](https://github.com/luz0415/GameTechLab_Engine/tree/Week04)
+- [WEEK05 🚀 Optimization](https://github.com/luz0415/GameTechLab_Engine/tree/Week05)
+- [WEEK05+ ▶️ PIE](https://github.com/luz0415/GameTechLab_Engine/tree/Week05+)
+- [WEEK06 🎨 Decal](https://github.com/luz0415/GameTechLab_Engine/tree/Week06)
+- [WEEK06+ 🌫️ Fog](https://github.com/luz0415/GameTechLab_Engine/tree/Week06+)
+- [WEEK07 💡 Light](https://github.com/luz0415/GameTechLab_Engine/tree/Week07)
+- [WEEK08 👤 Shadow](https://github.com/luz0415/GameTechLab_Engine/tree/Week08)
+- [WEEK09 🛠️ GameJam-2 & Scripting](https://github.com/luz0415/GameTechLab_Engine/tree/Week09)
+- [WEEK09+ 🎥 Cinematic](https://github.com/luz0415/GameTechLab_Engine/tree/Week09+)
+- [WEEK10 🦴 FBX](https://github.com/luz0415/GameTechLab_Engine/tree/Week10)
+- [WEEK11 🏃 Animation](https://github.com/luz0415/GameTechLab_Engine/tree/Week11)
+- [WEEK12 ✨ Particle](https://github.com/luz0415/GameTechLab_Engine/tree/Week12)
+- [WEEK13 💥 PhysX](https://github.com/luz0415/GameTechLab_Engine/tree/Week13)
+- [WEEK14 🏆 GameJam-3](https://github.com/luz0415/GameTechLab_Engine/tree/Week14)
