@@ -63,8 +63,8 @@ void FPhysXSimEventCallback::onContact(const PxContactPairHeader& PairHeader, co
                 HitB.Location = ActorB->GetActorLocation();
                 HitB.Distance = 0.0f; // 물리 충돌은 거리 0
                 HitB.Item = Point.internalFaceIndex1;
-                HitA.MyBoneName = BoneNameB;
-                HitA.BoneName = BoneNameA;
+                HitB.MyBoneName = BoneNameB;
+                HitB.BoneName = BoneNameA;
 
                 ActorB->OnComponentHit.Broadcast(CompB, CompA, HitB);
             }
